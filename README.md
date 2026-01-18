@@ -1,6 +1,14 @@
 # SmartKB-智能知识库系统
 
-![界面](https://github.com/youufis/SmartKB/blob/main/shot3.png)
+## 智能助手
+
+![智能助手](https://github.com/youufis/SmartKB/blob/main/shot3.png)
+
+## 教育智能体
+
+![教育智能体](https://github.com/youufis/SmartKB/blob/main/shot1.png)
+
+![教育智能体](https://github.com/youufis/SmartKB/blob/main/shot2.png)
 
 ## 1. 系统概述
 
