@@ -1,0 +1,60 @@
+footer {
+    display: none !important;
+}
+/* 添加对话历史区域的滚动样式 
+固定高度 max-height: 60vh;*/
+.chat-history {
+    height: auto;
+    max-height: none;
+    overflow-y: auto;
+    border: 0px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* 自定义滚动条样式 */
+.chat-history::-webkit-scrollbar {
+    width: 8px; /* 滚动条宽度 */
+}
+
+.chat-history::-webkit-scrollbar-track {
+    background: #f1f1f1; /* 滚动条轨道背景色 */
+    border-radius: 4px;
+}
+
+.chat-history::-webkit-scrollbar-thumb {
+    background: #c1c1c1; /* 滚动条滑块颜色 */
+    border-radius: 4px;
+}
+
+.chat-history::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8; /* 滚动条滑块悬停颜色 */
+}
+
+/* 隐藏Gradio默认的滚动条 */
+.chat-history .wrap,
+.chat-history .prose {
+    overflow: unset !important;
+    max-height: unset !important;
+    height: unset !important;
+}
+/* 用户消息样式 - 右对齐 */
+.user-message {
+    background-color: #F0F0F0;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px 0;
+    text-align: right;
+    margin-left: 10%;
+}
+
+/* AI消息样式 - 左对齐 */
+.ai-message {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px 0;
+    text-align: left;
+    margin-right: 10%;
+    border: 0px solid #e0e0e0;
+}
