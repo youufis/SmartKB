@@ -1696,26 +1696,51 @@ def agent_chat_with_image(file_path, prompt, session_state=None):
     except Exception as e:
         yield f"图像处理失败: {str(e)}", session_id
 
-# 新增：从文件生成简短摘要（同步获取最终文本）
+# 缓存文件摘要，避免重复计算（key: 绝对路径 -> {hash, summary, mtime}）
+FILE_SUMMARY_CACHE = {}
+
 def get_file_summary(file_path, session_state=None):
-    """根据文件类型同步获取一个简短摘要（用于作为上下文增强）"""
+    """根据文件类型同步获取一个简短摘要（用于作为上下文增强），带缓存：文件未变化时复用摘要"""
+    global FILE_SUMMARY_CACHE
     try:
-        if is_image_file(file_path):
-            # 使用图像理解接口获取描述性摘要
+        if not file_path or not os.path.exists(file_path):
+            return ""
+        abs_path = os.path.abspath(file_path)
+        try:
+            file_hash = calculate_file_hash(abs_path)
+        except Exception:
+            # 退回到 mtime 作为降级判断
+            file_hash = str(os.path.getmtime(abs_path))
+        # 检查缓存
+        cache_entry = FILE_SUMMARY_CACHE.get(abs_path)
+        if cache_entry and cache_entry.get("hash") == file_hash:
+            return cache_entry.get("summary", "")
+
+        # 未命中缓存，生成摘要
+        summary_text = ""
+        if is_image_file(abs_path):
             prompt = "请简要描述这张图片的主要内容与要点，最多200字。"
             last = ""
-            for out, sid in agent_chat_with_image(file_path, prompt, session_state=session_state):
+            for out, sid in agent_chat_with_image(abs_path, prompt, session_state=session_state):
                 last = out
-            return last or ""
-        elif is_document_file(file_path):
-            # 否则调用文档理解接口生成摘要
+            summary_text = (last or "").strip()
+        elif is_document_file(abs_path):
             prompt = "请简要总结该文档的主要结论与要点，最多200字。"
             last = ""
-            for out, sid in agent_chat_with_document(file_path, prompt, session_state=session_state):
+            for out, sid in agent_chat_with_document(abs_path, prompt, session_state=session_state):
                 last = out
-            return last or ""
+            summary_text = (last or "").strip()
         else:
-            return ""
+            summary_text = ""
+
+        # 截断过长摘要以节省缓存空间
+        if summary_text and len(summary_text) > 5000:
+            summary_text = summary_text[:5000]
+
+        # 存入缓存
+        FILE_SUMMARY_CACHE[abs_path] = {"hash": file_hash, "summary": summary_text, "mtime": os.path.getmtime(abs_path)}
+        # print(f"缓存文件摘要: {FILE_SUMMARY_CACHE[abs_path]}") # 打印缓存信息
+        return summary_text
     except Exception:
         return ""
 
