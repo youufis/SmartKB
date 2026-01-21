@@ -2892,6 +2892,8 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
                     delete_button = gr.Button("删除选中", variant="stop", icon="icon/delete.png")
                 with gr.Row():
                     html_upload_msg = gr.Markdown()
+        with gr.Tab("关于与帮助", id="about_help_tab") as about_help_tab:
+            about_md=gr.Markdown(value=load_about_help_content())
     # 登录和注册功能
     login_button.click(
         fn=login,
@@ -3097,7 +3099,7 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
     # 添加随机示例刷新功能
     demo.load(fn=update_examples, inputs=None, outputs=[examples1.dataset,examples2.dataset])
     
-    # # 加载关于与帮助内容
+    # 加载关于与帮助内容
     # demo.load(fn=load_about_help_content, inputs=None, outputs=[about_md])
     
 
