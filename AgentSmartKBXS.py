@@ -1,9 +1,11 @@
 import os
+os.environ['MPLCONFIGDIR'] ="D:/SmartKB/matplotlib"
 from dashscope import Application    
 import gradio as gr
 from dotenv import load_dotenv
 import time
 import json
+import csv
 import requests
 import base64
 import hashlib
@@ -12,8 +14,8 @@ import re
 import shutil
 import sqlite3
 import bcrypt
-from shared_utils import clear_chat_history, getnvr_url
-from query_service import get_query_service
+from score_system import mount_score_api
+from smart_rollcall_api import mount_rollcall_api
 
 
 # 定义初始最大允许的请求数
@@ -39,7 +41,7 @@ PROMPT_FILE_NAME = "信通课程知识要点.txt"
 # 网络/UI相关
 UI_PORT = 7862
 SERVER_HOST = "0.0.0.0"
-SERVER_PORT = 8088
+SERVER_PORT = 8082
 ICON_PATH = "icon/logo.png"
 FAVICON_PATH = "favicon.ico"
 
@@ -48,8 +50,10 @@ QWEN_OPENAI_API_BASE = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 APPID = "6fcb54e8f16f4e3b94e4b9fd4eab1125"
 MEMORY_ID = "77338108f9c649c4b629b8078e6c6370"
 MODEL_LONG_NAME = "qwen-long"
-MODEL_VL_NAME = "qwen3-vl-plus"
-MODEL_NAME="qwen3-max"
+MODEL_VL_NAME = "qwen3-vl-flash"
+# MODEL_NAME="qwen3-max"
+# MODEL_NAME="qwen3.5-flash"
+MODEL_NAME="deepseek-v4-flash"
 EMBEDDING_MODEL_NAME = "quentinz/bge-large-zh-v1.5:latest"
 
 # 默认用户
@@ -246,34 +250,63 @@ def delete_user(username, current_user):
         return f"删除失败：{str(e)}"
 
 def get_user_info(username, current_user):
-    """获取用户信息，管理员可以查看任何用户，普通用户只能查看自己的信息"""
+    """获取用户信息，支持模糊查询。管理员可以查看任何用户，普通用户只能查看自己的信息"""
     if current_user != "root" and current_user != username:
         return "权限不足：只能查看自己的信息"
     
     conn = sqlite3.connect('users.db')
     c = conn.cursor()
     
+    # 先尝试精确查询
     c.execute("SELECT username, class, name, gender FROM users WHERE username=?", (username,))
     result = c.fetchone()
+    
+    if result:
+        conn.close()
+        username, class_val, name, gender = result
+        
+        # 格式化性别显示
+        gender_str = ""
+        if gender is not None:
+            g = str(gender)
+            if g in ('1', 'M', 'm', '男'):
+                gender_str = '男'
+            elif g in ('2', 'F', 'f', '女', '0'):
+                gender_str = '女'
+            else:
+                gender_str = g
+        
+        return f"用户名: {username}\n班级: {class_val}\n姓名: {name}\n性别: {gender_str}"
+    
+    # 如果精确查询没有找到，尝试模糊查询
+    fuzzy_param = '%' + username + '%'
+    c.execute("SELECT username, class, name, gender FROM users WHERE username LIKE ?", (fuzzy_param,))
+    fuzzy_results = c.fetchall()
     conn.close()
     
-    if not result:
+    if not fuzzy_results:
         return f"用户 {username} 不存在"
     
-    username, class_val, name, gender = result
+    if len(fuzzy_results) == 1:
+        # 只有一个匹配，返回详细信息
+        username, class_val, name, gender = fuzzy_results[0]
+        
+        # 格式化性别显示
+        gender_str = ""
+        if gender is not None:
+            g = str(gender)
+            if g in ('1', 'M', 'm', '男'):
+                gender_str = '男'
+            elif g in ('2', 'F', 'f', '女', '0'):
+                gender_str = '女'
+            else:
+                gender_str = g
+        
+        return f"用户名: {username}\n班级: {class_val}\n姓名: {name}\n性别: {gender_str}"
     
-    # 格式化性别显示
-    gender_str = ""
-    if gender is not None:
-        g = str(gender)
-        if g in ('1', 'M', 'm', '男'):
-            gender_str = '男'
-        elif g in ('2', 'F', 'f', '女', '0'):
-            gender_str = '女'
-        else:
-            gender_str = g
-    
-    return f"用户名: {username}\n班级: {class_val}\n姓名: {name}\n性别: {gender_str}"
+    # 多个匹配，列出用户名
+    usernames = [row[0] for row in fuzzy_results]
+    return f"找到多个匹配用户：{', '.join(usernames)}\n请提供更精确的用户名"
 
 def get_all_users(current_user):
     """获取所有用户列表，只有管理员可以查看"""
@@ -308,6 +341,157 @@ def get_all_users(current_user):
         result += f"用户名: {username}, 班级: {class_val}, 姓名: {name}, 性别: {gender_str}\n"
     
     return result
+
+
+def standardize_gender_value(gender_value):
+    if gender_value is None:
+        return None
+    gender_str = str(gender_value).strip()
+    if gender_str in ("男", "1", "M", "m", "male", "Male"):
+        return 1
+    if gender_str in ("女", "0", "F", "f", "female", "Female"):
+        return 0
+    if gender_str == "":
+        return None
+    return None
+
+
+def standardize_role_value(role_value):
+    if role_value is None:
+        return 2
+    role_str = str(role_value).strip()
+    if role_str in ("管理员", "0", "admin", "Admin", "administrator", "Administrator"):
+        return 0
+    if role_str in ("教师", "1", "teacher", "Teacher"):
+        return 1
+    if role_str in ("普通用户", "2", "user", "User"):
+        return 2
+    return 2
+
+
+def bulk_delete_users(pattern, current_user):
+    if current_user != "root":
+        return "权限不足：只有管理员可以批量删除用户"
+
+    if not pattern or not pattern.strip():
+        return "请输入要删除的用户名包含的关键词"
+
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    like_pattern = f"%{pattern.strip()}%"
+    c.execute("SELECT username FROM users WHERE username LIKE ? AND username != 'root'", (like_pattern,))
+    users = [row[0] for row in c.fetchall()]
+    if not users:
+        conn.close()
+        return f"未找到包含 '{pattern}' 的用户"
+
+    c.executemany("DELETE FROM users WHERE username=?", [(u,) for u in users])
+    conn.commit()
+    conn.close()
+
+    users_display = ", ".join(users[:20])
+    if len(users) > 20:
+        users_display += f", ... 共 {len(users)} 个用户"
+    return f"已删除 {len(users)} 个用户：{users_display}"
+
+
+def generate_user_import_template():
+    template_path = os.path.abspath("user_import_template.csv")
+    header = "username,password,class,name,gender,role\n"
+    sample = "s11001,Password123,1,张三,男,普通用户\n"
+    try:
+        with open(template_path, "w", encoding="gbk", newline="") as f:
+            f.write(header)
+            f.write(sample)
+        return template_path
+    except Exception as e:
+        return None
+
+
+def import_users_from_file(file_path, current_user):
+    if current_user != "root":
+        return "权限不足：只有管理员可以导入用户"
+
+    if not file_path or not os.path.exists(file_path):
+        return "导入文件不存在"
+
+    ext = os.path.splitext(file_path)[1].lower()
+    if ext != ".csv":
+        return "仅支持 CSV 格式的导入文件"
+
+    success_count = 0
+    failure_messages = []
+
+    def read_csv_with_encoding(encoding):
+        with open(file_path, newline="", encoding=encoding) as f:
+            reader = csv.DictReader(f)
+            return list(reader)
+
+    try:
+        try:
+            rows = read_csv_with_encoding("utf-8-sig")
+        except UnicodeDecodeError:
+            rows = read_csv_with_encoding("gbk")
+
+        row_index = 1
+        for row in rows:
+            row_index += 1
+            if not row or not any(str(v).strip() for v in row.values()):
+                continue
+
+            username = str(row.get("username", "")).strip()
+            password = str(row.get("password", "")).strip()
+            class_val = str(row.get("class", "")).strip()
+            name = str(row.get("name", "")).strip()
+            gender = str(row.get("gender", "")).strip()
+            role = str(row.get("role", "")).strip()
+
+            if not username or not password:
+                failure_messages.append(f"第{row_index}行：用户名或密码不能为空")
+                continue
+
+            if class_val == "":
+                class_num = None
+            else:
+                try:
+                    class_num = int(class_val)
+                except ValueError:
+                    failure_messages.append(f"第{row_index}行：班级必须为整数")
+                    continue
+
+            gender_num = standardize_gender_value(gender)
+            role_num = standardize_role_value(role)
+
+            result = register_user(username, password, class_num, name, gender_num, current_user, role_num)
+            if "成功" in result:
+                success_count += 1
+            else:
+                failure_messages.append(f"第{row_index}行：{result}")
+    except Exception as e:
+        return f"导入失败：{str(e)}"
+
+    summary = [f"导入完成：成功 {success_count} 个用户，失败 {len(failure_messages)} 条"]
+    if failure_messages:
+        summary.append("失败明细：")
+        summary.extend(failure_messages[:20])
+        if len(failure_messages) > 20:
+            summary.append(f"...还有 {len(failure_messages) - 20} 条失败记录")
+    return "\n".join(summary)
+
+
+def handle_bulk_delete_users(pattern, session_state):
+    current_user = session_state.get("logged_in_name", "")
+    if not current_user:
+        return "请先登录"
+    return bulk_delete_users(pattern, current_user)
+
+
+def handle_import_users(import_file, session_state):
+    current_user = session_state.get("logged_in_name", "")
+    if not current_user:
+        return "请先登录"
+    return import_users_from_file(import_file, current_user)
+
 
 def get_online_users_count():
     """获取当前在线人数"""
@@ -384,10 +568,10 @@ def login(username_or_name, password, state):
         hashed_password = result[1]
     
     # 密码验证
-    if username == "root" and password == "":
-        login_success = True
-    else:
-        login_success = check_password(password, hashed_password)
+    # if username == "root" and password == "":
+    #     login_success = True
+    # else:
+    login_success = check_password(password, hashed_password)
         
     if login_success:
         logged_in = True              
@@ -463,8 +647,18 @@ def login(username_or_name, password, state):
         # 检查用户角色，只有管理员和教师才显示教学资源页面
         is_admin_or_teacher = is_admin(username) or is_teacher(username)
         html_resources_visible = is_admin_or_teacher
+        score_tab_visible = is_admin_or_teacher
         
-        return (msg, gr.update(value=htmlstr), gr.update(visible=True), gr.update(selected="main_tab"), state, gr.FileExplorer(root_dir=user_chat_dir), gr.update(visible=True), gr.update(visible=user_mgmt_visible), gr.update(visible=html_resources_visible), gr.update(value=html_content), gr.FileExplorer(root_dir=user_html_dir))
+        return (msg, gr.update(value=htmlstr), gr.update(visible=True), 
+                gr.update(selected="main_tab"), state, 
+                gr.FileExplorer(root_dir=user_chat_dir), 
+                gr.update(visible=True), 
+                gr.update(visible=user_mgmt_visible), 
+                gr.update(visible=html_resources_visible), 
+                gr.update(value=html_content), 
+                gr.FileExplorer(root_dir=user_html_dir), 
+                gr.update(visible=score_tab_visible)
+                )
     else:
         logged_in = False
         state["logged_in_name"] = ""
@@ -482,8 +676,8 @@ def login(username_or_name, password, state):
                 gr.update(visible=False), 
                 gr.update(visible=False),
                 gr.update(value="<p style='text-align: center;'>请先登录以查看您的HTML资源</p>"),
-                gr.FileExplorer(root_dir=get_html_placeholder_dir()))
-
+                gr.FileExplorer(root_dir=get_html_placeholder_dir()),
+                gr.update(visible=False))
 ##########################################
 # 工具函数
 ##########################################
@@ -612,6 +806,8 @@ def get_htmlfilelst(state):
             )}
         </div>
         '''
+    # file_grid_html=file_grid_html+f'<div class="file-grid"><div class="file-card"><a href="/gradio_api/file=root/html/puzzle/index.html" target="_blank">互动小活动</a></div>  \
+    # <div class="file-card"><a href="/gradio_api/file=root/html/ai/index.html" target="_blank">人工智能通识课</a></div></div>'
     
     return file_grid_html
 
@@ -642,14 +838,19 @@ def get_history_placeholder_dir():
 # 获取用户的API KEY
 def getapi_key(session_state=None):
     # 从 session_state 获取登录用户，否则使用默认管理员 root
-    logged_in_name = DEFAULT_LOGGED_IN_NAME
-    # 默认所有用户
-    # if session_state and isinstance(session_state, dict):
-    #     ln = session_state.get("logged_in_name")
-    #     if ln:
-    #         logged_in_name = ln
-    
-    env_path=os.path.join(logged_in_name, ".env")
+    logged_in_name = session_state.get("logged_in_name") if session_state else "None"
+    logged_in_name = DEFAULT_LOGGED_IN_NAME # 默认使用管理员的环境变量!!!!
+    # 判断用户是否是管理员或教师
+    if is_admin(logged_in_name):
+        logged_in_name = DEFAULT_LOGGED_IN_NAME  # 管理员使用 ROOT_DIR 目录
+        env_path=os.path.join(logged_in_name, ".env")
+    else:
+        logged_in_name = logged_in_name  # 使用自己的目录
+        env_path=os.path.join(logged_in_name, ".env")
+        # 如果目录下没有 .env 文件,则复制根目录下的 .env 文件到用户目录下
+        if not os.path.exists(env_path):
+            shutil.copyfile(os.path.join(".env"), env_path)
+        
      # 清除全局环境变量中的缓存，防止污染
     for key in ["dashscope_api_key", "deepseek_api_key"]:
         if key in os.environ:
@@ -661,7 +862,11 @@ def getapi_key(session_state=None):
     dashscope_apikey  = os.getenv("dashscope_api_key")
     deepseek_apikey=os.getenv("deepseek_api_key")
     #dashscope.api_key = dashscope_apikey 
+    #print(f"从 {env_path} 加载的 DashScope API KEY: {dashscope_apikey}")
+    #print(f"从 {env_path} 加载的 DeepSeek API KEY: {deepseek_apikey}")
     return dashscope_apikey,deepseek_apikey
+
+
 
 # 用户上下文相关函数
 def get_user_context(session_state):
@@ -822,14 +1027,14 @@ def log_access_with_limit_check(ip_address, prompt):
 ##########################################
 # 文件处理相关函数
 ##########################################
-def upload_file_and_get_id(file_path, logged_in_name: str = DEFAULT_LOGGED_IN_NAME):
+def upload_file_and_get_id(file_path, session_state):
     """
     上传文件到DashScope并获取文件ID
     
     :param file_path: 本地文件路径
     :return: 文件ID
     """            
-    api_key, _ = getapi_key(logged_in_name) 
+    api_key, _ = getapi_key(session_state) 
     with open(file_path, 'rb') as f:
         file_response = requests.post(
             f"{QWEN_OPENAI_API_BASE}/files",
@@ -1416,141 +1621,6 @@ def agent_chatX(prompt, session_state=None):
         #yield str(e), session_id
         yield "网络连接错误：请检查您的网络连接或稍后重试！", session_id
 
-#本地RAG查询服务 本地知识库
-def agent_chat(prompt, session_state=None):
-    # 从 session_state 获取登录用户，否则使用默认
-    logged_in_name = DEFAULT_LOGGED_IN_NAME
-    session_id = None
-    if session_state and isinstance(session_state, dict):
-        ln = session_state.get("logged_in_name")
-        if ln:
-            logged_in_name = ln
-        session_id = session_state.get("session_id")
-        
-        # 如果session_state中没有session_id，则创建一个新的
-        if session_id is None:
-            session_id = f"{logged_in_name}_{int(time.time())}"
-            session_state["session_id"] = session_id
-        
-    
-    yield f"请稍候...", session_id        
-
-    # 导入query_service模块本地RAG查询服务
-    
-    
-    # 初始化QueryService实例
-    model_name = MODEL_NAME # 可根据需要调整
-    embedding_model_name = EMBEDDING_MODEL_NAME  # 可根据需要调整
-    
-    # 获取QueryService实例
-    service = get_query_service(model_name, embedding_model_name, logged_in_name)
-    
-    # 使用RAG模式查询
-    full_response = ""
-    
-    try:
-        # 使用RAG模式进行查询
-        for chunk in service.execute_query(prompt, mode="rag"):
-            full_response = chunk  # execute_query返回累积内容
-            yield full_response, session_id
-            
-    except Exception as e:
-        yield f"查询出错: {str(e)}", session_id
-        return
-    
-
-def agent_chativ(prompt, session_state=None):
-    """使用IV Agent Workflow处理复杂任务"""
-    # 从 session_state 获取登录用户，否则使用默认
-    logged_in_name = DEFAULT_LOGGED_IN_NAME
-    session_id = None
-    if session_state and isinstance(session_state, dict):
-        ln = session_state.get("logged_in_name")
-        if ln:
-            logged_in_name = ln
-        session_id = session_state.get("session_id")
-        
-        # 如果session_state中没有session_id，则创建一个新的
-        if session_id is None:
-            session_id = f"{logged_in_name}_{int(time.time())}"
-            session_state["session_id"] = session_id
-    
-    yield f"请稍候...", session_id
-    
-    try:
-        # 获取NVR URLs
-        nvr1_url, nvr2_url = getnvr_url(logged_in_name)
-        
-        # 初始化参数
-        model_name = MODEL_NAME  # 可根据需要调整
-        embedding_model_name = EMBEDDING_MODEL_NAME  # 可根据需要调整
-        size = "1024*768"  # 图像大小
-        isplus = "False"   # 是否启用增强版
-        voice = "严肃男"   # 语音合成的声音
-
-        # 导入agent_rag_service并调用其流式函数 不要提示导入，避免循环依赖
-        import asyncio
-        from queue import Queue, Empty
-        import threading
-        from agent_rag_service import run_agent_workflow_stream
-
-        output_queue = Queue()
-        result = []
-
-        def run_workflow_in_thread():
-            try:
-                # 获取事件循环，如果不存在则创建新的
-                try:
-                    loop = asyncio.get_running_loop()
-                except RuntimeError:
-                    loop = asyncio.new_event_loop()
-                    asyncio.set_event_loop(loop)
-                
-                async def execute_workflow():
-                    # 在异步上下文中执行流式工作流
-                    full_output = ""
-                    try:
-                        async for output in run_agent_workflow_stream(
-                                prompt, session_state, model_name, 
-                                embedding_model_name, size, isplus, voice):
-                            output_queue.put(output)
-                    except Exception as e:
-                        output_queue.put(f"工作流执行出错: {str(e)}")
-                    finally:
-                        output_queue.put(None)  # 发送结束标记
-
-                loop.run_until_complete(execute_workflow())
-            except Exception as e:
-                output_queue.put(f"线程执行出错: {str(e)}")
-                output_queue.put(None)
-
-        # 启动工作流线程
-        thread = threading.Thread(target=run_workflow_in_thread)
-        thread.start()
-
-        # 持续从队列中获取输出并流式返回给Gradio
-        full_output = ""
-        while True:
-            try:
-                item = output_queue.get(timeout=1)  # 1秒超时
-                if item is None:  # 结束标记
-                    break
-                full_output = item  # 更新完整输出内容
-                yield full_output, session_id  # 流式返回给Gradio
-            except Empty:
-                # 检查线程是否仍在运行
-                if not thread.is_alive():
-                    break
-                continue
-
-        # 等待线程完成
-        thread.join()
-            
-    except Exception as e:
-        yield f"IV智能体执行出错: {str(e)}", session_id
-        import traceback
-        traceback.print_exc()
-        return
    
 def agent_chat_with_document(file_path, prompt, session_state=None):
     """使用agent_chat处理文档问答，支持 session_state 获取用户上下文"""
@@ -1570,7 +1640,7 @@ def agent_chat_with_document(file_path, prompt, session_state=None):
     yield "请稍候...", session_id
     
     try:
-        file_id = upload_file_and_get_id(file_path, logged_in_name=logged_in_name)
+        file_id = upload_file_and_get_id(file_path, session_state)
         if not file_id:
             yield "文件上传失败：无法获取文件ID", session_id
             return
@@ -1644,7 +1714,7 @@ def agent_chat_with_image(file_path, prompt, session_state=None):
             session_id = f"{logged_in_name}_{int(time.time())}"
             session_state["session_id"] = session_id
             
-    dashscope_api_key, _ = getapi_key(logged_in_name)
+    dashscope_api_key, _ = getapi_key(session_state)
     yield "请稍候...", session_id
        
     model_name = MODEL_VL_NAME  # 图像理解模型
@@ -1744,7 +1814,7 @@ def get_file_summary(file_path, session_state=None):
     except Exception:
         return ""
 
-def handle_unified_query(file_path, prompt, session_state, ragchk, include_file_context, request: gr.Request):
+def handle_unified_query(file_path, prompt, session_state, include_file_context, request: gr.Request):
     # 从 session_state 获取 session_id
     session_id = session_state.get("session_id") if session_state else None
     
@@ -1814,12 +1884,8 @@ def handle_unified_query(file_path, prompt, session_state, ragchk, include_file_
             # 增强提示词，包含用户上下文
             enhanced_prompt = enhance_prompt_with_user_context(prompt, session_state)
             # print("Enhanced Prompt with File Context:", enhanced_prompt) #调试输出
-            if ragchk=="本地知识库版":
-                response_gen = agent_chat(enhanced_prompt, session_state=session_state)
-            elif ragchk=="本地智能体版":
-                response_gen = agent_chativ(enhanced_prompt, session_state=session_state)
-            else:
-                response_gen = agent_chatX(enhanced_prompt, session_state=session_state)
+
+            response_gen = agent_chatX(enhanced_prompt, session_state=session_state)
             
             for response, updated_session_id in response_gen:
                     yield response, updated_session_id    
@@ -1867,18 +1933,14 @@ def handle_unified_query(file_path, prompt, session_state, ragchk, include_file_
         # 增强提示词，包含用户上下文
         enhanced_prompt = enhance_prompt_with_user_context(prompt, session_state)
         # print("Enhanced Prompt:", enhanced_prompt) # 调试输出
-        if ragchk=="本地知识库版":
-            response_gen = agent_chat(enhanced_prompt, session_state=session_state)
-        elif ragchk=="本地智能体版":
-            response_gen = agent_chativ(enhanced_prompt, session_state=session_state)
-        else:
-            response_gen = agent_chatX(enhanced_prompt, session_state=session_state)
+
+        response_gen = agent_chatX(enhanced_prompt, session_state=session_state)
         
         for response, updated_session_id in response_gen:
                 yield response, updated_session_id
 
 # 创建一个包装函数来处理对话和历史记录
-def chat_with_history(file_path, user_input, session_state, ragchk, include_file_context, request: gr.Request):
+def chat_with_history(file_path, user_input, session_state, include_file_context, request: gr.Request):
     # 初始化session_state
     if session_state is None:
         session_state = {"conversation_history": [], "session_id": None}
@@ -1990,7 +2052,7 @@ def chat_with_history(file_path, user_input, session_state, ragchk, include_file
         # 正常调用AI
         # 增强提示词，包含用户上下文
         enhanced_prompt = enhance_prompt_with_user_context(user_input, session_state)
-        response_gen = handle_unified_query(file_path, enhanced_prompt, session_state,ragchk, include_file_context, request)
+        response_gen = handle_unified_query(file_path, enhanced_prompt, session_state, include_file_context, request)
         for response, updated_session_id in response_gen:
             ai_response = response  # 持续更新为最新的响应
             final_session_id = updated_session_id
@@ -2484,9 +2546,12 @@ def update_user_mgmt_visibility(session_state):
     """根据用户权限动态更新用户管理面板的可见性"""
     current_user = session_state.get("logged_in_name", "")
     if not current_user:
-        return [gr.update(visible=False) for _ in range(12)]  # 隐藏所有组件
+        return [gr.update(visible=False) for _ in range(17)]  # 隐藏所有组件
     
     is_admin = current_user == "root"
+    
+    # 生成模板文件路径（仅管理员）
+    template_path = generate_user_import_template() if is_admin else None
     
     # 返回各个组件的可见性状态
     return [
@@ -2496,6 +2561,11 @@ def update_user_mgmt_visibility(session_state):
         gr.update(visible=is_admin),  # 删除用户按钮
         gr.update(visible=is_admin),  # 查询用户按钮
         gr.update(visible=is_admin),  # 查看所有用户按钮
+        gr.update(visible=is_admin),  # 批量删除用户名包含输入框
+        gr.update(visible=is_admin),  # 批量删除按钮
+        gr.update(visible=is_admin),  # 导入用户文件输入
+        gr.update(visible=is_admin),  # 导入用户按钮
+        gr.update(visible=is_admin, value=template_path),  # 导入模板文件输出
         gr.update(visible=True),      # 用户名输入框（所有用户可见，用于输入要修改密码的用户名）
         gr.update(visible=is_admin),  # 班级输入框
         gr.update(visible=is_admin),  # 姓名输入框
@@ -2793,7 +2863,7 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
             """
         gr.HTML(htmlstr)
     with gr.Tabs() as tabs:
-        with gr.Tab("用户登录", id="login_tab") as login_tab:
+        with gr.Tab("🔐 用户登录", id="login_tab") as login_tab:
             with gr.Row():
                 login_username = gr.Textbox(label="用户名",placeholder="输入用户名或姓名")
                 login_password = gr.Textbox(label="密码", type="password", placeholder="输入密码")
@@ -2815,11 +2885,19 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
                     delete_user_button = gr.Button("删除用户", variant="stop",icon="icon/delete.png")
                     search_button = gr.Button("查询用户", variant="secondary",icon="icon/search.png")
                     list_users_button = gr.Button("查看所有用户", variant="secondary",icon="icon/view.png")
+                with gr.Row():
+                    template_file = gr.File(label="导入模板文件", interactive=False)
+                    bulk_delete_pattern = gr.Textbox(label="批量删除用户名包含", placeholder="例如：s11")
+                with gr.Row():
+                    import_user_file = gr.File(label="导入用户文件", file_types=[".csv"], file_count="single", type="filepath")
+                    import_users_button = gr.Button("导入用户", variant="primary", icon="icon/upload.png")
+                    bulk_delete_button = gr.Button("批量删除用户", variant="stop", icon="icon/delete.png")
+                    
             with gr.Row():
                 login_msg = gr.Markdown()
             with gr.Row():
                 lblmsg.render()
-        with gr.Tab("教育智能体", id="main_tab", visible=False) as main_tab:
+        with gr.Tab("🤖 教育智能体", id="main_tab", visible=False) as main_tab:
             with gr.Row():
                 with gr.Column(scale=2):
                     query_input.render()
@@ -2837,7 +2915,6 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
                     
             with gr.Row():
                 query_button = gr.Button("发送消息",icon="icon/submit.png",variant="primary",scale=2)   
-                ragchk=gr.Dropdown(label="版本",choices=["本地知识库版", "本地智能体版", "云端智能体版"], value="本地智能体版", container=False,scale=1)
                 new_topic_button = gr.Button("新话题", icon="icon/newtopic.png", variant="stop",scale=1) 
                 stop_button = gr.Button("停止", icon="icon/stop.png", variant="stop",scale=1)
                 refresh_button = gr.Button("换一换", icon="icon/refresh.png", variant="stop",scale=1)
@@ -2868,7 +2945,7 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
                         )
                 with gr.Row():
                     delete_file_button = gr.Button("删除选择", icon="icon/delete.png", variant="stop")
-        with gr.Tab("教学资源", id="html_resources_tab", visible=False) as html_resources_tab:
+        with gr.Tab("📚 教学资源", id="html_resources_tab", visible=False) as html_resources_tab:
             with gr.Row():
                 html_files_grid = gr.HTML(label="HTML文件列表", value="<p style='text-align: center;'>请先登录以查看您的HTML资源</p>")
             with gr.Accordion("资源管理",open=False,) as html_resources_mgmt:
@@ -2892,17 +2969,20 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
                     delete_button = gr.Button("删除选中", variant="stop", icon="icon/delete.png")
                 with gr.Row():
                     html_upload_msg = gr.Markdown()
-        with gr.Tab("关于与帮助", id="about_help_tab") as about_help_tab:
+        with gr.Tab("🏆 课堂积分", id="score_tab", visible=False) as score_tab:
+            score_html = gr.HTML()
+        with gr.Tab("ℹ️ 关于与帮助", id="about_help_tab") as about_help_tab:
             about_md=gr.Markdown(value=load_about_help_content())
+        
     # 登录和注册功能
     login_button.click(
         fn=login,
         inputs=[login_username, login_password, session_state],
-        outputs=[login_msg, lblmsg, main_tab, tabs, session_state, history_file_explorer, history_sidebar, user_mgmt, html_resources_tab, html_files_grid, file_explorer]
+        outputs=[login_msg, lblmsg, main_tab, tabs, session_state, history_file_explorer, history_sidebar, user_mgmt, html_resources_tab, html_files_grid, file_explorer, score_tab]
     ).then(
         fn=update_user_mgmt_visibility,
         inputs=[session_state],
-        outputs=[register_button, update_info_button, change_pwd_button, delete_user_button, search_button, list_users_button, mgmt_username, mgmt_class, mgmt_name, mgmt_gender, mgmt_role, mgmt_password]
+        outputs=[register_button, update_info_button, change_pwd_button, delete_user_button, search_button, list_users_button, bulk_delete_pattern, bulk_delete_button, import_user_file, import_users_button, template_file, mgmt_username, mgmt_class, mgmt_name, mgmt_gender, mgmt_role, mgmt_password]
     ).then(
         fn=lambda: ("", ""),  # 清空用户名和密码输入框
         inputs=None,
@@ -2912,11 +2992,11 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
     login_password.submit(
         fn=login,
         inputs=[login_username, login_password, session_state],
-        outputs=[login_msg, lblmsg, main_tab, tabs, session_state, history_file_explorer, history_sidebar, user_mgmt, html_resources_tab, html_files_grid, file_explorer]
+        outputs=[login_msg, lblmsg, main_tab, tabs, session_state, history_file_explorer, history_sidebar, user_mgmt, html_resources_tab, html_files_grid, file_explorer, score_tab]
     ).then(
         fn=update_user_mgmt_visibility,
         inputs=[session_state],
-        outputs=[register_button, update_info_button, change_pwd_button, delete_user_button, search_button, list_users_button, mgmt_username, mgmt_class, mgmt_name, mgmt_gender, mgmt_role, mgmt_password]
+        outputs=[register_button, update_info_button, change_pwd_button, delete_user_button, search_button, list_users_button, bulk_delete_pattern, bulk_delete_button, import_user_file, import_users_button, template_file, mgmt_username, mgmt_class, mgmt_name, mgmt_gender, mgmt_role, mgmt_password]
     ).then(
         fn=lambda: ("", ""),  # 清空用户名和密码输入框
         inputs=None,
@@ -2966,11 +3046,24 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
         inputs=[session_state],
         outputs=[login_msg]
     )
-        
 
+    # 批量删除用户按钮事件
+    bulk_delete_button.click(
+        fn=handle_bulk_delete_users,
+        inputs=[bulk_delete_pattern, session_state],
+        outputs=[login_msg]
+    )
+
+    # 导入用户按钮事件
+    import_users_button.click(
+        fn=handle_import_users,
+        inputs=[import_user_file, session_state],
+        outputs=[login_msg]
+    )
+        
     query_event =query_button.click(
         fn=chat_with_history,
-        inputs=[file_input, query_input, session_state,ragchk,include_file_context], 
+        inputs=[file_input, query_input, session_state, include_file_context], 
         outputs=[query_output, session_state, html_output] 
     ).then(
         fn=refresh_file_explorer_after_chat,
@@ -2988,7 +3081,7 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
 
     submit_event=query_input.submit(
         fn=chat_with_history,
-        inputs=[file_input, query_input, session_state,ragchk,include_file_context], 
+        inputs=[file_input, query_input, session_state, include_file_context], 
         outputs=[query_output, session_state, html_output]
     ).then(
         fn=refresh_file_explorer_after_chat,
@@ -3023,10 +3116,6 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
         fn=lambda current_state: ("", "","" ,None,gr.update(visible=False),gr.update(visible=False),{"conversation_history": [], "session_id": None, "logged_in_name": current_state.get("logged_in_name"), "class": current_state.get("class"), "name": current_state.get("name"), "gender": current_state.get("gender")}), 
         inputs=[session_state], 
         outputs=[query_input, query_output, html_output,file_input,preview_html_button,copy_button,session_state]
-    ).then(
-        fn=clear_chat_history,
-        inputs=[gr.State(False), session_state],
-        outputs=[query_output]
     )
 
     
@@ -3131,6 +3220,28 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
         outputs=[file_upload, file_explorer]
     )
     
+    # 课堂积分标签页 - 加载HTML内容
+    def load_score_html():
+        import urllib.parse
+        html_path = "root/html/score_system/index.html"
+        src = f"/gradio_api/file={urllib.parse.quote(html_path)}"
+        return gr.update(value=f"""<iframe src="{src}"
+            style="width:100%;height:100vh;border:none;min-height:700px;">
+        </iframe>""")
+    
+    score_tab.select(
+        fn=load_score_html,
+        inputs=None,
+        outputs=[score_html]
+    )
+    
+    # 页面加载时也预加载积分页面
+    demo.load(
+        fn=load_score_html,
+        inputs=None,
+        outputs=[score_html]
+    )
+    
     # HTML文件上传按钮事件文件管理器刷新BUG，先刷一个临时目录，再刷正式目录
     upload_button.click(
         fn=handle_html_file_upload,
@@ -3169,13 +3280,20 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
                         <p style='text-align: center;'>
                         Copyright © 2025 By [UNET] All rights reserved.
                         </p>""")
-    demo.load(fn=get_host,inputs=None,outputs=linkurl)
+    # demo.load(fn=get_host,inputs=None,outputs=linkurl)
     demo.queue(default_concurrency_limit=8,max_size=20)
     demo.launch(
         server_name=SERVER_HOST,
-        server_port=8088,
+        server_port=SERVER_PORT,
         inbrowser=True,
         show_api=False,
+        share=False,
+        prevent_thread_lock=True,
         allowed_paths=['./'],
         favicon_path=FAVICON_PATH,
     )
+    # 必须先 launch 才能拿到真正的 app 对象（queue 和 launch 创建的不是同一个）
+    mount_score_api(demo.app)
+    mount_rollcall_api(demo.app)
+    # 阻塞主线程保持服务运行
+    demo.block_thread()
