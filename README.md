@@ -60,6 +60,8 @@
    - 用户名：root
    - 密码：root
 
+> 如果需要使用云端 DashScope 服务，请先在 `.env` 文件中配置 `dashscope_api_key` 和 `deepseek_api_key`。
+
 ## 登录与使用说明
 
 - 登录时可输入用户名或姓名。
