@@ -1,5 +1,15 @@
 # SmartKB-智能知识库系统
 
+## 智能助手
+
+![智能助手](https://github.com/youufis/SmartKB/blob/main/shot3.png)
+
+## 教育智能体
+
+![教育智能体](https://github.com/youufis/SmartKB/blob/main/shot1.png)
+
+![教育智能体](https://github.com/youufis/SmartKB/blob/main/shot2.png)
+
 ## 1. 系统概述
 
 智能助手系统(SmartKB)是一个基于大语言模型的全方位智能知识管理平台，集成了多模态处理、智能生成、实时交互和协作管理等核心功能。该系统不仅是一个信息检索工具，更是一个能够理解、创造和交互的智能认知体。
@@ -187,3 +197,4 @@ python SmartKB.py
 
 **文档版本**：v10.0
 **更新日期**：2025-12
+# SmartKB
