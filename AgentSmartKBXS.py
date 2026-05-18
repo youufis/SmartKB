@@ -244,7 +244,18 @@ def delete_user(username, current_user):
         c.execute("DELETE FROM users WHERE username=?", (username,))
         conn.commit()
         conn.close()
-        return f"用户 {username} 删除成功"
+        
+        # 删除用户目录（如果存在）
+        user_dir = os.path.abspath(username)
+        dir_deleted = ""
+        if os.path.isdir(user_dir):
+            try:
+                shutil.rmtree(user_dir)
+                dir_deleted = f"，并已删除用户目录 {username}/"
+            except Exception as e:
+                dir_deleted = f"，但删除用户目录失败：{str(e)}"
+        
+        return f"用户 {username} 删除成功{dir_deleted}"
     except Exception as e:
         conn.close()
         return f"删除失败：{str(e)}"
@@ -389,10 +400,28 @@ def bulk_delete_users(pattern, current_user):
     conn.commit()
     conn.close()
 
+    # 删除对应用户目录
+    deleted_dirs = []
+    failed_dirs = []
+    for u in users:
+        user_dir = os.path.abspath(u)
+        if os.path.isdir(user_dir):
+            try:
+                shutil.rmtree(user_dir)
+                deleted_dirs.append(u)
+            except Exception as e:
+                failed_dirs.append(f"{u}({e})")
+
     users_display = ", ".join(users[:20])
     if len(users) > 20:
         users_display += f", ... 共 {len(users)} 个用户"
-    return f"已删除 {len(users)} 个用户：{users_display}"
+
+    result = f"已删除 {len(users)} 个用户：{users_display}"
+    if deleted_dirs:
+        result += f"\n已删除 {len(deleted_dirs)} 个用户目录"
+    if failed_dirs:
+        result += f"\n删除目录失败：{', '.join(failed_dirs)}"
+    return result
 
 
 def generate_user_import_template():
