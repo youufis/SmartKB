@@ -2689,6 +2689,66 @@ def load_about_help_content():
         return f"# 关于与帮助\n\n读取帮助文档时出错：{str(e)}"
 
 # HTML资源页面相关函数
+def _rewrite_html_links(html_content: str, base_url: str) -> str:
+    """将 HTML 中的相对链接重写为 Gradio file 服务链接"""
+    import re
+
+    def _rewrite_attr(match):
+        prefix = match.group(1)  # href=" 或 data-href="
+        url = match.group(2)     # 链接值
+        # 跳过绝对链接、锚点、javascript、data: 等
+        if url.startswith(("http://", "https://", "#", "javascript:", "data:", "mailto:")):
+            return match.group(0)
+        # 跳过已经是 gradio_api/file= 开头的
+        if url.startswith("/gradio_api/"):
+            return match.group(0)
+        # 重写相对路径
+        new_url = base_url + url
+        return f'{prefix}{new_url}"'
+
+    # 重写 href="..." 和 data-href="..."
+    content = re.sub(r'(href=")([^"]*)(")', _rewrite_attr, html_content)
+    content = re.sub(r"(data-href=')([^']*)(')", _rewrite_attr, content)
+    # 也处理双引号的 data-href
+    content = re.sub(r'(data-href=")([^"]*)(")', _rewrite_attr, content)
+    return content
+
+
+def load_index_html():
+    """加载 root/html/index.html 导航页内容，重写链接为 Gradio file 服务路径"""
+    import urllib.parse
+    index_path = os.path.join(ROOT_DIR, "html", "index.html")
+    try:
+        if os.path.exists(index_path):
+            with open(index_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            # 重写所有相对链接，加上 gradio file 前缀
+            base_url = "/gradio_api/file=" + urllib.parse.quote("root/html/")
+            content = _rewrite_html_links(content, base_url)
+            # 用 srcdoc 嵌入（此时链接已全部为绝对路径，不会404）
+            return gr.update(value=f"""<div style="position:relative;width:100%;">
+                <iframe srcdoc="{content.replace('"', '&quot;')}"
+                    style="width:100%;height:100vh;border:none;"
+                    onload="
+                        var self = this;
+                        function resize() {{
+                            try {{
+                                var h = self.contentWindow.document.documentElement.scrollHeight;
+                                if (h > 100) {{ self.style.height = h + 'px'; }}
+                            }} catch(e) {{}}
+                        }}
+                        resize();
+                        setTimeout(resize, 500);
+                        setTimeout(resize, 1500);
+                        setTimeout(resize, 3000);
+                    ">
+                </iframe>
+            </div>""")
+        else:
+            return gr.update(value="<p style='text-align:center;color:var(--text-secondary);'>导航页面未找到</p>")
+    except Exception as e:
+        return gr.update(value=f"<p style='text-align:center;color:red;'>加载导航页失败：{str(e)}</p>")
+
 def update_html_resources(session_state):
     """更新HTML资源页面，显示用户的HTML文件列表"""
 
@@ -2976,7 +3036,10 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
                     delete_file_button = gr.Button("删除选择", icon="icon/delete.png", variant="stop")
         with gr.Tab("📚 教学资源", id="html_resources_tab", visible=False) as html_resources_tab:
             with gr.Row():
-                html_files_grid = gr.HTML(label="HTML文件列表", value="<p style='text-align: center;'>请先登录以查看您的HTML资源</p>")
+                Html_Nav=gr.HTML(value="")
+            with gr.Accordion("HTML资源",open=False,) as html_tab:
+                with gr.Row():
+                    html_files_grid = gr.HTML(label="HTML文件列表", value="<p style='text-align: center;'>请先登录以查看您的HTML资源</p>")
             with gr.Accordion("资源管理",open=False,) as html_resources_mgmt:
                 with gr.Row():
                 # 管理员和教师可以上传HTML资源文件
@@ -3240,6 +3303,10 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
    
     # 当用户切换到HTML资源标签页时，自动刷新内容
     html_resources_tab.select(
+        fn=load_index_html,
+        inputs=None,
+        outputs=[Html_Nav]
+    ).then(
         fn=update_html_resources,
         inputs=[session_state],
         outputs=[html_files_grid]
@@ -3269,6 +3336,13 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
         fn=load_score_html,
         inputs=None,
         outputs=[score_html]
+    )
+    
+    # 页面加载时预加载教学资源导航
+    demo.load(
+        fn=load_index_html,
+        inputs=None,
+        outputs=[Html_Nav]
     )
     
     # HTML文件上传按钮事件文件管理器刷新BUG，先刷一个临时目录，再刷正式目录
