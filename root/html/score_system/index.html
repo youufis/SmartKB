@@ -1,0 +1,2072 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏆 课堂积分激励系统</title>
+<style>
+/* ═══════════════════════════════════════
+   0. CSS 变量 & 重置
+   ═══════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f0f4f8;
+  --surface: #ffffff;
+  --surface-hover: #e8ecf1;
+  --border: #dce0e6;
+  --border-hover: #b0b8c4;
+  --text: #1a202c;
+  --text-dim: #718096;
+  --text-bright: #000000;
+  --cyan: #0891b2;
+  --purple: #7c3aed;
+  --magenta: #db2777;
+  --green: #059669;
+  --gold: #d97706;
+  --gradient-main: linear-gradient(135deg, var(--cyan), var(--purple));
+  --gradient-glow: linear-gradient(135deg, var(--cyan), var(--magenta));
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.08);
+  --font: 'Noto Sans SC', -apple-system, 'Microsoft YaHei', sans-serif;
+}
+
+html { font-size: 15px; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+/* ═══════════════════════════════════════
+   1. 动画背景
+   ═══════════════════════════════════════ */
+@property --bg-x { syntax: '<percentage>'; initial-value: 0%; inherits: false; }
+@property --bg-y { syntax: '<percentage>'; initial-value: 0%; inherits: false; }
+
+#bg-anim {
+  position: fixed; inset: 0; z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 60% at var(--bg-x, 20%) var(--bg-y, 30%),
+      rgba(8,145,178,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at calc(100% - var(--bg-x, 20%)) calc(100% - var(--bg-y, 30%)),
+      rgba(124,58,237,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 50% 100%,
+      rgba(219,39,119,0.04) 0%, transparent 50%),
+    var(--bg);
+  animation: bg-drift 12s ease-in-out infinite alternate;
+}
+@keyframes bg-drift {
+  0% { --bg-x: 10%; --bg-y: 20%; }
+  50% { --bg-x: 40%; --bg-y: 60%; }
+  100% { --bg-x: 60%; --bg-y: 30%; }
+}
+
+/* Grid overlay */
+#bg-grid {
+  position: fixed; inset: 0; z-index: -1;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ═══════════════════════════════════════
+   2. 粒子 & Toast
+   ═══════════════════════════════════════ */
+#particle-container { position: fixed; inset: 0; pointer-events: none; z-index: 999; }
+
+@keyframes particle-fly {
+  0%   { opacity: 1; transform: translate(0,0) scale(1); }
+  70%  { opacity: 0.6; }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0); }
+}
+.particle {
+  position: fixed; border-radius: 50%; pointer-events: none;
+  animation: particle-fly 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+#toast-container {
+  position: fixed; top: 20px; right: 20px; z-index: 1000;
+  display: flex; flex-direction: column; gap: 10px; pointer-events: none;
+}
+@keyframes toast-in {
+  0%   { transform: translateX(120%) scale(0.8); opacity: 0; }
+  100% { transform: translateX(0) scale(1); opacity: 1; }
+}
+@keyframes toast-out {
+  0%   { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(120%); opacity: 0; }
+}
+.toast {
+  background: rgba(10,10,30,0.9);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: var(--radius-sm);
+  padding: 12px 20px;
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: var(--shadow);
+  animation: toast-in 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  pointer-events: auto;
+  white-space: nowrap;
+}
+.toast .toast-icon { font-size: 1.3rem; }
+.toast .toast-score { color: var(--cyan); font-weight: 900; }
+.toast.out { animation: toast-out 0.3s ease-in forwards; }
+
+/* ═══════════════════════════════════════
+   3. 主应用容器
+   ═══════════════════════════════════════ */
+#app {
+  width: 100%; max-width: 1440px;
+  padding: 24px 32px 40px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+
+/* ═══════════════════════════════════════
+   4. 头部
+   ═══════════════════════════════════════ */
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+header h1 {
+  font-size: 1.7rem; font-weight: 900;
+  background: var(--gradient-glow);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+}
+.header-actions {
+  display: flex; align-items: center; gap: 12px;
+}
+.btn-icon {
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text-dim); width: 38px; height: 38px;
+  border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; transition: all 0.2s;
+}
+.btn-icon:hover {
+  background: var(--surface-hover); border-color: var(--border-hover); color: var(--text);
+  transform: scale(1.1);
+}
+
+/* ═══════════════════════════════════════
+   5. 年级 Tabs
+   ═══════════════════════════════════════ */
+#grade-tabs {
+  display: flex; gap: 8px;
+  background: rgba(0,0,0,0.02);
+  border: 1px solid var(--border);
+  border-radius: 100px; padding: 4px;
+}
+.grade-tab {
+  padding: 8px 24px; border: none; background: transparent;
+  color: var(--text-dim); font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; border-radius: 100px; transition: all 0.3s;
+  font-family: var(--font);
+  position: relative;
+}
+.grade-tab:hover { color: var(--text); }
+.grade-tab.active {
+  background: var(--gradient-main);
+  color: white;
+  box-shadow: 0 0 20px rgba(8,145,178,0.25);
+}
+
+/* ═══════════════════════════════════════
+   6. 控制栏
+   ═══════════════════════════════════════ */
+#controls {
+  display: flex; align-items: center; gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* 班级选择器 */
+.class-select-wrap {
+  position: relative;
+}
+.class-select-wrap::before {
+  content: '📚'; position: absolute; left: 14px; top: 50%;
+  transform: translateY(-50%); font-size: 1rem; z-index: 1;
+}
+#class-select {
+  appearance: none; -webkit-appearance: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 40px 10px 44px;
+  border-radius: 100px;
+  font-size: 0.95rem; font-weight: 500;
+  font-family: var(--font);
+  cursor: pointer; transition: all 0.2s;
+  min-width: 160px;
+}
+#class-select:hover { background: var(--surface-hover); border-color: var(--border-hover); }
+#class-select:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(8,145,178,0.15); }
+.class-select-wrap::after {
+  content: '▾'; position: absolute; right: 14px; top: 50%;
+  transform: translateY(-50%); color: var(--text-dim);
+  pointer-events: none;
+}
+#class-select option { background: var(--surface); color: var(--text); }
+
+/* 学生名单管理 */
+.manage-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  box-shadow: var(--shadow);
+  margin-top: 16px;
+}
+.manage-panel .section-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-bottom: 14px;
+}
+.manage-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.btn-primary {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+  background: var(--gradient-main);
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  opacity: 0.95;
+}
+.manage-help {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+.manage-table-wrap {
+  overflow-x: auto;
+}
+.manage-panel.collapsed .manage-table-wrap,
+.manage-panel.collapsed .manage-help {
+  display: none;
+}
+.manage-panel.collapsed .manage-toolbar {
+  justify-content: space-between;
+}
+#student-manage-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 560px;
+}
+#student-manage-table th,
+#student-manage-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-size: 0.95rem;
+}
+#student-manage-table th {
+  color: var(--text-dim);
+  font-weight: 700;
+}
+.manage-action-btn {
+  border: none;
+  background: none;
+  color: var(--cyan);
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 4px 8px;
+}
+.manage-action-btn.delete {
+  color: #ef4444;
+}
+.manage-empty {
+  text-align: center;
+  color: var(--text-dim);
+  padding: 26px 0;
+}
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 30, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  z-index: 10000;
+}
+.modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+.modal-sheet {
+  width: min(520px, calc(100% - 32px));
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+.modal-sheet h3 {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+}
+.modal-grid {
+  display: grid;
+  gap: 14px;
+}
+.modal-grid label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.95rem;
+  color: var(--text-dim);
+}
+.modal-grid input,
+.modal-grid select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+.btn-secondary {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.btn-secondary:hover {
+  transform: translateY(-1px);
+  background: var(--surface-hover);
+}
+
+/* 积分档次 */
+#score-tiers {
+  display: flex; gap: 8px;
+  background: rgba(0,0,0,0.02);
+  border: 1px solid var(--border);
+  border-radius: 100px; padding: 4px;
+}
+.tier-btn {
+  padding: 8px 20px; border: none; background: transparent;
+  border-radius: 100px; cursor: pointer; transition: all 0.3s;
+  font-family: var(--font); font-weight: 700; font-size: 0.95rem;
+  color: var(--text-dim); position: relative;
+}
+.tier-btn:hover { color: var(--text); }
+.tier-btn.active {
+  color: white;
+  box-shadow: 0 0 25px rgba(8,145,178,0.25);
+}
+.tier-btn[data-points="5"].active {
+  background: linear-gradient(135deg, #00d4ff, #0099cc);
+}
+.tier-btn[data-points="8"].active {
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+}
+.tier-btn[data-points="10"].active {
+  background: linear-gradient(135deg, #ff00e4, #ff6600);
+}
+.tier-btn-minus.active {
+  box-shadow: 0 0 25px rgba(239,68,68,0.25) !important;
+}
+.tier-btn-minus[data-points="-5"].active {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+}
+.tier-btn-minus[data-points="-8"].active {
+  background: linear-gradient(135deg, #f97316, #ea580c) !important;
+}
+.tier-btn-minus[data-points="-10"].active {
+  background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+}
+
+/* 6.5. 随机抽取按钮 */
+.btn-random-pick {
+  background: linear-gradient(135deg, #7c3aed, #db2777);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 100px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-random-pick:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+}
+.btn-random-pick:active {
+  transform: scale(0.95);
+}
+.btn-random-pick:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn-random-pick.picking {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
+  50% { box-shadow: 0 4px 25px rgba(124, 58, 237, 0.6); }
+}
+
+/* 闪动高亮动画 - 增强版 */
+.student-card.flashing {
+  animation: flash-highlight 0.15s ease-in-out;
+  z-index: 10;
+}
+
+@keyframes flash-highlight {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255, 0, 0, 0);
+    border-color: var(--border);
+    background: var(--surface);
+  }
+  50% { 
+    transform: scale(1.12);
+    box-shadow: 0 0 30px rgba(255, 50, 50, 0.9), 0 0 60px rgba(255, 100, 100, 0.6);
+    border-color: #ff0000 !important;
+    background: linear-gradient(135deg, #ffe6e6, #fff0f0);
+  }
+}
+
+/* 获胜者金色光晕 - 增强对比版 */
+.student-card.winner {
+  animation: winner-glow 1.5s ease-in-out infinite;
+  border: 3px solid #ffd700 !important;
+  box-shadow: 0 0 40px rgba(255, 215, 0, 0.8), 0 0 80px rgba(255, 215, 0, 0.5) !important;
+  background: linear-gradient(135deg, #fff9e6, #fffdf0, #fffbe6) !important;
+  position: relative;
+  overflow: visible;
+}
+
+.student-card.winner::before {
+  content: '👑';
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  font-size: 2rem;
+  animation: crown-bounce 1s ease-in-out infinite;
+  filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.8));
+  z-index: 20;
+}
+
+/* 被抽中学生卡片 - 蓝紫色主题（与金色形成对比）*/
+.student-card.picked {
+  animation: picked-pulse 2s ease-in-out infinite;
+  border: 3px solid #7c3aed !important;
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.8), 0 0 80px rgba(124, 58, 237, 0.5) !important;
+  background: linear-gradient(135deg, #f3e8ff, #ede9fe, #e9d5ff) !important;
+  position: relative;
+  overflow: visible;
+  transform: scale(1.1);
+}
+
+.student-card.picked::before {
+  content: '🎯';
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  font-size: 2rem;
+  animation: target-bounce 1s ease-in-out infinite;
+  filter: drop-shadow(0 2px 8px rgba(124, 58, 237, 0.8));
+  z-index: 20;
+}
+
+@keyframes picked-pulse {
+  0%, 100% { 
+    transform: scale(1.1);
+    box-shadow: 0 0 40px rgba(124, 58, 237, 0.8), 0 0 80px rgba(124, 58, 237, 0.5);
+  }
+  50% { 
+    transform: scale(1.18);
+    box-shadow: 0 0 60px rgba(124, 58, 237, 1), 0 0 120px rgba(124, 58, 237, 0.8);
+  }
+}
+
+@keyframes target-bounce {
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  25% { transform: translateY(-10px) rotate(-15deg) scale(1.1); }
+  75% { transform: translateY(-10px) rotate(15deg) scale(1.1); }
+}
+
+@keyframes crown-bounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-8px) rotate(-10deg); }
+  75% { transform: translateY(-8px) rotate(10deg); }
+}
+
+@keyframes winner-glow {
+  0%, 100% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.8), 0 0 80px rgba(255, 215, 0, 0.5);
+  }
+  50% { 
+    transform: scale(1.15);
+    box-shadow: 0 0 60px rgba(255, 215, 0, 1), 0 0 120px rgba(255, 215, 0, 0.8);
+  }
+}
+
+/* 随机抽取结果显示区 */
+.pick-result-display {
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  border: 2px solid #0ea5e9;
+  border-radius: 12px;
+  padding: 12px 24px;
+  min-width: 200px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.2);
+}
+
+.pick-result-display.active {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border-color: #f59e0b;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+  animation: result-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.pick-result-display .pick-result-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0369a1;
+  display: block;
+}
+
+.pick-result-display.active .pick-result-text {
+  color: #92400e;
+  font-size: 1.3rem;
+  animation: text-bounce 0.6s ease-in-out;
+}
+
+@keyframes result-pop {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes text-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* 搜索框 */
+.search-wrap {
+  position: relative; margin-left: auto;
+}
+.search-wrap::before {
+  content: '🔍'; position: absolute; left: 14px; top: 50%;
+  transform: translateY(-50%); font-size: 0.85rem; z-index: 1;
+}
+#search-input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 16px 10px 40px;
+  border-radius: 100px;
+  font-size: 0.9rem; font-family: var(--font);
+  width: 200px; transition: all 0.2s;
+}
+#search-input:focus {
+  outline: none; border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+  width: 260px;
+}
+#search-input::placeholder { color: var(--text-dim); }
+
+/* ═══════════════════════════════════════
+   7. 统计小卡片
+   ═══════════════════════════════════════ */
+#class-stats {
+  display: flex; gap: 12px; flex-wrap: wrap;
+}
+.stat-chip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 0.85rem; font-weight: 500;
+  color: var(--text-dim);
+  display: flex; align-items: center; gap: 6px;
+}
+.stat-chip .stat-val {
+  color: var(--text); font-weight: 700;
+}
+
+/* ═══════════════════════════════════════
+   8. 主体布局
+   ═══════════════════════════════════════ */
+main {
+  display: flex; gap: 24px; flex: 1;
+  min-height: 0;
+}
+
+/* ═══════════════════════════════════════
+   9. 学生卡片网格
+   ═══════════════════════════════════════ */
+#student-section {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: 16px;
+}
+#student-section .section-title {
+  font-size: 1rem; font-weight: 700; color: var(--text-dim);
+  display: flex; align-items: center; gap: 8px;
+}
+#student-section .section-title .count {
+  color: var(--cyan); font-weight: 900;
+}
+
+#student-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+  padding: 4px;
+}
+
+/* 卡片 spring 动画 */
+@keyframes card-spring {
+  0%   { transform: scale(1); }
+  25%  { transform: scale(0.90); }
+  50%  { transform: scale(1.06); }
+  75%  { transform: scale(0.98); }
+  100% { transform: scale(1); }
+}
+.student-card.spring {
+  animation: card-spring 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.student-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 10px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  position: relative;
+  user-select: none;
+}
+.student-card::before {
+  content: ''; position: absolute; inset: 0;
+  border-radius: inherit;
+  opacity: 0; transition: opacity 0.3s;
+  background: linear-gradient(135deg, transparent 40%, rgba(8,145,178,0.05) 100%);
+}
+.student-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-hover);
+  background: var(--surface-hover);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+.student-card:hover::before { opacity: 1; }
+.student-card:active {
+  transform: scale(0.95);
+  transition-duration: 0.05s;
+}
+
+.student-card .avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; font-weight: 700;
+  margin-bottom: 2px;
+  position: relative;
+}
+.student-card .avatar.male {
+  background: linear-gradient(135deg, rgba(8,145,178,0.12), rgba(8,145,178,0.05));
+  color: var(--cyan);
+}
+.student-card .avatar.female {
+  background: linear-gradient(135deg, rgba(219,39,119,0.12), rgba(219,39,119,0.05));
+  color: var(--magenta);
+}
+.student-card .name {
+  font-weight: 600; font-size: 0.85rem;
+  text-align: center; line-height: 1.3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 100%;
+}
+.student-card .score-badge {
+  font-weight: 900; font-size: 0.95rem;
+  padding: 2px 12px; border-radius: 100px;
+  background: rgba(8,145,178,0.1);
+  color: var(--cyan);
+  transition: all 0.3s;
+  display: flex; align-items: center; gap: 4px;
+}
+.student-card .score-badge.high { background: rgba(217,119,6,0.12); color: var(--gold); }
+.student-card .score-badge.mid { background: rgba(5,150,105,0.1); color: var(--green); }
+.student-card .score-badge.low { background: rgba(0,0,0,0.03); color: var(--text-dim); }
+
+/* 分数数字动画 */
+.student-card .score-num {
+  display: inline-block; transition: all 0.3s;
+}
+.student-card .score-num.bump {
+  animation: score-bump 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes score-bump {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+/* 加分涟漪 */
+@keyframes ripples {
+  0%   { transform: scale(0.5); opacity: 0.6; }
+  100% { transform: scale(3); opacity: 0; }
+}
+.student-card .ripple {
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 2px solid var(--cyan);
+  animation: ripples 0.6s ease-out forwards;
+}
+.student-card .ripple.minus {
+  border-color: #ef4444;
+}
+
+/* 空状态 */
+.empty-state {
+  grid-column: 1 / -1;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 80px 20px;
+  color: var(--text-dim); gap: 12px;
+}
+.empty-state .empty-icon { font-size: 3rem; opacity: 0.3; }
+.empty-state .empty-text { font-size: 1rem; }
+
+/* ═══════════════════════════════════════
+   10. 排行榜面板
+   ═══════════════════════════════════════ */
+#ranking-section {
+  width: 320px; flex-shrink: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  display: flex; flex-direction: column; gap: 14px;
+  max-height: calc(100vh - 160px);
+}
+#ranking-section .ranking-header {
+  display: flex; align-items: center; justify-content: space-between;
+}
+#ranking-section .ranking-header h2 { font-size: 1rem; font-weight: 700; }
+#ranking-section .ranking-header .badge {
+  font-size: 0.75rem; color: var(--text-dim);
+  background: rgba(0,0,0,0.03);
+  padding: 2px 10px; border-radius: 100px;
+}
+
+#ranking-list {
+  flex: 1; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.rank-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 10px; border-radius: var(--radius-sm);
+  transition: all 0.3s;
+}
+.rank-item:hover { background: rgba(0,0,0,0.02); }
+
+.rank-item .rank-num {
+  width: 24px; text-align: center; font-weight: 700; font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.rank-item .rank-num.gold { color: var(--gold); }
+.rank-item .rank-num.silver { color: #c0c0c0; }
+.rank-item .rank-num.bronze { color: #cd7f32; }
+.rank-item .rank-num.other { color: var(--text-dim); }
+
+.rank-item .rank-name {
+  font-weight: 600; font-size: 0.85rem;
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.rank-item .rank-class {
+  font-weight: 500; font-size: 0.8rem; color: var(--text-dim);
+  min-width: 40px; text-align: center; flex-shrink: 0;
+}
+
+.rank-item .rank-bar-wrap {
+  flex: 1; height: 8px; background: rgba(0,0,0,0.04);
+  border-radius: 100px; overflow: hidden; position: relative;
+}
+.rank-item .rank-bar {
+  height: 100%; border-radius: 100px;
+  transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1);
+  width: 0%;
+}
+.rank-item .rank-bar.color-0 { background: linear-gradient(90deg, var(--gold), #ff8800); }
+.rank-item .rank-bar.color-1 { background: linear-gradient(90deg, #c0c0c0, #e0e0e0); }
+.rank-item .rank-bar.color-2 { background: linear-gradient(90deg, #cd7f32, #e8a85a); }
+.rank-item .rank-bar.color-3 { background: linear-gradient(90deg, var(--cyan), var(--purple)); }
+.rank-item .rank-bar.color-4 { background: linear-gradient(90deg, var(--purple), var(--magenta)); }
+.rank-item .rank-bar.color-rest {
+  background: linear-gradient(90deg, rgba(0,0,0,0.06), rgba(0,0,0,0.03));
+}
+
+.rank-item .rank-score {
+  font-weight: 700; font-size: 0.85rem;
+  color: var(--text); min-width: 36px; text-align: right;
+}
+/* Rank toggle */
+.rank-toggle {
+  display: flex; gap: 4px; padding: 0 16px 8px;
+  background: transparent;
+}
+.rank-mode-btn {
+  flex: 1; padding: 6px 12px; border: 1px solid var(--border);
+  background: transparent; color: var(--text-dim);
+  font-size: 0.8rem; font-weight: 600; cursor: pointer;
+  border-radius: 100px; transition: all 0.25s;
+  font-family: var(--font);
+}
+.rank-mode-btn:hover { background: var(--surface-hover); color: var(--text); }
+.rank-mode-btn.active {
+  background: var(--gradient-main); color: #fff; border-color: transparent;
+  box-shadow: 0 2px 8px rgba(8,145,178,0.25);
+}
+
+
+/* ═══════════════════════════════════════
+   11. 空排行榜占位
+   ═══════════════════════════════════════ */
+.rank-empty {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; flex: 1; color: var(--text-dim); gap: 8px;
+}
+.rank-empty .icon { font-size: 2.5rem; opacity: 0.2; }
+.rank-empty .text { font-size: 0.85rem; }
+
+/* ═══════════════════════════════════════
+   12. 滚动条美化
+   ═══════════════════════════════════════ */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.06); border-radius: 100px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.1); }
+
+/* ═══════════════════════════════════════
+   13. 响应式
+   ═══════════════════════════════════════ */
+@media (max-width: 1000px) {
+  #app { padding: 16px; }
+  main { flex-direction: column; }
+  #ranking-section { width: 100%; max-height: none; }
+  #student-grid { max-height: none; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+}
+
+@media (max-width: 600px) {
+  header h1 { font-size: 1.3rem; }
+  #controls { gap: 10px; }
+  .search-wrap { margin-left: 0; width: 100%; }
+  #search-input, #search-input:focus { width: 100%; }
+  #student-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; }
+  .student-card { padding: 10px 8px; }
+  .student-card .avatar { width: 36px; height: 36px; font-size: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ 背景 ═══ -->
+<div id="bg-anim"></div>
+<div id="bg-grid"></div>
+
+<!-- ═══ 粒子容器 ═══ -->
+<div id="particle-container"></div>
+
+<!-- ═══ Toast 容器 ═══ -->
+<div id="toast-container"></div>
+
+<!-- ═══ 主应用 ═══ -->
+<div id="app">
+
+  <!-- 头部 -->
+  <header>
+    <h1>🏆 课堂积分激励</h1>
+    <div class="header-actions">
+      <span id="grade-tabs">
+        <button class="grade-tab active" data-grade="高一">🎓 高一</button>
+        <button class="grade-tab" data-grade="高二">🎓 高二</button>
+      </span>
+    </div>
+  </header>
+
+  <!-- 控制栏 -->
+  <div id="controls">
+    <div class="class-select-wrap">
+      <select id="class-select">
+        <option value="">选择班级...</option>
+      </select>
+    </div>
+
+    <div id="score-tiers">
+      <button class="tier-btn active" data-points="5">+5</button>
+      <button class="tier-btn" data-points="8">+8</button>
+      <button class="tier-btn" data-points="10">+10</button>
+      <div style="width: 1px; height: 24px; background: var(--border); margin: 0 4px;"></div>
+      <button class="tier-btn tier-btn-minus" data-points="-5">-5</button>
+      <button class="tier-btn tier-btn-minus" data-points="-8">-8</button>
+      <button class="tier-btn tier-btn-minus" data-points="-10">-10</button>
+    </div>
+
+    <button id="random-pick-btn" class="btn-random-pick" title="随机抽取学生（Space键）">
+      🎲 随机抽取
+    </button>
+
+    <!-- 随机抽取结果显示区 -->
+    <div id="pick-result-display" class="pick-result-display">
+      <span class="pick-result-text">等待抽取...</span>
+    </div>
+
+    <div class="search-wrap">
+      <input id="search-input" type="text" placeholder="搜索学生..." />
+    </div>
+  </div>
+
+  <!-- 班级统计 -->
+  <div id="class-stats"></div>
+
+  <!-- 主体 -->
+  <main>
+    <!-- 学生列表 -->
+    <section id="student-section">
+      <div class="section-title">
+        👥 学生名单 <span class="count" id="student-count">0</span> 人
+      </div>
+      <div id="student-grid"></div>
+    </section>
+
+    <!-- 排行榜 -->
+    <aside id="ranking-section">
+      <div class="ranking-header">
+        <h2>📊 排行榜</h2>
+        <span class="badge" id="rank-count">TOP 0</span>
+      </div>
+      <div class="rank-toggle" id="rank-toggle">
+        <button class="rank-mode-btn active" data-mode="class">🏫 班级</button>
+        <button class="rank-mode-btn" data-mode="grade">🏆 年级</button>
+      </div>
+      <div id="ranking-list">
+        <div class="rank-empty">
+          <div class="icon">📋</div>
+          <div class="text">选择班级查看排行</div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <section id="student-management-section" class="manage-panel collapsed">
+    <div class="section-title">🧾 学生名单管理</div>
+    <div class="manage-toolbar">
+      <div>
+        <button id="add-student-btn" class="btn-primary">新增学生</button>
+        <button id="manage-collapse-btn" class="btn-secondary">展开</button>
+      </div>
+      <div class="manage-help">选择班级后即可编辑、删除、添加学生</div>
+    </div>
+    <div class="manage-table-wrap">
+      <table id="student-manage-table">
+        <thead>
+          <tr>
+            <th>姓名</th>
+            <th>班级</th>
+            <th>性别</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="4" class="manage-empty">请选择班级以管理学生名单</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<div id="student-modal" class="modal">
+  <div class="modal-sheet">
+    <h3 id="student-modal-title">新增学生</h3>
+    <form id="student-form">
+      <div class="modal-grid">
+        <label>
+          姓名
+          <input id="student-name" type="text" placeholder="输入学生姓名" required />
+        </label>
+        <label>
+          班级
+          <input id="student-class" type="text" placeholder="例如：高一1班" required />
+        </label>
+        <label>
+          性别
+          <select id="student-gender">
+            <option value="">请选择</option>
+            <option value="男">男</option>
+            <option value="女">女</option>
+          </select>
+        </label>
+        <label>
+          语种
+          <input id="student-language" type="text" placeholder="可选" />
+        </label>
+        <label>
+          科目
+          <input id="student-subjects" type="text" placeholder="可选" />
+        </label>
+        <label>
+          专业方向
+          <input id="student-major" type="text" placeholder="可选" />
+        </label>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="cancel-student-btn">取消</button>
+        <button type="submit" class="btn-primary" id="save-student-btn">保存</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  🏆 课堂积分激励系统 - 前端逻辑
+// ═══════════════════════════════════════════════════
+
+const API_BASE = window.location.origin && window.location.origin !== 'null' ? window.location.origin : '';
+
+let currentGrade = '高一';
+let currentClass = '';
+let currentTier = 5;
+let studentsData = [];
+
+// ── 随机抽取相关变量 ──
+let recentPicks = []; // 记录最近被抽中的学生姓名
+const MAX_RECENT_PICKS = 5; // 最多记录最近5次抽取
+let isPicking = false; // 是否正在抽取中
+
+// ── DOM 引用 ──
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+
+const gradeTabs = $$('.grade-tab');
+const classSelect = $('#class-select');
+const tierBtns = $$('.tier-btn');
+const searchInput = $('#search-input');
+const studentGrid = $('#student-grid');
+const studentCount = $('#student-count');
+const rankingList = $('#ranking-list');
+const rankCount = $('#rank-count');
+const classStats = $('#class-stats');
+const addStudentBtn = $('#add-student-btn');
+const manageCollapseBtn = $('#manage-collapse-btn');
+const manageTableBody = document.querySelector('#student-manage-table tbody');
+const studentModal = $('#student-modal');
+const studentModalTitle = $('#student-modal-title');
+const studentForm = $('#student-form');
+const cancelStudentBtn = $('#cancel-student-btn');
+const studentNameInput = $('#student-name');
+const studentClassInput = $('#student-class');
+const studentGenderSelect = $('#student-gender');
+const studentLanguageInput = $('#student-language');
+const studentSubjectsInput = $('#student-subjects');
+const studentMajorInput = $('#student-major');
+let editStudentOriginal = null;
+
+// ── API 请求 ──
+async function apiGet(path) {
+  const res = await fetch(`${API_BASE}${path}`);
+  if (!res.ok) {
+    throw new Error(`GET ${path} failed ${res.status}`);
+  }
+  return res.json();
+}
+async function apiPost(path, data) {
+  const res = await fetch(`${API_BASE}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+async function apiDelete(path, data) {
+  const res = await fetch(`${API_BASE}${path}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    throw new Error(`DELETE ${path} failed ${res.status}`);
+  }
+  return res.json();
+}
+
+// ── 年级切换 ──
+gradeTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    gradeTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentGrade = tab.dataset.grade;
+    loadClasses();
+  });
+});
+
+// ── 加载班级列表 ──
+async function loadClasses(selectedClass = '') {
+  try {
+    const classes = await apiGet(`/score-api/classes?grade=${currentGrade}`);
+    classSelect.innerHTML = '<option value="">选择班级...</option>';
+    classes.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c; opt.textContent = c;
+      classSelect.appendChild(opt);
+    });
+    if (selectedClass && classes.includes(selectedClass)) {
+      classSelect.value = selectedClass;
+      currentClass = selectedClass;
+      await loadStudents();
+      loadRanking();
+      loadStats();
+      return;
+    }
+    currentClass = '';
+    studentGrid.innerHTML = renderEmptyGrid('👆 请选择班级');
+    classStats.innerHTML = '';
+    studentCount.textContent = '0';
+    loadRanking();
+  } catch (error) {
+    console.error('班级加载失败', error);
+    classSelect.innerHTML = '<option value="">加载失败</option>';
+    studentGrid.innerHTML = renderEmptyGrid('加载失败，请刷新页面');
+    manageTableBody.innerHTML = '<tr><td colspan="4" class="manage-empty">学生管理加载失败</td></tr>';
+    classStats.innerHTML = '';
+    studentCount.textContent = '0';
+  }
+}
+
+// ── 班级选择 ──
+classSelect.addEventListener('change', () => {
+  currentClass = classSelect.value;
+  if (currentClass) {
+    loadStudents();
+    loadRanking();
+    loadStats();
+  } else {
+    studentGrid.innerHTML = renderEmptyGrid('👆 请选择班级');
+    studentCount.textContent = '0';
+    classStats.innerHTML = '';
+    loadRanking(); // loadRanking 内部已处理两种模式
+  }
+});
+
+// ── 积分档次切换 ──
+tierBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tierBtns.forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    currentTier = parseInt(btn.dataset.points);
+  });
+});
+
+/**
+ * ═══════════════════════════════════════
+ * 随机抽取学生功能
+ * ═══════════════════════════════════════
+ */
+
+// ── 智能抽取算法 ──
+function smartPickStudent(students) {
+  if (!students || students.length === 0) return null;
+  
+  // 第一步：排除最近被抽中的学生
+  let candidates = students.filter(s => !recentPicks.includes(s.name));
+  
+  // 如果排除后没有候选人，使用全部学生
+  if (candidates.length === 0) {
+    candidates = [...students];
+  }
+  
+  // 第二步：在候选人中，优先选择积分较低的学生
+  const minScore = Math.min(...candidates.map(s => s.score || 0));
+  const maxScore = Math.max(...candidates.map(s => s.score || 0));
+  const scoreRange = maxScore - minScore || 1;
+  
+  // 为每个学生计算权重（积分越低权重越高）
+  const weightedCandidates = candidates.map(s => {
+    const score = s.score || 0;
+    const weight = 1 + ((maxScore - score) / scoreRange) * 2;
+    return { student: s, weight };
+  });
+  
+  // 第三步：根据权重随机选择
+  const totalWeight = weightedCandidates.reduce((sum, c) => sum + c.weight, 0);
+  let random = Math.random() * totalWeight;
+  
+  for (const candidate of weightedCandidates) {
+    random -= candidate.weight;
+    if (random <= 0) {
+      return candidate.student;
+    }
+  }
+  
+  return weightedCandidates[0].student;
+}
+
+// ── 记录抽取历史 ──
+function recordPick(studentName) {
+  recentPicks.push(studentName);
+  if (recentPicks.length > MAX_RECENT_PICKS) {
+    recentPicks.shift();
+  }
+}
+
+// ── 闪动动画 - 增强版 ──
+function flashAnimation(targetStudent) {
+  return new Promise(resolve => {
+    const cards = Array.from(document.querySelectorAll('.student-card'));
+    if (cards.length === 0) {
+      resolve();
+      return;
+    }
+    
+    let flashCount = 0;
+    const maxFlashes = 35; // 增加闪烁次数，让效果更明显
+    let currentDelay = 40; // 更快的起始速度
+    const delayIncrease = 1.12; // 稍微减缓减速速度
+    
+    function flash() {
+      // 清除所有卡片的闪烁状态
+      cards.forEach(card => card.classList.remove('flashing'));
+      
+      let randomCard;
+      const remainingFlashes = maxFlashes - flashCount;
+      
+      // 最后5次逐渐聚焦到目标学生
+      if (remainingFlashes <= 5) {
+        if (remainingFlashes === 1) {
+          // 最后一次：必定是目标学生
+          randomCard = document.querySelector(`.student-card[data-name="${targetStudent.name}"]`);
+        } else if (remainingFlashes <= 3) {
+          // 倒数2-4次：70%概率是目标学生
+          randomCard = Math.random() > 0.3 
+            ? document.querySelector(`.student-card[data-name="${targetStudent.name}"]`)
+            : cards[Math.floor(Math.random() * cards.length)];
+        } else {
+          // 倒数第5次：50%概率
+          randomCard = Math.random() > 0.5 
+            ? document.querySelector(`.student-card[data-name="${targetStudent.name}"]`)
+            : cards[Math.floor(Math.random() * cards.length)];
+        }
+      } else {
+        // 前期：随机选择其他学生（排除目标）
+        const nonTargetCards = cards.filter(c => c.dataset.name !== targetStudent.name);
+        randomCard = nonTargetCards.length > 0
+          ? nonTargetCards[Math.floor(Math.random() * nonTargetCards.length)]
+          : cards[Math.floor(Math.random() * cards.length)];
+      }
+      
+      if (randomCard) {
+        randomCard.classList.add('flashing');
+        // 添加声音反馈（可选）
+        try {
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          
+          oscillator.frequency.value = 800 + (flashCount * 20); // 频率递增
+          oscillator.type = 'sine';
+          gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
+          
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.05);
+        } catch(e) {
+          // 忽略音频错误
+        }
+      }
+      
+      flashCount++;
+      
+      if (flashCount < maxFlashes) {
+        currentDelay *= delayIncrease;
+        setTimeout(flash, currentDelay);
+      } else {
+        // 动画结束，清除所有闪烁状态
+        cards.forEach(card => card.classList.remove('flashing'));
+        resolve();
+      }
+    }
+    
+    flash();
+  });
+}
+
+// ── 高亮获胜者（被抽中的学生）──
+function highlightWinner(student) {
+  // 清除之前的所有状态
+  document.querySelectorAll('.student-card.winner').forEach(card => {
+    card.classList.remove('winner');
+  });
+  document.querySelectorAll('.student-card.picked').forEach(card => {
+    card.classList.remove('picked');
+  });
+  
+  const pickedCard = document.querySelector(`.student-card[data-name="${student.name}"]`);
+  
+  if (pickedCard) {
+    // 应用被抽中的蓝紫色主题样式
+    pickedCard.classList.add('picked');
+    pickedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    // 更新显示区域
+    updatePickDisplay(student.name, student.score || 0);
+  }
+}
+
+// ── 更新抽取结果显示区域 ──
+function updatePickDisplay(name, score) {
+  const displayEl = document.getElementById('pick-result-display');
+  const textEl = displayEl.querySelector('.pick-result-text');
+  
+  if (displayEl && textEl) {
+    // 先移除active类，触发动画重置
+    displayEl.classList.remove('active');
+    void displayEl.offsetWidth; // 强制重绘
+    
+    // 更新文本内容
+    textEl.innerHTML = `🎯 <strong>${name}</strong> <span style="color:#7c3aed">(+5分)</span>`;
+    
+    // 添加active类触发动画
+    setTimeout(() => {
+      displayEl.classList.add('active');
+    }, 50);
+  }
+}
+
+// ── 抽取过程中的名字闪现动画 ──
+let nameFlashInterval = null;
+
+function startNameFlashing() {
+  const displayEl = document.getElementById('pick-result-display');
+  const textEl = displayEl?.querySelector('.pick-result-text');
+  
+  if (!displayEl || !textEl || !studentsData || studentsData.length === 0) return;
+  
+  // 清除之前的定时器
+  if (nameFlashInterval) {
+    clearInterval(nameFlashInterval);
+  }
+  
+  let flashCount = 0;
+  const maxFlashes = 35; // 与卡片闪烁次数一致
+  let currentDelay = 40; // 起始速度
+  
+  function flashName() {
+    if (flashCount >= maxFlashes || !isPicking) {
+      clearInterval(nameFlashInterval);
+      return;
+    }
+    
+    // 随机选择一个学生名字
+    const randomStudent = studentsData[Math.floor(Math.random() * studentsData.length)];
+    textEl.textContent = randomStudent.name;
+    
+    flashCount++;
+    
+    // 逐渐减速
+    currentDelay *= 1.12;
+    
+    // 设置下一次闪现
+    nameFlashInterval = setTimeout(flashName, currentDelay);
+  }
+  
+  // 立即开始第一次闪现
+  flashName();
+}
+
+function stopNameFlashing() {
+  if (nameFlashInterval) {
+    clearTimeout(nameFlashInterval);
+    nameFlashInterval = null;
+  }
+}
+
+// ── 禁用/启用交互 ──
+function disableInteractions(disable) {
+  const interactiveElements = [
+    document.getElementById('class-select'),
+    document.getElementById('search-input'),
+    ...document.querySelectorAll('.tier-btn'),
+    ...document.querySelectorAll('.grade-tab')
+  ];
+  
+  interactiveElements.forEach(el => {
+    el.style.pointerEvents = disable ? 'none' : 'auto';
+    el.style.opacity = disable ? '0.5' : '1';
+  });
+}
+
+// ── 重置抽取状态 ──
+function resetPickState() {
+  isPicking = false;
+  const pickBtn = document.getElementById('random-pick-btn');
+  pickBtn.disabled = false;
+  pickBtn.classList.remove('picking');
+  pickBtn.textContent = '🎲 随机抽取';
+  disableInteractions(false);
+  
+  // 重置显示区域（但保留最后抽中的学生名字）
+  const displayEl = document.getElementById('pick-result-display');
+  if (displayEl) {
+    displayEl.classList.remove('active');
+  }
+}
+
+// ── 显示抽取结果 Toast ──
+function showPickToast(name, points, total) {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = `
+    <span class="toast-icon">🎉</span>
+    <span>抽中了 ${name}</span>
+    <span class="toast-score">+${points}分</span>
+    <span style="color:var(--text-dim)">⭐ ${total}</span>
+  `;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('out');
+    setTimeout(() => toast.remove(), 300);
+  }, 2000);
+
+  while (container.children.length > 5) {
+    container.firstChild.remove();
+  }
+}
+
+// ── 粒子爆发效果 (覆盖原函数以支持更多场景) ──
+function burstParticles(cx, cy, points) {
+  const container = document.getElementById('particle-container');
+  const colors = ['#00d4ff', '#7c3aed', '#ff00e4', '#00ff88', '#ffbb00', '#ff6600', '#ffffff'];
+  const count = Math.min(20 + Math.abs(points) * 2, 40);
+
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 60 + Math.random() * 180;
+    const dx = Math.cos(angle) * speed;
+    const dy = Math.sin(angle) * speed;
+    const size = 3 + Math.random() * 8;
+    const c = colors[Math.floor(Math.random() * colors.length)];
+
+    p.style.cssText = `
+      left: ${cx + (Math.random()-0.5)*20}px;
+      top: ${cy + (Math.random()-0.5)*20}px;
+      width: ${size}px; height: ${size}px;
+      --dx: ${dx}px; --dy: ${dy}px;
+      background: ${c};
+      box-shadow: 0 0 ${size * 2}px ${c};
+    `;
+    container.appendChild(p);
+    setTimeout(() => p.remove(), 1000);
+  }
+}
+
+// ── 随机抽取主函数 ──
+async function randomPickStudent() {
+  if (isPicking) return;
+  
+  if (!studentsData || studentsData.length === 0) {
+    showToast('提示', '请先选择班级', 0, 0, true);
+    return;
+  }
+  
+  isPicking = true;
+  const pickBtn = document.getElementById('random-pick-btn');
+  pickBtn.disabled = true;
+  pickBtn.classList.add('picking');
+  pickBtn.textContent = '🎯 抽取中...';
+  
+  disableInteractions(true);
+  
+  // 启动名字闪现动画
+  startNameFlashing();
+  
+  const targetStudent = smartPickStudent(studentsData);
+  
+  if (!targetStudent) {
+    showToast('错误', '无法选择学生', 0, 0, true);
+    stopNameFlashing();
+    resetPickState();
+    return;
+  }
+  
+  await flashAnimation(targetStudent);
+  
+  // 停止名字闪现
+  stopNameFlashing();
+  
+  highlightWinner(targetStudent);
+  
+  recordPick(targetStudent.name);
+  
+  // 自动加5分
+  const autoPoints = 5;
+  try {
+    const res = await apiPost('/score-api/score', { 
+      grade: currentGrade, 
+      class: currentClass, 
+      name: targetStudent.name, 
+      points: autoPoints 
+    });
+    
+    if (res.success) {
+      targetStudent.score = res.total;
+      
+      const card = document.querySelector(`.student-card[data-name="${targetStudent.name}"]`);
+      
+      if (card) {
+        const numSpan = card.querySelector('.score-num');
+        const badge = card.querySelector('.score-badge');
+        
+        if (numSpan) {
+          numSpan.textContent = res.total;
+          numSpan.classList.remove('bump');
+          void numSpan.offsetWidth;
+          numSpan.classList.add('bump');
+        }
+        
+        if (badge) {
+          badge.className = 'score-badge';
+          if (res.total >= 20) badge.classList.add('high');
+          else if (res.total >= 10) badge.classList.add('mid');
+          else badge.classList.add('low');
+        }
+        
+        const rect = card.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        burstParticles(cx, cy, autoPoints);
+      }
+      
+      showPickToast(targetStudent.name, autoPoints, res.total);
+      
+      renderStudents();
+      loadRanking();
+      loadStats();
+    } else {
+      showPickToast(targetStudent.name, 0, targetStudent.score || 0);
+    }
+  } catch (e) {
+    console.error('自动加分失败', e);
+    showPickToast(targetStudent.name, 0, targetStudent.score || 0);
+  }
+  
+  setTimeout(() => {
+    resetPickState();
+  }, 2000);
+}
+
+// ── 随机抽取按钮事件 ──
+document.getElementById('random-pick-btn').addEventListener('click', randomPickStudent);
+
+// ── 搜索过滤 ──
+searchInput.addEventListener('input', () => {
+  renderStudents();
+  renderStudentManageTable();
+});
+
+addStudentBtn.addEventListener('click', () => openStudentModal());
+manageCollapseBtn.addEventListener('click', toggleManagePanel);
+cancelStudentBtn.addEventListener('click', closeStudentModal);
+studentModal.addEventListener('click', (e) => {
+  if (e.target === studentModal) closeStudentModal();
+});
+studentForm.addEventListener('submit', saveStudent);
+manageTableBody.addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  const name = btn.dataset.name;
+  const cls = btn.dataset.class;
+  const action = btn.dataset.action;
+  if (!name || !cls || !action) return;
+  const student = studentsData.find(s => s.name === name && s.class === cls);
+  if (action === 'edit') {
+    openStudentModal(student);
+  } else if (action === 'delete') {
+    deleteStudent(name, cls, student);
+  }
+});
+
+// ── 加载学生 ──
+async function loadStudents() {
+  try {
+    studentsData = await apiGet(`/score-api/students?grade=${currentGrade}&class=${currentClass}`);
+    recentPicks = []; // 切换班级时清空抽取历史
+    renderStudents();
+    renderStudentManageTable();
+  } catch (error) {
+    console.error('学生数据加载失败', error);
+    studentGrid.innerHTML = renderEmptyGrid('学生数据加载失败');
+    studentCount.textContent = '0';
+    manageTableBody.innerHTML = '<tr><td colspan="4" class="manage-empty">学生管理加载失败</td></tr>';
+  }
+}
+
+function escapeHtmlAttr(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function renderStudentManageTable() {
+  if (!currentClass) {
+    manageTableBody.innerHTML = '<tr><td colspan="4" class="manage-empty">请选择班级以管理学生名单</td></tr>';
+    return;
+  }
+
+  if (!studentsData || studentsData.length === 0) {
+    manageTableBody.innerHTML = '<tr><td colspan="4" class="manage-empty">当前班级暂无学生</td></tr>';
+    return;
+  }
+
+  manageTableBody.innerHTML = '';
+  studentsData.forEach((s) => {
+    const row = document.createElement('tr');
+    const safeName = escapeHtmlAttr(s.name);
+    const safeClass = escapeHtmlAttr(s.class);
+    row.innerHTML = `
+      <td>${s.name}</td>
+      <td>${s.class}</td>
+      <td>${s.gender || '—'}</td>
+      <td>
+        <button class="manage-action-btn" data-action="edit" data-name="${safeName}" data-class="${safeClass}">编辑</button>
+        <button class="manage-action-btn delete" data-action="delete" data-name="${safeName}" data-class="${safeClass}">删除</button>
+      </td>
+    `;
+    manageTableBody.appendChild(row);
+  });
+}
+
+function openStudentModal(student = null) {
+  editStudentOriginal = student ? { name: student.name, class: student.class } : null;
+  studentModalTitle.textContent = student ? '编辑学生' : '新增学生';
+  studentForm.reset();
+  studentNameInput.value = student?.name || '';
+  studentClassInput.value = student?.class || currentClass || '';
+  studentGenderSelect.value = student?.gender || '';
+  studentLanguageInput.value = student?.language || '';
+  studentSubjectsInput.value = student?.subjects || '';
+  studentMajorInput.value = student?.major || '';
+  studentModal.classList.add('active');
+}
+
+function closeStudentModal() {
+  editStudentOriginal = null;
+  studentModal.classList.remove('active');
+}
+
+async function saveStudent(event) {
+  event.preventDefault();
+  const name = studentNameInput.value.trim();
+  const cls = studentClassInput.value.trim();
+  const gender = studentGenderSelect.value;
+  const language = studentLanguageInput.value.trim();
+  const subjects = studentSubjectsInput.value.trim();
+  const major = studentMajorInput.value.trim();
+
+  if (!name || !cls) {
+    showToast('提示', '请填写姓名和班级', '', true);
+    return;
+  }
+
+  const payload = {
+    grade: currentGrade,
+    name,
+    class: cls,
+    gender,
+    language,
+    subjects,
+    major,
+    originalName: editStudentOriginal?.name || '',
+    originalClass: editStudentOriginal?.class || '',
+  };
+
+  try {
+    const res = await apiPost('/score-api/student', payload);
+    if (res.success) {
+      closeStudentModal();
+      showToast('保存成功', name, '', false);
+      await loadClasses(cls);
+    } else {
+      showToast('保存失败', res.error || '操作未完成', '', true);
+    }
+  } catch (error) {
+    console.error('保存学生失败', error);
+    showToast('保存失败', '网络或服务器错误', '', true);
+  }
+}
+
+async function deleteStudent(name, cls, student) {
+  if (!student) return;
+  if (!confirm(`确认删除 ${student.name} 吗？此操作会同时删除该学生的积分记录。`)) return;
+
+  try {
+    const res = await apiDelete('/score-api/student', { grade: currentGrade, name, class: cls });
+    if (res.success) {
+      showToast('删除成功', student.name, '', false);
+      await loadClasses(currentClass);
+    } else {
+      showToast('删除失败', res.error || '操作未完成', '', true);
+    }
+  } catch (error) {
+    console.error('删除学生失败', error);
+    showToast('删除失败', '网络或服务器错误', '', true);
+  }
+}
+
+function renderStudents() {
+  const query = searchInput.value.trim();
+  let list = studentsData;
+  if (query) {
+    list = list.filter(s => s.name.includes(query));
+  }
+  studentGrid.innerHTML = '';
+  studentCount.textContent = list.length;
+
+  if (list.length === 0) {
+    studentGrid.innerHTML = renderEmptyGrid(query ? '🤷 没有匹配的学生' : '📭 暂无学生数据');
+    return;
+  }
+
+  list.forEach(s => {
+    const card = createStudentCard(s);
+    studentGrid.appendChild(card);
+  });
+}
+
+function renderEmptyGrid(msg) {
+  return `<div class="empty-state"><div class="empty-icon">${msg.includes('👆')?'👆':'📭'}</div><div class="empty-text">${msg}</div></div>`;
+}
+
+function toggleManagePanel() {
+  const panel = document.getElementById('student-management-section');
+  const collapsed = panel.classList.toggle('collapsed');
+  manageCollapseBtn.textContent = collapsed ? '展开' : '收起';
+}
+
+// ── 创建学生卡片 ──
+function createStudentCard(s) {
+  const div = document.createElement('div');
+  div.className = 'student-card';
+  div.dataset.name = s.name;
+
+  const gender = s.gender === '女' ? 'female' : 'male';
+  const emoji = s.gender === '女' ? '👩' : '👦';
+  const score = s.score || 0;
+
+  let scoreClass = 'low';
+  if (score >= 20) scoreClass = 'high';
+  else if (score >= 10) scoreClass = 'mid';
+
+  div.innerHTML = `
+    <div class="avatar ${gender}">${emoji}</div>
+    <div class="name">${s.name}</div>
+    <div class="score-badge ${scoreClass}">
+      ⭐ <span class="score-num">${score}</span>
+    </div>
+  `;
+
+  div.addEventListener('click', () => handleScoreClick(s, div));
+  return div;
+}
+
+// ── 加分处理 ──
+async function handleScoreClick(s, cardEl) {
+  const name = s.name;
+  const points = currentTier;
+  const grade = currentGrade;
+  const cls = currentClass;
+
+  // 1. 触发弹簧动画
+  cardEl.classList.remove('spring');
+  void cardEl.offsetWidth; // reflow
+  cardEl.classList.add('spring');
+
+  // 2. 粒子爆发
+  const rect = cardEl.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  burstParticles(cx, cy, points);
+
+  // 3. 涟漪
+  const ripple = document.createElement('div');
+  ripple.className = points < 0 ? 'ripple minus' : 'ripple';
+  cardEl.appendChild(ripple);
+  setTimeout(() => ripple.remove(), 600);
+
+  // 4. 发请求
+  try {
+    const res = await apiPost('/score-api/score', { grade, class: cls, name, points });
+
+    if (res.success) {
+      // 5. 更新卡片分数
+      s.score = res.total;
+      const badge = cardEl.querySelector('.score-badge');
+      const numSpan = cardEl.querySelector('.score-num');
+      numSpan.textContent = res.total;
+
+      // 更新分数样式
+      badge.className = 'score-badge';
+      if (res.total >= 20) badge.classList.add('high');
+      else if (res.total >= 10) badge.classList.add('mid');
+      else badge.classList.add('low');
+
+      // 6. 分数 bump 动画
+      numSpan.classList.remove('bump');
+      void numSpan.offsetWidth;
+      numSpan.classList.add('bump');
+
+      // 7. Toast
+      showToast(name, points, res.total);
+
+      // 8. 更新排行榜
+      loadRanking();
+      loadStats();
+    }
+  } catch (e) {
+    console.error('加分失败', e);
+    showToast(name, points, s.score || 0, true);
+  }
+}
+
+// ── 粒子爆发 ──
+function burstParticles(cx, cy, points) {
+  const container = document.getElementById('particle-container');
+  const colors = ['#00d4ff', '#7c3aed', '#ff00e4', '#00ff88', '#ffbb00', '#ff6600', '#ffffff'];
+  const absPoints = Math.abs(points);
+  const count = Math.min(20 + absPoints * 2, 40);
+
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 60 + Math.random() * 180;
+    const dx = Math.cos(angle) * speed;
+    const dy = Math.sin(angle) * speed;
+    const size = 3 + Math.random() * 8;
+    const c = colors[Math.floor(Math.random() * colors.length)];
+
+    p.style.cssText = `
+      left: ${cx + (Math.random()-0.5)*20}px;
+      top: ${cy + (Math.random()-0.5)*20}px;
+      width: ${size}px; height: ${size}px;
+      --dx: ${dx}px; --dy: ${dy}px;
+      background: ${c};
+      box-shadow: 0 0 ${size * 2}px ${c};
+    `;
+    container.appendChild(p);
+    setTimeout(() => p.remove(), 1000);
+  }
+}
+
+// ── Toast 通知 (通用版) ──
+function showToast(name, points, total, isError = false) {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  
+  // 如果是字符串类型调用（如提示错误），适配显示
+  if (typeof name === 'string' && typeof points === 'string') {
+     const title = name;
+     const msg = points;
+     toast.innerHTML = `
+      <span class="toast-icon">${isError ? '⚠️' : 'ℹ️'}</span>
+      <span>${title}: ${msg}</span>
+    `;
+  } else {
+    // 原有积分变动显示
+    const sign = points > 0 ? '+' : '';
+    const icon = isError ? '⚠️' : '✅';
+    toast.innerHTML = `
+      <span class="toast-icon">${icon}</span>
+      <span>${name}</span>
+      <span class="toast-score">${sign}${points}</span>
+      <span style="color:var(--text-dim)">⭐ ${total}</span>
+    `;
+  }
+
+  if (isError) {
+    toast.style.borderColor = 'rgba(255,100,100,0.3)';
+  }
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('out');
+    setTimeout(() => toast.remove(), 300);
+  }, 2000);
+
+  // 最多保留 5 个
+  while (container.children.length > 5) {
+    container.firstChild.remove();
+  }
+}
+
+let rankMode = 'grade';
+
+// ── 排行模式切换 ──
+document.getElementById('rank-toggle').addEventListener('click', (e) => {
+  const btn = e.target.closest('.rank-mode-btn');
+  if (!btn) return;
+  document.querySelectorAll('.rank-mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  rankMode = btn.dataset.mode;
+  loadRanking();
+});
+
+// ── 加载排行榜 ──
+async function loadRanking() {
+  try {
+    let url = `/score-api/ranking?grade=${currentGrade}`;
+    if (rankMode === 'class' && currentClass) {
+      url += `&class=${currentClass}`;
+    }
+    if (rankMode === 'class' && !currentClass) {
+      rankingList.innerHTML = renderRankEmpty('选择班级查看排行');
+      rankCount.textContent = 'TOP 0';
+      return;
+    }
+    const ranking = await apiGet(url);
+    renderRanking(ranking);
+  } catch (error) {
+    console.error('排行榜加载失败', error);
+    rankingList.innerHTML = renderRankEmpty('排行榜加载失败');
+    rankCount.textContent = 'TOP 0';
+  }
+}
+
+function renderRanking(ranking) {
+  if (!ranking || ranking.length === 0) {
+    rankingList.innerHTML = renderRankEmpty('暂无积分数据');
+    rankCount.textContent = 'TOP 0';
+    return;
+  }
+  rankCount.textContent = `TOP ${Math.min(ranking.length, 100)}`;
+  rankingList.innerHTML = '';
+  const maxScore = Math.max(...ranking.map(s => s.score), 1);
+  const displayCount = Math.min(ranking.length, 100);
+
+  for (let i = 0; i < displayCount; i++) {
+    const s = ranking[i];
+    const item = document.createElement('div');
+    item.className = 'rank-item';
+
+    const rank = i + 1;
+    let rankClass = 'other';
+    if (rank === 1) rankClass = 'gold';
+    else if (rank === 2) rankClass = 'silver';
+    else if (rank === 3) rankClass = 'bronze';
+
+    const barColor = i < 3 ? `color-${i}` : (i < 5 ? `color-${i}` : 'color-rest');
+    const barPct = maxScore > 0 ? (s.score / maxScore) * 100 : 0;
+
+    item.innerHTML = `
+      <div class="rank-num ${rankClass}">${rank}</div>
+      <div class="rank-name">${s.name}</div>
+      <div class="rank-class">${s.class}</div>
+      <div class="rank-bar-wrap">
+        <div class="rank-bar ${barColor}" style="width:${barPct}%"></div>
+      </div>
+      <div class="rank-score">${s.score}</div>
+    `;
+    rankingList.appendChild(item);
+  }
+}
+
+function renderRankEmpty(msg = '选择班级查看排行') {
+  return `<div class="rank-empty"><div class="icon">📋</div><div class="text">${msg}</div></div>`;
+}
+
+// ── 加载班级统计 ──
+async function loadStats() {
+  if (!currentClass) { classStats.innerHTML = ''; return; }
+  try {
+    const stats = await apiGet(`/score-api/stats?grade=${currentGrade}&class=${currentClass}`);
+    classStats.innerHTML = `
+      <div class="stat-chip">🏆 全班总分 <span class="stat-val">${stats.total}</span></div>
+      <div class="stat-chip">📊 人均 <span class="stat-val">${stats.avg}</span></div>
+      <div class="stat-chip">🥇 最高 <span class="stat-val">${stats.max_name} ${stats.max_score}</span></div>
+      <div class="stat-chip">👥 人数 <span class="stat-val">${stats.count}</span></div>
+    `;
+  } catch (error) {
+    console.error('统计加载失败', error);
+    classStats.innerHTML = '<div class="stat-chip">加载统计失败</div>';
+  }
+}
+
+// ── 键盘快捷键 ──
+document.addEventListener('keydown', (e) => {
+  // 数字键切换积分档次
+  if (e.key === '1') { tierBtns[0].click(); }
+  else if (e.key === '2') { tierBtns[1].click(); }
+  else if (e.key === '3') { tierBtns[2].click(); }
+  
+  // 空格或 R 键触发随机抽取
+  if (e.key === ' ' || e.key === 'r' || e.key === 'R') {
+    if (document.activeElement.tagName !== 'INPUT') {
+      e.preventDefault();
+      randomPickStudent();
+    }
+  }
+});
+
+// ── 初始化 ──
+loadClasses();
+</script>
+
