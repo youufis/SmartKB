@@ -931,34 +931,30 @@ a{text-decoration:none;color:inherit}
 </footer>
 
 <script>
-// ===== Tab切换逻辑 + View Transition =====
+// ===== Tab切换逻辑（兼容低版本浏览器） =====
 document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', async () => {
+  btn.addEventListener('click', function() {
     if (btn.classList.contains('active')) return;
 
-    // 使用 View Transitions API 做流畅切换
-    const transition = document.startViewTransition?.(() => {
-      // 移除所有 active
-      document.querySelectorAll('.tab-btn.active').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-content.active').forEach(c => c.classList.remove('active'));
+    // 低版本浏览器兼容：直接切换，不使用 View Transitions API
+    function switchTab() {
+      document.querySelectorAll('.tab-btn.active').forEach(function(b) { b.classList.remove('active'); });
+      document.querySelectorAll('.tab-content.active').forEach(function(c) { c.classList.remove('active'); });
 
       btn.classList.add('active');
-      const tabId = btn.dataset.tab;
-      const content = document.getElementById('tab-' + tabId);
+      var tabId = btn.dataset.tab;
+      var content = document.getElementById('tab-' + tabId);
       if (content) content.classList.add('active');
-    });
+    }
 
-    if (transition) await transition.finished;
+    // 尝试使用 View Transitions API，不支持则直接切换
+    var transition = null;
+    if (typeof document.startViewTransition === 'function') {
+      transition = document.startViewTransition(switchTab);
+    } else {
+      switchTab();
+    }
   });
-});
-</script>
-
-<script>
-document.addEventListener('click', function(e){
-  var card = e.target.closest('.card[data-href]');
-  if(card && !e.target.closest('a, button, span.badge, input')) {
-    window.open(card.getAttribute('data-href'), '_blank');
-  }
 });
 </script>
 
