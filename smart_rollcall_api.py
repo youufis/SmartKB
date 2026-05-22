@@ -136,14 +136,15 @@ async def api_pick(request: Request):
     # 公平轮询：维护本轮已抽到的学生
     picked_in_round = state.setdefault("picked_in_round", [])
 
-    # 如果本轮所有学生都已抽到，重置轮次
-    if set(picked_in_round) == set(names):
+    # 如果本轮覆盖率达到60%或全部抽完，自动重置轮次
+    total_students = len(names)
+    if total_students > 0 and len(picked_in_round) / total_students >= 0.6:
         picked_in_round.clear()
 
     # 从未在本轮抽到的学生中，按权重选择
     available = {n: state["weights"][n] for n in names if n not in picked_in_round}
     if not available:
-        # 兜底：如果所有都抽到了（不应该发生），重置
+        # 兜底：如果所有都抽到了，重置
         picked_in_round.clear()
         available = {n: state["weights"][n] for n in names}
 
@@ -177,6 +178,8 @@ async def api_mark(request: Request):
     result = body.get("result", "skip")
     # noScore=true: 仅记录历史不写积分（供答题页调用，避免重复计分）
     noScore = body.get("noScore", False)
+    # points: 自定义积分（覆盖默认 +5/+2），用于答题PK连击加分
+    customPoints = body.get("points")
 
     state = _load_history(grade, cls)
     points_added = 0
@@ -186,16 +189,18 @@ async def api_mark(request: Request):
         if not noScore:
             scores = _load_scores()
             sk = _score_key(grade, cls, student)
-            scores[sk] = scores.get(sk, 0) + 5
+            add_pts = customPoints if customPoints is not None else 5
+            scores[sk] = scores.get(sk, 0) + add_pts
             _save_scores(scores)
-            points_added = 5
+            points_added = add_pts
     elif result == "incorrect":
         if not noScore:
             scores = _load_scores()
             sk = _score_key(grade, cls, student)
-            scores[sk] = scores.get(sk, 0) + 2
+            add_pts = customPoints if customPoints is not None else 2
+            scores[sk] = scores.get(sk, 0) + add_pts
             _save_scores(scores)
-            points_added = 2
+            points_added = add_pts
 
     state.setdefault("history", []).append({
         "student": student,
@@ -252,6 +257,121 @@ async def api_reset(request: Request):
     _save_history(grade, cls, state)
     return {"success": True, "total": len(names)}
 
+# ── 工具：写入学生个人 ChatHistory ──
+
+def _save_to_student_chat(student_name, cls, content):
+    """将课堂记录写入学生个人的 ChatHistory 目录"""
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(base_dir, "users.db")
+    username = None
+    if os.path.exists(db_path):
+        import sqlite3
+        try:
+            conn = sqlite3.connect(db_path)
+            c = conn.cursor()
+            # 只用姓名查找（班级可能不一致）
+            c.execute("SELECT username FROM users WHERE name=?", (student_name,))
+            results = c.fetchall()
+            conn.close()
+            if results:
+                username = results[0][0]
+        except Exception:
+            pass
+    if not username:
+        return None
+    # 根据用户角色决定工作目录：学生(普通用户)在 stu/ 下，教师和管理员在根目录
+    try:
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        c.execute("SELECT role FROM users WHERE username=?", (username,))
+        role_row = c.fetchone()
+        conn.close()
+        if role_row and role_row[0] == 2:  # 普通用户（学生）
+            user_dir = os.path.join(base_dir, "stu", username)
+        else:
+            user_dir = os.path.join(base_dir, username)
+    except Exception:
+        user_dir = os.path.join(base_dir, username)
+    os.makedirs(user_dir, exist_ok=True)
+    chat_dir = os.path.join(user_dir, "ChatHistory")
+    date_str = time.strftime("%Y-%m-%d")
+    date_dir = os.path.join(chat_dir, date_str)
+    os.makedirs(date_dir, exist_ok=True)
+    timestamp = time.strftime("%Y%m%d_%H%M%S")
+    filepath = os.path.join(date_dir, f"课堂记录_{timestamp}.md")
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(content)
+    return filepath
+
+
+# ── API: 保存详细答题记录到学生 ChatHistory ──
+
+async def api_save_record(request: Request):
+    body = await request.json()
+    grade = body.get("grade", "")
+    cls = body.get("class", "")
+    student = body.get("student", "")
+    rec_type = body.get("type", "课堂互动")
+    title = body.get("title", "")
+    correct_count = body.get("correctCount", 0)
+    total = body.get("totalQuestions", 0)
+    points = body.get("points", 0)
+    answers = body.get("answers", [])
+    lines = [f"## 🎯 课堂答题记录\n"]
+    lines.append(f"**时间**: {time.strftime('%Y-%m-%d %H:%M:%S')}")
+    lines.append(f"**班级**: {grade} · {cls}")
+    if title:
+        lines.append(f"**课程**: {title}")
+    lines.append(f"**类型**: {rec_type}")
+    lines.append("\n---\n")
+    lines.append("### 📊 答题概况\n")
+    lines.append(f"**学生**: {student}")
+    if total > 0:
+        ratio = f"{correct_count}/{total}"
+        emoji = "✅" if correct_count == total else "⚠️"
+        lines.append(f"**结果**: {emoji} 答对 {ratio} 题 · 获得 +{points} 积分")
+    else:
+        lines.append(f"**结果**: {'✅ 答对' if points > 0 else '💬 参与'} · 获得 +{points} 积分")
+    if answers:
+        lines.append("\n---\n")
+        lines.append("### 📋 题目详情\n")
+        labels = ["A", "B", "C", "D"]
+        for i, a in enumerate(answers):
+            icon = "✅" if a.get("isCorrect") else "❌"
+            lines.append(f"**第 {i+1} 题** {icon} {'答对' if a.get('isCorrect') else '答错'}")
+            lines.append(f"> {a.get('question', '')}")
+            opts = a.get("options", [])
+            your_ans = a.get("yourAnswer", -1)
+            correct_ans = a.get("correctAnswer", -1)
+            # 兼容 options 为对象 {A:..., B:...} 或数组
+            opt_list = []
+            if isinstance(opts, dict):
+                opt_list = [opts.get(l, "") for l in labels]
+            elif isinstance(opts, (list, tuple)):
+                opt_list = list(opts)
+            # 兼容 yourAnswer/correctAnswer 为字母或数字
+            if isinstance(your_ans, str) and your_ans in labels:
+                your_ans = labels.index(your_ans)
+            if isinstance(correct_ans, str) and correct_ans in labels:
+                correct_ans = labels.index(correct_ans)
+            for j, opt in enumerate(opt_list):
+                marker = ""
+                if j == your_ans and j == correct_ans:
+                    marker = " ← **你的答案** ✅"
+                elif j == your_ans:
+                    marker = " ← **你的答案**"
+                elif j == correct_ans:
+                    marker = " ← **正确答案** ✅"
+                lines.append(f"- {labels[j]}. {opt}{marker}")
+            if a.get("principle"):
+                lines.append(f"知识点：{a['principle']}")
+            lines.append("")
+    lines.append("\n---\n")
+    lines.append("*由 SmartKB 自动记录*")
+    _save_to_student_chat(student, cls, "\n".join(lines))
+    return {"success": True}
+
+
 # ── 挂载 ──
 
 def mount_rollcall_api(app):
@@ -262,3 +382,4 @@ def mount_rollcall_api(app):
     app.post("/rollcall-api/mark")(api_mark)
     app.get("/rollcall-api/history")(api_history)
     app.post("/rollcall-api/reset")(api_reset)
+    app.post("/rollcall-api/save-record")(api_save_record)

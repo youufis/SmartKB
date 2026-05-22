@@ -1268,9 +1268,9 @@ function flashAnimation(targetStudent) {
     }
     
     let flashCount = 0;
-    const maxFlashes = 35; // 增加闪烁次数，让效果更明显
-    let currentDelay = 40; // 更快的起始速度
-    const delayIncrease = 1.12; // 稍微减缓减速速度
+    const maxFlashes = 15; // 减少闪烁次数，加快抽取速度
+    let currentDelay = 30; // 起始速度
+    const delayIncrease = 1.08; // 减速因子
     
     function flash() {
       // 清除所有卡片的闪烁状态
@@ -1279,18 +1279,18 @@ function flashAnimation(targetStudent) {
       let randomCard;
       const remainingFlashes = maxFlashes - flashCount;
       
-      // 最后5次逐渐聚焦到目标学生
-      if (remainingFlashes <= 5) {
+      // 最后3次逐渐聚焦到目标学生
+      if (remainingFlashes <= 3) {
         if (remainingFlashes === 1) {
           // 最后一次：必定是目标学生
           randomCard = document.querySelector(`.student-card[data-name="${targetStudent.name}"]`);
-        } else if (remainingFlashes <= 3) {
-          // 倒数2-4次：70%概率是目标学生
+        } else if (remainingFlashes <= 2) {
+          // 倒数第2次：70%概率是目标学生
           randomCard = Math.random() > 0.3 
             ? document.querySelector(`.student-card[data-name="${targetStudent.name}"]`)
             : cards[Math.floor(Math.random() * cards.length)];
         } else {
-          // 倒数第5次：50%概率
+          // 倒数第3次：50%概率
           randomCard = Math.random() > 0.5 
             ? document.querySelector(`.student-card[data-name="${targetStudent.name}"]`)
             : cards[Math.floor(Math.random() * cards.length)];
@@ -1305,25 +1305,6 @@ function flashAnimation(targetStudent) {
       
       if (randomCard) {
         randomCard.classList.add('flashing');
-        // 添加声音反馈（可选）
-        try {
-          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          const oscillator = audioContext.createOscillator();
-          const gainNode = audioContext.createGain();
-          
-          oscillator.connect(gainNode);
-          gainNode.connect(audioContext.destination);
-          
-          oscillator.frequency.value = 800 + (flashCount * 20); // 频率递增
-          oscillator.type = 'sine';
-          gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
-          
-          oscillator.start(audioContext.currentTime);
-          oscillator.stop(audioContext.currentTime + 0.05);
-        } catch(e) {
-          // 忽略音频错误
-        }
       }
       
       flashCount++;
@@ -1374,8 +1355,8 @@ function updatePickDisplay(name, score) {
     displayEl.classList.remove('active');
     void displayEl.offsetWidth; // 强制重绘
     
-    // 更新文本内容
-    textEl.innerHTML = `🎯 <strong>${name}</strong> <span style="color:#7c3aed">(+5分)</span>`;
+    // 更新文本内容（仅显示名字，不加分，教师确认后手动点击卡片加分）
+    textEl.innerHTML = `🎯 <strong>${name}</strong>`;
     
     // 添加active类触发动画
     setTimeout(() => {
@@ -1399,8 +1380,8 @@ function startNameFlashing() {
   }
   
   let flashCount = 0;
-  const maxFlashes = 35; // 与卡片闪烁次数一致
-  let currentDelay = 40; // 起始速度
+  const maxFlashes = 15; // 与卡片闪烁次数一致
+  let currentDelay = 30; // 起始速度
   
   function flashName() {
     if (flashCount >= maxFlashes || !isPicking) {
@@ -1553,57 +1534,17 @@ async function randomPickStudent() {
   
   recordPick(targetStudent.name);
   
-  // 自动加5分
-  const autoPoints = 5;
-  try {
-    const res = await apiPost('/score-api/score', { 
-      grade: currentGrade, 
-      class: currentClass, 
-      name: targetStudent.name, 
-      points: autoPoints 
-    });
-    
-    if (res.success) {
-      targetStudent.score = res.total;
-      
-      const card = document.querySelector(`.student-card[data-name="${targetStudent.name}"]`);
-      
-      if (card) {
-        const numSpan = card.querySelector('.score-num');
-        const badge = card.querySelector('.score-badge');
-        
-        if (numSpan) {
-          numSpan.textContent = res.total;
-          numSpan.classList.remove('bump');
-          void numSpan.offsetWidth;
-          numSpan.classList.add('bump');
-        }
-        
-        if (badge) {
-          badge.className = 'score-badge';
-          if (res.total >= 20) badge.classList.add('high');
-          else if (res.total >= 10) badge.classList.add('mid');
-          else badge.classList.add('low');
-        }
-        
-        const rect = card.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        burstParticles(cx, cy, autoPoints);
-      }
-      
-      showPickToast(targetStudent.name, autoPoints, res.total);
-      
-      renderStudents();
-      loadRanking();
-      loadStats();
-    } else {
-      showPickToast(targetStudent.name, 0, targetStudent.score || 0);
-    }
-  } catch (e) {
-    console.error('自动加分失败', e);
-    showPickToast(targetStudent.name, 0, targetStudent.score || 0);
+  // 提示教师点击卡片手动加分（防止抽到请假学生）
+  const card = document.querySelector(`.student-card[data-name="${targetStudent.name}"]`);
+  if (card) {
+    const rect = card.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    burstParticles(cx, cy, 0);
   }
+  
+  // 显示提示：点击卡片手动加分
+  showToast('提示', `已抽中 ${targetStudent.name}，点击卡片手动加分`, '', false);
   
   setTimeout(() => {
     resetPickState();

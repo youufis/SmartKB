@@ -16,6 +16,7 @@ import sqlite3
 import bcrypt
 from score_system import mount_score_api
 from smart_rollcall_api import mount_rollcall_api
+from downloads_api import mount_downloads_api
 
 
 # 定义初始最大允许的请求数
@@ -36,6 +37,7 @@ ROOT_DIR = "root"
 RESERVED_DIR_NAME = "Reserved"
 SUMMARY_DIR_NAME = "Summary"
 TASK_DIR_NAME = "Task"
+STU_DIR = "stu"  # 学生（普通用户）目录统一放在 stu/ 下
 PROMPT_FILE_NAME = "信通课程知识要点.txt"
 
 # 网络/UI相关
@@ -246,7 +248,7 @@ def delete_user(username, current_user):
         conn.close()
         
         # 删除用户目录（如果存在）
-        user_dir = os.path.abspath(username)
+        user_dir = os.path.abspath(get_user_base_dir(username))
         dir_deleted = ""
         if os.path.isdir(user_dir):
             try:
@@ -404,7 +406,7 @@ def bulk_delete_users(pattern, current_user):
     deleted_dirs = []
     failed_dirs = []
     for u in users:
-        user_dir = os.path.abspath(u)
+        user_dir = os.path.abspath(get_user_base_dir(u))
         if os.path.isdir(user_dir):
             try:
                 shutil.rmtree(user_dir)
@@ -637,10 +639,11 @@ def login(username_or_name, password, state):
         conn.close()
         
         # 创建以用户名命名的目录（如果不存在）
-        if not os.path.exists(username):
-            os.makedirs(username)
+        user_base = get_user_base_dir(username)
+        if not os.path.exists(user_base):
+            os.makedirs(user_base)
         # 确保该用户的 ChatHistory 子目录存在
-        user_chat_dir = os.path.join(username, CHAT_HISTORY_DIR)
+        user_chat_dir = os.path.join(user_base, CHAT_HISTORY_DIR)
         os.makedirs(user_chat_dir, exist_ok=True)
         
         # 更新状态和用户名，并保存用户信息到 state 以便后续使用
@@ -649,6 +652,8 @@ def login(username_or_name, password, state):
         state["name"] = name_val
         state["gender"] = gender_str
         logged_in_name = state.get("logged_in_name")
+        # 如果是教师登录，确保其 HTML 目录中有必要的资源文件
+        ensure_teacher_html_files(username)
         # 获取用户的API KEY
         dashscope_api_key, deepseek_api_key = getapi_key(state)
         
@@ -743,12 +748,42 @@ def read_directory(directory_path, extflag=True):
 def get_account_html_dir(logged_in_name: str | None):
     """返回指定账号的 HTML 目录路径。非管理员账号的HTML保存在各自账号目录下，管理员使用 ROOT_DIR。"""
     name = logged_in_name if logged_in_name else DEFAULT_LOGGED_IN_NAME
-    # 如果是管理员root则其根目录为ROOT_DIR常量
-    if name == ROOT_DIR:
-        base = ROOT_DIR
-    else:
-        base = name
+    base = get_user_base_dir(name)
     return os.path.join(base, "html")
+
+def ensure_teacher_html_files(username):
+    """确保教师用户的HTML目录中有必要的文件，如果缺失则从 root/html 复制"""
+    if not is_teacher(username):
+        return
+    
+    html_dir = get_account_html_dir(username)
+    os.makedirs(html_dir, exist_ok=True)
+    
+    source_dir = os.path.join(ROOT_DIR, "html")
+    
+    # 1. 检查并复制必要的文件
+    required_files = [
+        "0.00智能随机点名.html",
+        "高二年级学生名单.json",
+        "高一年级学生名单.json"
+    ]
+    for filename in required_files:
+        target_path = os.path.join(html_dir, filename)
+        if not os.path.exists(target_path):
+            source_path = os.path.join(source_dir, filename)
+            if os.path.exists(source_path):
+                shutil.copy2(source_path, target_path)
+    
+    # 2. 检查 score_system 子目录
+    score_system_dir = os.path.join(html_dir, "score_system")
+    os.makedirs(score_system_dir, exist_ok=True)
+    
+    # 3. 检查 score_system 中的 index.html
+    index_html_path = os.path.join(score_system_dir, "index.html")
+    if not os.path.exists(index_html_path):
+        source_index_path = os.path.join(source_dir, "score_system", "index.html")
+        if os.path.exists(source_index_path):
+            shutil.copy2(source_index_path, index_html_path)
 
 # 获取HTML文件列表
 def get_htmlfilelst(state):
@@ -846,14 +881,19 @@ def get_html_placeholder_dir():
     return os.path.abspath(os.path.join('.', '.html_placeholder'))
 
 # ---------- 用户目录辅助函数 ----------
+def get_user_base_dir(username):
+    """获取用户工作根目录。学生(普通用户)在 stu/ 下，教师和管理员在根目录。"""
+    if username == ROOT_DIR:
+        return ROOT_DIR
+    role = get_user_role(username)
+    if role == 2:  # 普通用户（学生）
+        return os.path.join(STU_DIR, username)
+    return username
+
 def get_account_chat_history_dir(logged_in_name: str | None):
     """返回指定账号的 ChatHistory 目录路径。非管理员账号的历史保存在各自账号目录下，管理员使用 ROOT_DIR。"""
     name = logged_in_name if logged_in_name else DEFAULT_LOGGED_IN_NAME
-    # 如果是管理员root则其根目录为ROOT_DIR常量
-    if name == ROOT_DIR:
-        base = ROOT_DIR
-    else:
-        base = name
+    base = get_user_base_dir(name)
     return os.path.join(base, CHAT_HISTORY_DIR)
 
 def get_admin_chat_history_dir():
@@ -871,14 +911,14 @@ def getapi_key(session_state=None):
     logged_in_name = DEFAULT_LOGGED_IN_NAME # 默认使用管理员的环境变量!!!!
     # 判断用户是否是管理员或教师
     if is_admin(logged_in_name):
-        logged_in_name = DEFAULT_LOGGED_IN_NAME  # 管理员使用 ROOT_DIR 目录
-        env_path=os.path.join(logged_in_name, ".env")
+        base_dir = DEFAULT_LOGGED_IN_NAME  # 管理员使用 ROOT_DIR 目录
     else:
-        logged_in_name = logged_in_name  # 使用自己的目录
-        env_path=os.path.join(logged_in_name, ".env")
-        # 如果目录下没有 .env 文件,则复制根目录下的 .env 文件到用户目录下
-        if not os.path.exists(env_path):
-            shutil.copyfile(os.path.join(".env"), env_path)
+        base_dir = get_user_base_dir(logged_in_name)  # 使用自己的目录（学生使用 stu/ 子目录）
+    env_path = os.path.join(base_dir, ".env")
+    # 如果目录下没有 .env 文件,则复制根目录下的 .env 文件到用户目录下
+    if not os.path.exists(env_path):
+        os.makedirs(base_dir, exist_ok=True)
+        shutil.copyfile(os.path.join(".env"), env_path)
         
      # 清除全局环境变量中的缓存，防止污染
     for key in ["dashscope_api_key", "deepseek_api_key"]:
@@ -1495,7 +1535,7 @@ def save_conversation_history(conversation_history, session_id, file_path=None, 
     chat_history_dir_abs = os.path.abspath(chat_history_dir)
     if logged_in_name != ROOT_DIR and chat_history_dir_abs.startswith(admin_dir):
         # 将存储路径强制到用户自己的目录
-        chat_history_dir = os.path.abspath(os.path.join(logged_in_name, CHAT_HISTORY_DIR))
+        chat_history_dir = os.path.abspath(os.path.join(get_user_base_dir(logged_in_name), CHAT_HISTORY_DIR))
     
     os.makedirs(chat_history_dir, exist_ok=True)
     
@@ -2714,16 +2754,28 @@ def _rewrite_html_links(html_content: str, base_url: str) -> str:
     return content
 
 
-def load_index_html():
-    """加载 root/html/index.html 导航页内容，重写链接为 Gradio file 服务路径"""
+def load_index_html(session_state=None):
+    """加载当前登录用户的 html/index.html 导航页内容，重写链接为 Gradio file 服务路径"""
     import urllib.parse
-    index_path = os.path.join(ROOT_DIR, "html", "index.html")
+    # 确定当前用户的 html 目录
+    logged_in_name = None
+    if session_state and isinstance(session_state, dict):
+        logged_in_name = session_state.get("logged_in_name")
+    if logged_in_name:
+        # 已登录用户，使用其自己的 html 目录
+        html_dir = get_account_html_dir(logged_in_name)
+        index_path = os.path.join(html_dir, "index.html")
+        base_url_path = html_dir.replace('\\', '/') + "/"
+    else:
+        # 未登录，使用 root 目录作为默认
+        index_path = os.path.join(ROOT_DIR, "html", "index.html")
+        base_url_path = "root/html/"
     try:
         if os.path.exists(index_path):
             with open(index_path, "r", encoding="utf-8") as f:
                 content = f.read()
             # 重写所有相对链接，加上 gradio file 前缀
-            base_url = "/gradio_api/file=" + urllib.parse.quote("root/html/")
+            base_url = "/gradio_api/file=" + urllib.parse.quote(base_url_path)
             content = _rewrite_html_links(content, base_url)
             # 用 srcdoc 嵌入（此时链接已全部为绝对路径，不会404）
             return gr.update(value=f"""<div style="position:relative;width:100%;">
@@ -2745,7 +2797,83 @@ def load_index_html():
                 </iframe>
             </div>""")
         else:
-            return gr.update(value="<p style='text-align:center;color:var(--text-secondary);'>导航页面未找到</p>")
+            # 已登录用户没有 index.html，自动创建一个带说明的导航文件
+            if logged_in_name:
+                default_content = """<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教学资源导航</title>
+    <style>
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.8;
+            color: #333;
+        }}
+        h1 {{ color: #1a73e8; border-bottom: 2px solid #1a73e8; padding-bottom: 10px; }}
+        .tip {{
+            background: #e8f0fe; border-left: 4px solid #1a73e8;
+            padding: 14px 18px; margin: 20px 0; border-radius: 0 4px 4px 0;
+        }}
+        .tip strong {{ color: #1a73e8; }}
+        ul {{ padding-left: 20px; }}
+        li {{ margin: 8px 0; }}
+        code {{ background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }}
+        .footer {{ margin-top: 40px; font-size: 0.85em; color: #888; text-align: center; }}
+    </style>
+</head>
+<body>
+    <h1>📚 教学资源导航</h1>
+    <div class="tip">
+        <strong>💡 说明：</strong>本页面是您的教学资源导航主页。您可以通过编辑此文件来自定义导航布局和链接。<br>
+        将 HTML 教学资源文件上传到当前目录后，它们会自动出现在下方的「HTML资源」列表中。
+    </div>
+    <h2>📖 使用提示</h2>
+    <ul>
+        <li>在「资源管理」中上传 <code>.html</code> 等文件，即可在「HTML资源」列表中查看</li>
+        <li>编辑此 <code>index.html</code> 文件可自定义导航页面的样式、布局和链接</li>
+        <li>支持上传 HTML、CSS、JS、图片、PDF、Office 文档等多种格式</li>
+        <li>上传后的文件可通过 <code>/gradio_api/file=目录/文件名</code> 路径直接访问</li>
+    </ul>
+    <h2>📂 资源目录</h2>
+    <p>当前目录下的所有文件可在「HTML资源」折叠面板中查看，点击即可在新窗口中打开。</p>
+    <div class="footer">
+        <p>此文件由系统自动生成，您可以自由编辑或替换。</p>
+    </div>
+</body>
+</html>"""
+                os.makedirs(os.path.dirname(index_path), exist_ok=True)
+                with open(index_path, "w", encoding="utf-8") as f:
+                    f.write(default_content)
+                # 写入后重新读取并显示
+                with open(index_path, "r", encoding="utf-8") as f:
+                    content = f.read()
+                base_url = "/gradio_api/file=" + urllib.parse.quote(base_url_path)
+                content = _rewrite_html_links(content, base_url)
+                return gr.update(value=f"""<div style="position:relative;width:100%;">
+                    <iframe srcdoc="{content.replace('"', '&quot;')}"
+                        style="width:100%;height:100vh;border:none;"
+                        onload="
+                            var self = this;
+                            function resize() {{
+                                try {{
+                                    var h = self.contentWindow.document.documentElement.scrollHeight;
+                                    if (h > 100) {{ self.style.height = h + 'px'; }}
+                                }} catch(e) {{}}
+                            }}
+                            resize();
+                            setTimeout(resize, 500);
+                            setTimeout(resize, 1500);
+                            setTimeout(resize, 3000);
+                        ">
+                    </iframe>
+                </div>""")
+            else:
+                return gr.update(value="<p style='text-align:center;color:var(--text-secondary);'>导航页面未找到</p>")
     except Exception as e:
         return gr.update(value=f"<p style='text-align:center;color:red;'>加载导航页失败：{str(e)}</p>")
 
@@ -2778,7 +2906,7 @@ def handle_html_file_upload(files, session_state):
         return "未选择文件", gr.update(), gr.update()
     
     # 获取用户html目录
-    html_dir = os.path.join(current_user, "html")
+    html_dir = os.path.join(get_user_base_dir(current_user), "html")
     os.makedirs(html_dir, exist_ok=True)
     
     uploaded_files = []
@@ -2885,7 +3013,7 @@ def handle_html_file_delete(file_path, session_state):
         return "未选择文件", gr.update(), gr.update()
     
     # 获取用户html目录
-    html_dir = os.path.join(current_user, "html")
+    html_dir = os.path.join(get_user_base_dir(current_user), "html")
     
     # 确保目标路径在用户html目录内（安全限制）
     try:
@@ -3304,7 +3432,7 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
     # 当用户切换到HTML资源标签页时，自动刷新内容
     html_resources_tab.select(
         fn=load_index_html,
-        inputs=None,
+        inputs=[session_state],
         outputs=[Html_Nav]
     ).then(
         fn=update_html_resources,
@@ -3351,11 +3479,11 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
         inputs=[file_upload, session_state],
         outputs=[html_upload_msg, file_explorer, html_files_grid]
     ).then(
-        fn=lambda state: gr.FileExplorer(root_dir=os.path.join(state.get("logged_in_name", DEFAULT_LOGGED_IN_NAME), os.path.join("html", RESERVED_DIR_NAME))),
+        fn=lambda state: gr.FileExplorer(root_dir=os.path.join(get_account_html_dir(state.get("logged_in_name", DEFAULT_LOGGED_IN_NAME)), RESERVED_DIR_NAME)),
         inputs=[session_state],
         outputs=[file_explorer]
      ).then(
-        fn=lambda state: gr.FileExplorer(root_dir=os.path.join(state.get("logged_in_name", DEFAULT_LOGGED_IN_NAME), "html")),
+        fn=lambda state: gr.FileExplorer(root_dir=get_account_html_dir(state.get("logged_in_name", DEFAULT_LOGGED_IN_NAME))),
         inputs=[session_state],
         outputs=[file_explorer]
     )
@@ -3366,11 +3494,11 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
         inputs=[file_explorer, session_state],
         outputs=[html_upload_msg, file_explorer, html_files_grid]
      ).then(
-        fn=lambda state: gr.FileExplorer(root_dir=os.path.join(state.get("logged_in_name", DEFAULT_LOGGED_IN_NAME), os.path.join("html", RESERVED_DIR_NAME))),
+        fn=lambda state: gr.FileExplorer(root_dir=os.path.join(get_account_html_dir(state.get("logged_in_name", DEFAULT_LOGGED_IN_NAME)), RESERVED_DIR_NAME)),
         inputs=[session_state],
         outputs=[file_explorer]
     ).then(
-        fn=lambda state: gr.FileExplorer(root_dir=os.path.join(state.get("logged_in_name", DEFAULT_LOGGED_IN_NAME), "html")),
+        fn=lambda state: gr.FileExplorer(root_dir=get_account_html_dir(state.get("logged_in_name", DEFAULT_LOGGED_IN_NAME))),
         inputs=[session_state],
         outputs=[file_explorer]
     )
@@ -3398,5 +3526,6 @@ with gr.Blocks(title="教育智能体-高中信通版",theme="soft",css=css) as 
     # 必须先 launch 才能拿到真正的 app 对象（queue 和 launch 创建的不是同一个）
     mount_score_api(demo.app)
     mount_rollcall_api(demo.app)
+    mount_downloads_api(demo.app)
     # 阻塞主线程保持服务运行
     demo.block_thread()

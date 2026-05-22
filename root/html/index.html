@@ -17,6 +17,7 @@
   --ai:#7c3aed;--ai-light:#ede9fe;--ai-bg:linear-gradient(135deg,#6d28d9,#8b5cf6);
   --tool:#d97706;--tool-light:#fef3c7;--tool-bg:linear-gradient(135deg,#b45309,#f59e0b);
   --puzzle:#db2777;--puzzle-light:#fce7f3;--puzzle-bg:linear-gradient(135deg,#be185d,#ec4899);
+  --dl:#0d9488;--dl-light:#ccfbf1;--dl-bg:linear-gradient(135deg,#0f766e,#14b8a6);
   --tab-height:64px;
 }
 html{scroll-behavior:smooth}
@@ -80,6 +81,7 @@ a{text-decoration:none;color:inherit}
 .tab-ai .active-bar{background:var(--ai)}.tab-ai.active .tab-count{background:var(--ai);color:#fff}
 .tab-tool .active-bar{background:var(--tool)}.tab-tool.active .tab-count{background:var(--tool);color:#fff}
 .tab-puzzle .active-bar{background:var(--puzzle)}.tab-puzzle.active .tab-count{background:var(--puzzle);color:#fff}
+.tab-dl .active-bar{background:var(--dl)}.tab-dl.active .tab-count{background:var(--dl);color:#fff}
 
 /* ===== Tab Content ===== */
 .tab-content{display:none;padding:24px;max-width:1440px;margin:0 auto}
@@ -163,6 +165,12 @@ a{text-decoration:none;color:inherit}
 .puzzle-section .section-title{color:var(--puzzle)}
 .puzzle-section .title-line{background:linear-gradient(90deg,var(--puzzle-light),transparent)}
 .puzzle-badge{background:var(--puzzle-light)!important;color:var(--puzzle)!important}
+/* DL Teal */
+.dl-card:hover{border-color:var(--dl);box-shadow:0 8px 24px rgba(13,148,136,.12)}
+.dl-card:hover .ch-num{background:var(--dl);color:#fff}
+.dl-section .section-title{color:var(--dl)}
+.dl-section .title-line{background:linear-gradient(90deg,var(--dl-light),transparent)}
+.dl-badge{background:var(--dl-light)!important;color:var(--dl)!important}
 
 /* ===== Hero Card (featured) ===== */
 .hero-card{
@@ -183,6 +191,7 @@ a{text-decoration:none;color:inherit}
 .hero-btn-ai{background:var(--ai-bg);color:#fff}
 .hero-btn-tool{background:var(--tool-bg);color:#fff}
 .hero-btn-puzzle{background:var(--puzzle-bg);color:#fff}
+.hero-btn-dl{background:var(--dl-bg);color:#fff}
 
 /* ===== Footer ===== */
 .footer{
@@ -229,7 +238,7 @@ a{text-decoration:none;color:inherit}
 <nav class="tabs" role="tablist">
   <button class="tab-btn tab-gt active" data-tab="gt" role="tab" aria-selected="true">
     <span class="tab-icon">🛠️</span> 通用技术
-    <span class="tab-count">28</span>
+    <span class="tab-count">32</span>
     <span class="active-bar"></span>
   </button>
   <button class="tab-btn tab-it" data-tab="it" role="tab">
@@ -250,6 +259,11 @@ a{text-decoration:none;color:inherit}
   <button class="tab-btn tab-puzzle" data-tab="puzzle" role="tab">
     <span class="tab-icon">🧩</span> Puzzle 益智
     <span class="tab-count">21</span>
+    <span class="active-bar"></span>
+  </button>
+  <button class="tab-btn tab-dl" data-tab="dl" role="tab">
+    <span class="tab-icon">📁</span> 下载中心
+    <span class="tab-count">0</span>
     <span class="active-bar"></span>
   </button>
 </nav>
@@ -391,22 +405,22 @@ a{text-decoration:none;color:inherit}
     <div class="card gt-card" data-href="2.1.1结构及其设计.html">
       <div class="card-title"><span class="ch-num">§1</span> 结构及其设计</div>
       <div class="card-desc">结构类型、稳定性、强度、结构设计</div>
-      <div class="card-badges"><a class="badge gt-badge" href="2.1.1结构及其设计-工程蓝图.html" target="_blank">📐 工程蓝图</a><a class="badge gt-badge" href="2.1.1结构及其设计-探究式学习系统.html" target="_blank">🔬 探究式</a><a class="badge gt-badge" href="2.1结构及其设计练习题.html" target="_blank">📝 练习</a></div>
+      <div class="card-badges"><a class="badge" href="2.1.1结构及其设计_动画讲解.html" target="_blank">▶ 动画讲解</a><a class="badge gt-badge" href="2.1.1结构及其设计-工程蓝图.html" target="_blank">📐 工程蓝图</a><a class="badge gt-badge" href="2.1.1结构及其设计-探究式学习系统.html" target="_blank">🔬 探究式</a><a class="badge gt-badge" href="2.1结构及其设计练习题.html" target="_blank">📝 练习</a></div>
     </div>
     <div class="card gt-card" data-href="2.2.1流程及其设计.html">
       <div class="card-title"><span class="ch-num">§2</span> 流程及其设计</div>
       <div class="card-desc">流程图、时序、环节、工艺流程</div>
-      <div class="card-badges"><a class="badge gt-badge" href="2.2.1流程及其设计-流程图风.html" target="_blank">📊 流程图风</a><a class="badge gt-badge" href="2.2.1流程及其设计-探究式学习系统.html" target="_blank">🔬 探究式</a><a class="badge gt-badge" href="2.2流程及其设计练习题.html" target="_blank">📝 练习</a></div>
+      <div class="card-badges"><a class="badge" href="2.2.1流程及其设计_动画讲解.html" target="_blank">▶ 动画讲解</a><a class="badge gt-badge" href="2.2.1流程及其设计-流程图风.html" target="_blank">📊 流程图风</a><a class="badge gt-badge" href="2.2.1流程及其设计-探究式学习系统.html" target="_blank">🔬 探究式</a><a class="badge gt-badge" href="2.2流程及其设计练习题.html" target="_blank">📝 练习</a></div>
     </div>
     <div class="card gt-card" data-href="2.3.1系统及其设计.html">
       <div class="card-title"><span class="ch-num">§3</span> 系统及其设计</div>
       <div class="card-desc">系统特性、系统分析、系统优化</div>
-      <div class="card-badges"><a class="badge gt-badge" href="2.3.1系统及其设计-电路板风.html" target="_blank">⚡ 电路板风</a><a class="badge gt-badge" href="2.3.1系统及其设计-探究式学习系统.html" target="_blank">🔬 探究式</a><a class="badge gt-badge" href="2.3系统及其设计练习题.html" target="_blank">📝 练习</a></div>
+      <div class="card-badges"><a class="badge" href="2.3.1系统及其设计_动画讲解.html" target="_blank">▶ 动画讲解</a><a class="badge gt-badge" href="2.3.1系统及其设计-电路板风.html" target="_blank">⚡ 电路板风</a><a class="badge gt-badge" href="2.3.1系统及其设计-探究式学习系统.html" target="_blank">🔬 探究式</a><a class="badge gt-badge" href="2.3系统及其设计练习题.html" target="_blank">📝 练习</a></div>
     </div>
     <div class="card gt-card" data-href="2.4.1控制及其设计.html">
       <div class="card-title"><span class="ch-num">§4</span> 控制及其设计</div>
       <div class="card-desc">开环/闭环控制、控制系统设计</div>
-      <div class="card-badges"><a class="badge gt-badge" href="2.4.1控制及其设计-仪表盘风.html" target="_blank">📟 仪表盘风</a><a class="badge gt-badge" href="2.4.1控制及其设计-探究式学习系统.html" target="_blank">🔬 探究式</a><a class="badge gt-badge" href="2.4控制及其设计练习题.html" target="_blank">📝 练习</a></div>
+      <div class="card-badges"><a class="badge" href="2.4.1控制及其设计_动画讲解.html" target="_blank">▶ 动画讲解</a><a class="badge gt-badge" href="2.4.1控制及其设计-仪表盘风.html" target="_blank">📟 仪表盘风</a><a class="badge gt-badge" href="2.4.1控制及其设计-探究式学习系统.html" target="_blank">🔬 探究式</a><a class="badge gt-badge" href="2.4控制及其设计练习题.html" target="_blank">📝 练习</a></div>
     </div>
   </div>
 
@@ -925,9 +939,172 @@ a{text-decoration:none;color:inherit}
   </div>
 </section>
 
+<!-- ================================================================ -->
+<!-- TAB 6: 文件下载 -->
+<!-- ================================================================ -->
+<section class="tab-content" id="tab-dl" role="tabpanel">
+  <!-- 导航面包屑 -->
+  <div id="dlNav" style="margin-bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.82rem;color:var(--text-secondary);min-height:28px;">
+    <span id="dlBackBtn" onclick="dlGoUp()" style="display:none;color:var(--dl);cursor:pointer;font-weight:600;padding:2px 8px;border-radius:4px;">⬆ 返回上级</span>
+  </div>
+  <div style="margin-bottom:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+    <span style="font-weight:600;font-size:1rem;">📁 下载中心</span>
+    <span id="dlFileCount" style="font-size:.82rem;color:var(--text-secondary);">加载中...</span>
+    <span style="flex:1;"></span>
+    <input id="dlSearch" type="text" placeholder="🔍 搜索..." oninput="renderDLList()"
+      style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:5px 10px;font-size:.82rem;width:160px;outline:none;color:var(--text);">
+    <a class="hero-btn hero-btn-dl" href="downloads/index.html" target="_blank" style="font-size:.78rem;padding:5px 12px;">📂 完整页面</a>
+  </div>
+  <div id="dlFileList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;">
+    <div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--text-secondary);">加载中...</div>
+  </div>
+</section>
+
+<style>
+.dl-item {
+  display:flex;align-items:center;gap:10px;
+  background:var(--surface);border:1px solid #e8edf4;border-radius:10px;
+  padding:10px 14px;transition:all .2s;
+}
+.dl-item:hover {border-color:var(--dl);box-shadow:0 4px 12px rgba(13,148,136,.10);}
+.dl-item.dir {cursor:pointer;}
+.dl-item.dir:hover {background:#f0fdfa;}
+.dl-item .icon {
+  width:34px;height:34px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;flex-shrink:0;
+  background:#f1f5f9;
+}
+.dl-item .info {flex:1;min-width:0;}
+.dl-item .info .name {font-size:.85rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dl-item .info .meta {font-size:.73rem;color:var(--text-secondary);margin-top:1px;}
+.dl-item .dl-btn {
+  background:var(--dl-bg);border:none;color:#fff;
+  padding:3px 10px;border-radius:6px;cursor:pointer;font-size:.75rem;
+  text-decoration:none;flex-shrink:0;transition:all .2s;
+}
+.dl-item .dl-btn:hover {transform:translateY(-1px);box-shadow:0 4px 12px rgba(13,148,136,.3);}
+.dl-nav-item {color:var(--text-secondary);cursor:pointer;padding:1px 5px;border-radius:4px;transition:all .2s;white-space:nowrap;}
+.dl-nav-item:hover {color:var(--dl);background:rgba(13,148,136,.08);}
+.dl-nav-item.curr {color:var(--text);cursor:default;font-weight:500;}
+.dl-nav-item.curr:hover {background:transparent;}
+.dl-nav-sep {color:#d0d5dd;font-size:10px;}
+</style>
+
+<script>
+// ── 嵌入列表：目录浏览 ──
+var _dlCurDir = '';
+function dlGetContents(dir) {
+  var list = window._dlFiles || [];
+  var prefix = dir ? dir + '/' : '';
+  var seen = {}, items = [];
+  for (var i = 0; i < list.length; i++) {
+    var f = list[i];
+    var p = f.path || f.name;
+    if (p.indexOf(prefix) !== 0) continue;
+    var rest = p.substring(prefix.length);
+    if (!rest) continue;
+    var slash = rest.indexOf('/');
+    if (slash === -1) {
+      if (!f.is_dir) items.push({_isDir:false, _disp:rest, path:p, name:f.name, size:f.size, mtime:f.mtime});
+    } else {
+      var d = rest.substring(0, slash);
+      if (!seen[d]) { seen[d]=1; items.push({_isDir:true, _disp:d, path:prefix+d}); }
+    }
+  }
+  items.sort(function(a,b){
+    if (a._isDir !== b._isDir) return a._isDir ? -1 : 1;
+    return a._disp.toLowerCase() < b._disp.toLowerCase() ? -1 : 1;
+  });
+  return items;
+}
+function dlRenderNav() {
+  var nav = document.getElementById('dlNav');
+  var back = document.getElementById('dlBackBtn');
+  if (!_dlCurDir) { back.style.display='none'; nav.innerHTML='<span id="dlBackBtn" onclick="dlGoUp()" style="display:none;color:var(--dl);cursor:pointer;font-weight:600;padding:2px 8px;border-radius:4px;">⬆ 返回上级</span>'; return; }
+  back.style.display='inline-flex';
+  var parts = _dlCurDir.split('/');
+  var html = '<span id="dlBackBtn" onclick="dlGoUp()" style="display:inline-flex;color:var(--dl);cursor:pointer;font-weight:600;padding:2px 8px;border-radius:4px;">⬆ 返回上级</span>';
+  html += '<span class="dl-nav-item" onclick="dlEnterDir(\'\')">📁 根目录</span><span class="dl-nav-sep">›</span>';
+  var cum='';
+  for (var i=0;i<parts.length;i++) {
+    cum = i===0 ? parts[i] : cum+'/'+parts[i];
+    if (i===parts.length-1) html += '<span class="dl-nav-item curr">📂 '+parts[i]+'</span>';
+    else { html += '<span class="dl-nav-item" onclick="dlEnterDir(\''+cum.replace(/'/g,"\\'")+'\')">📂 '+parts[i]+'</span><span class="dl-nav-sep">›</span>'; }
+  }
+  nav.innerHTML = html;
+}
+function dlEnterDir(d) { _dlCurDir=d; dlRenderNav(); renderDLList(); }
+function dlGoUp() { if (!_dlCurDir) return; var i=_dlCurDir.lastIndexOf('/'); _dlCurDir=i===-1?'':_dlCurDir.substring(0,i); dlRenderNav(); renderDLList(); }
+
+async function loadDLList() {
+  var container = document.getElementById('dlFileList');
+  try {
+    var resp = await fetch('/downloads-api/list?_=' + Date.now());
+    if (!resp.ok) throw new Error('API error');
+    var data = await resp.json();
+    if (!data || !Array.isArray(data.files)) throw new Error('bad data');
+    window._dlFiles = data.files;
+    // 更新徽标
+    var fc = data.files.filter(function(f){return !f.is_dir;}).length;
+    document.querySelector('.tab-dl .tab-count').textContent = fc;
+    document.getElementById('dlFileCount').textContent = '共 '+fc+' 个文件';
+    dlRenderNav();
+    renderDLList();
+  } catch(e) {
+    container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--text-secondary);">⚠️ 无法加载文件列表</div>';
+  }
+}
+function formatSize(b) {
+  if (!b && b!==0) return '';
+  if (b===0) return '0 B';
+  var k=1024,s=['B','KB','MB','GB'],i=Math.floor(Math.log(b)/Math.log(k));
+  return (b/Math.pow(k,i)).toFixed(i>0?1:0)+' '+s[i];
+}
+function renderDLList() {
+  var container = document.getElementById('dlFileList');
+  var search = (document.getElementById('dlSearch').value||'').trim().toLowerCase();
+  var items = dlGetContents(_dlCurDir);
+  items = search ? items.filter(function(f){return f._disp.toLowerCase().indexOf(search)!==-1;}) : items;
+  if (items.length===0) {
+    container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--text-secondary);">'+
+      (!_dlCurDir && (!window._dlFiles||window._dlFiles.filter(function(f){return !f.is_dir;}).length===0) ? '📂 暂无文件' : '🔍 没有匹配的内容')+'</div>';
+    return;
+  }
+  container.innerHTML = items.map(function(f){
+    if (f._isDir) {
+      return '<div class="dl-item dir" onclick="dlEnterDir(\''+f.path.replace(/'/g,"\\'")+'\')">'+
+        '<div class="icon">📁</div><div class="info"><div class="name">'+f._disp+'</div><div class="meta">文件夹</div></div>'+
+        '<span style="color:var(--text-secondary);font-size:11px;">›</span></div>';
+    }
+    var ext='',ei='📄';
+    if (f.name.indexOf('.')!==-1) ext=f.name.split('.').pop().toLowerCase();
+    if (['zip','rar','7z','tar','gz'].indexOf(ext)!==-1) ei='📦';
+    else if (['png','jpg','jpeg','gif','webp','svg'].indexOf(ext)!==-1) ei='🖼️';
+    else if (['pdf'].indexOf(ext)!==-1) ei='📕';
+    else if (['doc','docx','xls','xlsx','ppt','pptx'].indexOf(ext)!==-1) ei='📝';
+    else if (['mp4','avi','mkv','mov','webm'].indexOf(ext)!==-1) ei='🎬';
+    var sz=formatSize(f.size), dt=f.mtime||'', meta=[sz,dt].filter(Boolean).join(' · ');
+    var p = encodeURIComponent(f.path||f.name);
+    var n = f.name.replace(/"/g,'&quot;');
+    return '<div class="dl-item"><div class="icon">'+ei+'</div><div class="info"><div class="name" title="'+(f.path||f.name).replace(/"/g,'&quot;')+'">'+f._disp+'</div>'+(meta?'<div class="meta">'+meta+'</div>':'')+'</div>'+
+      '<a class="dl-btn" href="/gradio_api/file=root/html/downloads/'+p+'" download="'+n+'">⬇ 下载</a></div>';
+  }).join('');
+}
+loadDLList();
+
+// 切换到该 Tab 时自动刷新
+(function(){
+  var btn = document.querySelector('.tab-dl');
+  if (btn) btn.addEventListener('click', function(){
+    setTimeout(loadDLList, 100);
+  });
+})();
+</script>
+
 <!-- ===== Footer ===== -->
 <footer class="footer">
-  SmartKB 教学资源中心 · 通用技术 / 信息技术 / 人工智能通识 / 课堂互动 / Puzzle益智
+  SmartKB 教学资源中心 · 通用技术 / 信息技术 / 人工智能通识 / 课堂互动 / Puzzle益智 / 下载中心
 </footer>
 
 <script>
@@ -965,6 +1142,8 @@ document.addEventListener('click', function(e){
     window.open(card.getAttribute('data-href'), '_blank');
   }
 });
+
+
 </script>
 </body>
 </html>

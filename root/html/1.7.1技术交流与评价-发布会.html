@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>技术交流与评价 · 发布会</title>
+<style>
+:root{
+  --st-bg:#0a0a12; --st-card:#14141e;
+  --st-text:#eaeaea; --st-dim:#6a6a7a;
+  --st-gold:#d4a843; --st-red:#e85050;
+  --st-green:#46b88c; --st-blue:#5b9ae0;
+  --st-purple:#a074d9;
+  --font:'Inter','Segoe UI',system-ui,sans-serif;
+  --font-body:'Inter','Segoe UI',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono','Courier New',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:var(--font-body);background:var(--st-bg);
+  color:var(--st-text);min-height:100vh;padding:20px;
+  background-image:radial-gradient(ellipse at 50% 0%,rgba(212,168,67,.03) 0%,transparent 60%);
+}
+.container{max-width:680px;margin:0 auto}
+/* 舞台聚光灯效果 */
+.st-spotlight{position:fixed;top:-100px;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(ellipse,rgba(212,168,67,.04) 0%,transparent 70%);pointer-events:none;z-index:0}
+/* 头部 */
+.st-header{text-align:center;padding:28px 0 14px;position:relative;z-index:1}
+.st-header h1{
+  font-family:var(--font);font-size:1.6rem;font-weight:700;
+  color:var(--st-gold);letter-spacing:3px;
+  text-transform:uppercase;
+}
+.st-header .st-line{width:60px;height:2px;background:var(--st-gold);margin:6px auto}
+.st-header .st-sub{font-size:.65rem;color:var(--st-dim);letter-spacing:4px;font-family:var(--font-mono)}
+/* 卡片 = 幻灯片 */
+.st-card{
+  background:var(--st-card);border:1px solid rgba(255,255,255,.06);
+  border-radius:8px;padding:22px 24px;margin-bottom:12px;
+  position:relative;z-index:1;
+  box-shadow:0 4px 30px rgba(0,0,0,.3);
+}
+.st-card::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(90deg,transparent,var(--st-gold),transparent)}
+.st-title{
+  font-family:var(--font);font-size:.9rem;font-weight:600;
+  color:var(--st-gold);margin-bottom:14px;letter-spacing:2px;
+  display:flex;align-items:center;gap:8px;
+}
+.st-title .st-badge{
+  font-family:var(--font-mono);font-size:.45rem;color:var(--st-dim);
+  border:1px solid rgba(255,255,255,.08);padding:1px 8px;
+  letter-spacing:1px;
+}
+/* 设置 */
+.setup-group{display:flex;flex-direction:column;gap:10px}
+.setup-row{display:flex;align-items:center;gap:10px}
+.setup-row label{font-family:var(--font-mono);font-size:.65rem;font-weight:600;min-width:50px;color:var(--st-dim);letter-spacing:1px}
+.setup-row select,.setup-row button{
+  flex:1;padding:9px 12px;font-family:var(--font-body);font-size:.8rem;
+  border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--st-text);
+  border-radius:4px;cursor:pointer;outline:none;
+}
+.setup-row select:focus,.setup-row button:focus{border-color:var(--st-gold)}
+.setup-row select:disabled{opacity:.3}
+.st-btn{
+  padding:10px 36px;font-family:var(--font);font-size:.78rem;font-weight:600;
+  border:1px solid var(--st-gold);background:transparent;color:var(--st-gold);
+  cursor:pointer;transition:all .2s;border-radius:4px;
+  letter-spacing:1px;
+}
+.st-btn:hover{background:var(--st-gold);color:var(--st-bg)}
+.st-btn:active{transform:scale(.97)}
+.st-btn:disabled{opacity:.2;cursor:not-allowed;transform:none}
+.st-btn-primary{background:var(--st-gold);color:var(--st-bg)}
+.st-btn-primary:hover{background:#e0b550}
+.st-btn-green{background:var(--st-green);color:var(--st-bg);border-color:var(--st-green)}
+.st-btn-green:hover{background:#52c898;border-color:#52c898}
+.hidden{display:none!important}
+/* 点名 = 聚光灯下登场 */
+.pick-area{text-align:center;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pick-name{
+  font-family:var(--font);font-size:2.8rem;font-weight:700;
+  color:var(--st-gold);transition:all .12s;letter-spacing:4px;
+  text-shadow:0 0 30px rgba(212,168,67,.15);
+}
+.pick-name.rolling{animation:st-flicker .06s infinite}
+@keyframes st-flicker{0%,100%{opacity:1}50%{opacity:.3}}
+.pick-name.result{animation:st-reveal .5s ease;color:#fff}
+@keyframes st-reveal{0%{opacity:0;transform:scale(.5)translateY(20px);text-shadow:0 0 60px var(--st-gold)}100%{opacity:1;transform:scale(1)translateY(0);text-shadow:0 0 30px rgba(212,168,67,.15)}}
+.pick-hint,.pick-class{font-size:.7rem;color:var(--st-dim);margin-top:4px;letter-spacing:1px}
+.pick-class{color:var(--st-green);font-weight:500}
+/* 答题 = 大屏演示 */
+.quiz-area{text-align:center}
+.q-info{font-size:.65rem;color:var(--st-dim);margin-bottom:4px;letter-spacing:1px}
+.q-princ{color:var(--st-green);font-weight:500}
+.q-text{
+  font-size:.9rem;line-height:1.7;text-align:left;
+  padding:16px 18px;border:1px solid rgba(255,255,255,.06);
+  margin:8px 0 14px;border-radius:6px;
+  background:rgba(255,255,255,.02);
+}
+.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt-btn{
+  padding:12px 14px;border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.02);text-align:left;cursor:pointer;
+  font-family:var(--font-body);font-size:.8rem;line-height:1.4;
+  display:flex;align-items:flex-start;gap:10px;transition:all .15s;
+  border-radius:4px;color:var(--st-text);
+}
+.opt-btn .ol{display:inline-flex;width:24px;height:24px;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.6rem;font-weight:700;flex-shrink:0;border:1px solid rgba(255,255,255,.1);color:var(--st-dim);border-radius:2px}
+.opt-btn:hover{border-color:var(--st-gold);background:rgba(212,168,67,.04)}
+.opt-btn.disabled{opacity:.5;pointer-events:none}
+.opt-btn.correct{border-color:var(--st-green);background:rgba(70,184,140,.06)}
+.opt-btn.correct .ol{background:var(--st-green);color:var(--st-bg);border-color:var(--st-green)}
+.opt-btn.wrong{border-color:var(--st-red);background:rgba(232,80,80,.06)}
+.opt-btn.wrong .ol{background:var(--st-red);color:#fff;border-color:var(--st-red)}
+.opt-btn.selected{border-color:var(--st-gold)}
+.feedback{font-size:.78rem;padding:8px 14px;margin-top:8px;font-weight:500;border-radius:4px}
+.feedback.correct{background:rgba(70,184,140,.08);color:var(--st-green);border:1px solid rgba(70,184,140,.15)}
+.feedback.wrong{background:rgba(232,80,80,.08);color:var(--st-red);border:1px solid rgba(232,80,80,.15)}
+/* 计分 */
+.score-section{text-align:center}
+.score-student{font-family:var(--font);font-size:1rem;color:var(--st-gold);letter-spacing:2px}
+.score-points{font-family:var(--font);font-size:2.5rem;font-weight:700;color:#fff;margin:8px 0;text-shadow:0 0 40px rgba(212,168,67,.2)}
+.score-label{font-size:.7rem;color:var(--st-dim);letter-spacing:1px}
+.bar-wrap{display:flex;align-items:center;gap:8px;margin-top:12px}
+.bar-bg{flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--st-gold),var(--st-green));transition:width .5s;border-radius:2px}
+.bar-text{font-size:.55rem;color:var(--st-dim);min-width:30px;font-family:var(--font-mono)}
+/* 排名 */
+.final-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:.8rem}
+.final-table th{background:rgba(255,255,255,.04);color:var(--st-gold);padding:8px 10px;font-family:var(--font-mono);font-size:.6rem;text-align:left;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,.06)}
+.final-table td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.03)}
+.rank-num{font-family:var(--font-mono);font-weight:700;color:var(--st-dim)}
+.rank-score{font-weight:700;color:var(--st-gold)}
+/* 粒子 */
+.particle-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
+.particle{position:absolute;border-radius:50%;pointer-events:none}
+/* 错题解析 */
+.review-section{text-align:left;margin-top:10px;border-top:1px solid rgba(255,255,255,.06);padding-top:14px;max-height:400px;overflow-y:auto}
+.rev-empty{text-align:center;color:var(--st-green);font-family:var(--font);font-size:.78rem;padding:20px 0}
+.rev-student{font-family:var(--font);font-size:.8rem;font-weight:600;color:var(--st-gold);margin:10px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,.06)}
+.rev-item{padding:10px 12px;margin-bottom:8px;background:rgba(255,255,255,.02);border-left:3px solid var(--st-red);border-radius:4px}
+.rev-q{font-size:.8rem;line-height:1.5;margin-bottom:6px}
+.rev-princ{display:inline-block;font-family:var(--font-mono);font-size:.5rem;color:var(--st-dim);border:1px solid rgba(255,255,255,.08);padding:1px 6px;margin-bottom:6px}
+.rev-opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px}
+.rev-opt{padding:5px 8px;font-size:.7rem;line-height:1.4;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);display:flex;align-items:flex-start;gap:6px;border-radius:2px}
+.rev-opt .rol{display:inline-flex;width:20px;height:20px;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.5rem;font-weight:700;flex-shrink:0;border:1px solid rgba(255,255,255,.1);color:var(--st-dim)}
+.rev-opt.rev-chosen{background:rgba(232,80,80,.06);border-color:var(--st-red)}
+.rev-opt.rev-chosen .rol{background:var(--st-red);color:#fff;border-color:var(--st-red)}
+.rev-opt.rev-right{background:rgba(70,184,140,.06);border-color:var(--st-green)}
+.rev-opt.rev-right .rol{background:var(--st-green);color:var(--st-bg);border-color:var(--st-green)}
+</style>
+</head>
+<body>
+<div class="st-spotlight"></div>
+<div class="container" id="app">
+<div class="st-header">
+  <div class="st-line"></div>
+  <h1>技术交流与评价</h1>
+  <div class="st-sub">PRESENTATION &bull; EVALUATION</div>
+</div>
+<div class="st-card" id="sceneSetup">
+  <div class="st-title"><span class="st-badge">SETUP</span> 设置</div>
+  <div class="setup-group">
+    <div class="setup-row"><label>年级</label><select id="gradeSelect"><option value="高一">高一</option><option value="高二">高二</option></select></div>
+    <div class="setup-row"><label>班级</label><select id="classSelect" disabled><option value="">—</option></select></div>
+    <div class="setup-row" style="margin-top:6px"><button class="st-btn st-btn-primary" id="btnStart" disabled>开始</button></div>
+  </div>
+</div>
+<div class="st-card hidden" id="scenePick">
+  <div class="st-title"><span class="st-badge">STAGE</span> 登场</div>
+  <div class="pick-area">
+    <div class="pick-hint" id="pickHint">点击抽取</div>
+    <div class="pick-name" id="pickName">—</div>
+    <div class="pick-class hidden" id="pickClassTag"></div>
+    <button class="st-btn hidden" id="btnPickStart" style="margin-top:8px">🎟 抽取</button>
+    <button class="st-btn st-btn-green hidden" id="btnPickConfirm" style="margin-top:4px">✔ 确认</button>
+    <button class="st-btn st- hidden" id="btnRepick" style="margin-top:4px">↻ 重抽</button>
+  </div>
+</div>
+<div class="st-card hidden" id="sceneQuiz">
+  <div class="st-title" id="quizTitle"><span class="st-badge">SLIDE</span> 答题</div>
+  <div class="quiz-area">
+    <div class="q-info"><span id="qNumber">1/2</span> &middot; <span class="q-princ" id="qPrinciple"></span></div>
+    <div class="q-text" id="qText">—</div>
+    <div class="opt-grid" id="optionsGrid"></div>
+    <div class="feedback hidden" id="feedbackBox"></div>
+    <button class="st-btn hidden" id="btnNextQ" style="margin-top:8px">下一题</button>
+  </div>
+</div>
+<div class="st-card hidden" id="sceneScore">
+  <div class="st-title"><span class="st-badge">SCORE</span> 成绩</div>
+  <div class="score-section">
+    <div class="score-label">学生</div>
+    <div class="score-student" id="scoreStudent"></div>
+    <div class="score-points" id="scorePoints">+10</div>
+    <div class="score-label" id="scoreLabel">正确 1 题</div>
+    <div class="score-label" id="scoreDetail" style="margin-top:2px;font-size:.65rem"></div>
+    <div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" id="energyBar" style="width:0%"></div></div><span class="bar-text" id="energyText">0%</span></div>
+    <button class="st-btn" id="btnNextRound" style="margin-top:8px">下一组</button>
+  </div>
+</div>
+<div class="st-card hidden" id="sceneFinal">
+  <div class="st-title"><span class="st-badge">RANKING</span> 排名榜</div>
+  <div style="overflow-x:auto"><table class="final-table"><thead><tr><th>#</th><th>姓名</th><th>班级</th><th>答对</th><th>积分</th></tr></thead><tbody id="finalBody"></tbody></table></div>
+  <button class="st-btn st-btn-primary" id="btnReview" style="margin-top:8px">📋 查看错题解析</button>
+  <div class="review-section hidden" id="reviewSection"></div>
+  <button class="st-btn" onclick="location.reload()" style="margin-top:10px">🔄 重新开始</button>
+</div>
+</div>
+<div class="particle-container" id="particleContainer"></div>
+<script>
+const $=id=>document.getElementById(id);
+const Q=[
+  {question:"技术试验是检验产品性能和质量的重要手段。某化工厂生产一种抗拉能力为300N的尼龙丝，下面测试方法最合理的是？",options:{A:"用300N拉力测试",B:"用350N拉力测试",C:"剪切试验",D:"弯曲试验"},answer:"B",principle:"技术试验方法"},
+  {question:"许丽购买椅子时，不合适的试验方法是？",options:{A:"坐上去感受舒适度",B:"手摇晃检查稳定性",C:"放重物检查承载能力",D:"摩擦穿刷检验防滑性"},answer:"D",principle:"技术试验合理性"},
+  {question:"对产品原型进行试验后，主要评价依据是？",options:{A:"使用寿命",B:"功能数量",C:"安全环保",D:"设计基本原则"},answer:"D",principle:"设计评价依据"},
+  {question:"材料弯曲测试，通过逐一增加码码磁观测弯曲程度，这属于？",options:{A:"性能试验",B:"优化试验",C:"信息试验",D:"预测试验"},answer:"A",principle:"性能试验分类"},
+  {question:"某电热水器投放市场前，你认为最重要的试验是？",options:{A:"外观审美",B:"安全绝缘测试",C:"价格竞争力",D:"包装设计"},answer:"B",principle:"产品安全试验"},
+  {question:"下列关于技术试验的说法正确的是？",options:{A:"只能在产品完成后进行",B:"可以在设计过程中多次进行",C:"只需要一次就可以",D:"只有专业人员才能做"},answer:"B",principle:"技术试验特点"},
+  {question:"在设计评价中，从使用者角度进行的评价称为？",options:{A:"专家评价",B:"内部评价",C:"客观评价",D:"用户评价"},answer:"D",principle:"设计评价角度"},
+  {question:"一件产品的设计是否成功，最有发言权的评价者是？",options:{A:"设计师",B:"生产厂商",C:"使用者",D:"广告商"},answer:"C",principle:"用户为中心"},
+  {question:"下列属于技术文档交流方式的是？",options:{A:"口头交流",B:"图纸交流",C:"模型交流",D:"以上都是"},answer:"D",principle:"技术交流方式"},
+  {question:"技术试验报告中，不必包含的内容是？",options:{A:"试验目的",B:"试验过程",C:"试验结果",D:"产品广告词"},answer:"D",principle:"技术文档规范"}
+];
+const G=[];for(let i=0;i<5;i++)G.push(Q.slice(i*2,i*2+2));
+const S={grade:'',class:'',students:[],available:[],picks:[],rr:[],cr:0};
+function $S(id){return document.getElementById(id)}
+function sh(id){document.querySelectorAll('.st-card').forEach(e=>e.classList.add('hidden'));$S(id).classList.remove('hidden')}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function st(m){const t=$('feedbackBox');t.textContent=m;t.classList.remove('hidden','correct','wrong')}
+function fp(x,y,c,n){const p=document.createElement('div');p.className='particle';p.style.cssText='left:'+x+'px;top:'+y+'px;width:4px;height:4px;background:'+c+';opacity:1';$('particleContainer').appendChild(p);let op=1,s=1+Math.random()*2;const iv=setInterval(()=>{op-=.02;p.style.transform='translate('+(Math.random()-0.5)*s*2+'px,'+(-s)+'px)';p.style.opacity=op;if(op<=0){clearInterval(iv);p.remove()}},20);setTimeout(()=>{for(let i=0;i<n;i++)setTimeout(()=>fp(x+(Math.random()-0.5)*80,y+(Math.random()-0.5)*80,c,0),i*15)},0)}
+async function lc(){const g=$('gradeSelect').value;S.grade=g;const cs=$('classSelect');cs.disabled=true;cs.innerHTML='<option value="">...</option>';try{const f=g==='高一'?'高一年级学生名单.json':'高二年级学生名单.json';const d=await(await fetch(f)).json();const cls=[...new Set(d.map(s=>s.class))].sort();cs.innerHTML='<option value="">— 选择 —</option>';cls.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;cs.appendChild(o)});cs.disabled=false}catch(e){cs.innerHTML='<option value="">失败</option>'}}
+$('gradeSelect').addEventListener('change',lc);$('classSelect').addEventListener('change',async function(){const c=this.value;S.class=c;$('btnStart').disabled=!c;if(c){S.students=(await(await fetch(S.grade==='高一'?'高一年级学生名单.json':'高二年级学生名单.json')).json()).filter(s=>s.class===c).map(s=>s.name)}});
+function ud(){$('gradeSelect').dispatchEvent(new Event('change'))}
+$('btnStart').addEventListener('click',function(){if(!S.class||S.students.length<5){st('学生不足5人');return}sh('scenePick');sr(0)})
+function sr(ri){S.cr=ri;S.rr[ri]=S.rr[ri]||{correctCount:0,points:0,answers:[]};S.rr[ri].answers=[];S.picks[ri]='';sp()}
+function sp(){$('pickHint').textContent='点击抽取';$('pickName').textContent='—';$('pickName').className='pick-name';$('pickClassTag').classList.add('hidden');$('btnPickStart').classList.remove('hidden');$('btnPickConfirm').classList.add('hidden');$('btnRepick').classList.add('hidden');$('btnPickStart').disabled=false;$('pickTitle').textContent='第 '+(S.cr+1)+' 组 · 登场'}
+function rp(){const pool=S.students.length>0?S.students:['---'];const pn=$('pickName');pn.className='pick-name rolling';$('pickHint').textContent='抽取中...';$('btnPickConfirm').classList.add('hidden');$('btnRepick').classList.add('hidden');$('btnPickStart').disabled=true;let rc=0,mx=18+Math.floor(Math.random()*10);let iv=setInterval(()=>{pn.textContent=pool[Math.floor(Math.random()*pool.length)];rc++;if(rc>=mx){clearInterval(iv);fetch('/rollcall-api/pick',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({grade:S.grade,class:S.class})}).then(d=>d.json()).then(d=>{if(d.error){st('⚠️',d.error);pn.textContent='——';pn.className='pick-name';$('btnPickStart').disabled=false;return}const c=d.student;pn.textContent=c;pn.className='pick-name result';$('pickHint').classList.add('hidden');$('pickClassTag').textContent=S.grade+' · '+S.class;$('pickClassTag').classList.remove('hidden');$('btnPickConfirm').classList.remove('hidden');$('btnRepick').classList.remove('hidden');fp(innerWidth/2,innerHeight/2,'var(--bp-cyan)',30);st('🎯','已选',c);S.picks[S.cr]=c}).catch(()=>{st('⚠️','服务异常');pn.textContent='——';pn.className='pick-name';$('btnPickStart').disabled=false})}},60+Math.random()*40)}
+$('btnPickStart').addEventListener('click',function(){this.disabled=true;rp()});
+$('btnRepick').addEventListener('click',rp);
+$('btnPickConfirm').addEventListener('click',function(){sh('sceneQuiz');sq()});
+function sq(){S.cq=0;sQ()}
+function sQ(){const g=G[S.cr];const q=g[S.cq];$('quizTitle').textContent='第 '+(S.cr+1)+' 组 · 答题';$('qNumber').textContent='题目 '+(S.cq+1)+'/2';$('qPrinciple').textContent=q.principle;$('qText').textContent=q.question;S.sa='';S.ad=false;$('feedbackBox').classList.add('hidden');$('btnNextQ').classList.add('hidden');const grid=$('optionsGrid');grid.innerHTML='';['A','B','C','D'].forEach(l=>{const b=document.createElement('button');b.className='opt-btn';b.innerHTML='<span class="ol">'+l+'</span><span>'+q.options[l]+'</span>';b.dataset.label=l;b.addEventListener('click',()=>hA(l));grid.appendChild(b)})}
+function hA(l){if(S.ad)return;S.ad=true;const g=G[S.cr];const q=g[S.cq];const c=q.answer;const ic=l===c;if(ic)S.rr[S.cr].correctCount=(S.rr[S.cr].correctCount||0)+1;let p=5;const cc=S.rr[S.cr].correctCount;if(cc===1)p=10;else if(cc===2)p=15;S.rr[S.cr].answers.push({question:q.question,options:q.options,correctAnswer:c,yourAnswer:l,principle:q.principle,isCorrect:ic});S.rr[S.cr].points=p;const btns=$('optionsGrid').querySelectorAll('.opt-btn');btns.forEach(b=>{b.classList.add('disabled');if(b.dataset.label===c)b.classList.add('correct');if(b.dataset.label===l&&!ic)b.classList.add('wrong');if(b.dataset.label===l&&ic)b.classList.add('selected')});const fb=$('feedbackBox');fb.classList.remove('hidden');if(ic){fb.className='feedback correct';fb.textContent='✔ 回答正确！'+c+'. '+q.options[c]}else{fb.className='feedback wrong';fb.textContent='✘ 回答错误。正确答案：'+c+'. '+q.options[c]}$('btnNextQ').classList.remove('hidden');$('btnNextQ').textContent=S.cq===0?'下一题':'查看成绩'}
+$('btnNextQ').addEventListener('click',function(){if(S.cq===0){S.cq=1;sQ()}else{sh('sceneScore');sSc()}})
+function saveRecord(g,c,s,cc,t,pts,ans,title){fetch('/rollcall-api/save-record',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({grade:g,class:c,student:s,type:'互动答题',title:title||'',correctCount:cc,totalQuestions:t,points:pts,answers:ans||[]})}).catch(()=>{})}
+function sSc(){const s=S.picks[S.cr];const cc=S.rr[S.cr].correctCount;const p=S.rr[S.cr].points;$('scoreStudent').textContent=s;$('scorePoints').textContent='+'+p;$('scoreLabel').textContent='正确 '+cc+' 题';$('scoreDetail').textContent='第 '+(S.cr+1)+' 组 · 积分';const bar=$('energyBar');const txt=$('energyText');const w=(S.cr+1)/5*100;bar.style.width=w+'%';txt.textContent=Math.round(w)+'%';fetch('/score-api/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({grade:S.grade,class:S.class,name:s,points:p})}).catch(()=>{});fetch('/rollcall-api/mark',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({grade:S.grade,class:S.class,student:s,result:'quiz'})}).catch(()=>{});saveRecord(S.grade,S.class,s,cc,2,p,S.rr[S.cr]?.answers,'技术交流与评价-发布会');fp(innerWidth/2,innerHeight/2,'var(--st-gold)',40)}
+$('btnNextRound').addEventListener('click',function(){if(S.cr<4){sh('scenePick');sr(S.cr+1)}else{sh('sceneFinal');sF()}})
+function sF(){$('reviewSection').classList.add('hidden');$('btnReview').textContent='📋 查看错题解析';sh('sceneFinal');const tb=$('finalBody');tb.innerHTML='';const rows=S.picks.map((n,i)=>{const cr=S.rr[i];return{name:n,class:S.class,correct:cr?.correctCount||0,points:cr?.points||5}}).sort((a,b)=>b.points-a.points);rows.forEach((r,i)=>{const tr=document.createElement('tr');tr.innerHTML='<td class="rank-num">#'+(i+1)+'</td><td>'+r.name+'</td><td>'+r.class+'</td><td>'+r.correct+'/2</td><td class="rank-score">+'+r.points+'</td>';tb.appendChild(tr)});fp(innerWidth/2,innerHeight/2,'var(--st-gold)',60);setTimeout(()=>fp(innerWidth/2,innerHeight/2,'var(--st-green)',30),400)}
+function buildReview(){const rs=$('reviewSection');rs.innerHTML='';let hw=false;const la=['A','B','C','D'];S.picks.forEach((n,ri)=>{const cr=S.rr[ri];if(!cr||!cr.answers)return;const w=cr.answers.filter(a=>!a.isCorrect);if(!w.length)return;hw=true;let h='<div class="rev-student">'+n+'</div>';w.forEach(a=>{h+='<div class="rev-item"><span class="rev-princ">'+a.principle+'</span><div class="rev-q">'+a.question+'</div><div class="rev-opt-grid">';la.forEach(l=>{let cls='rev-opt';if(l===a.yourAnswer)cls+=' rev-chosen';if(l===a.correctAnswer)cls+=' rev-right';h+='<div class="'+cls+'"><span class="rol">'+l+'</span><span>'+a.options[l]+'</span></div>'});h+='</div></div>'});rs.innerHTML+=h});if(!hw)rs.innerHTML='<div class="rev-empty">✅ 所有同学全部答对！</div>'}
+$('btnReview').addEventListener('click',function(){const rs=$('reviewSection');if(!rs.classList.contains('hidden')){rs.classList.add('hidden');this.textContent='📋 查看错题解析';return}this.textContent='📋 收起解析';buildReview();rs.classList.remove('hidden')});
+lc();sh('sceneSetup');ud();
+</script>
+</body>
+</html>

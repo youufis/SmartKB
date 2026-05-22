@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📁 下载中心</title>
+<style>
+:root {
+  --bg: #0a0e1a; --card: #121828; --border: #1e2940;
+  --text: #e0e6f0; --muted: #6b7d9a;
+  --accent: #4fc3f7; --success: #66bb6a; --danger: #ef5350; --warning: #ffa726;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { height:100%; }
+body {
+  font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;
+  background:var(--bg); color:var(--text);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  min-height:100vh; padding:20px;
+  background-image:radial-gradient(ellipse at 50% 0%,#121828 0%,#0a0e1a 70%);
+}
+.main-card {
+  width:100%; max-width:800px;
+  background:var(--card); border:1px solid var(--border); border-radius:24px;
+  padding:32px 40px; box-shadow:0 20px 60px rgba(0,0,0,.5);
+  position:relative; overflow:hidden;
+  max-height:calc(100vh - 40px); display:flex; flex-direction:column;
+}
+.main-card::before {
+  content:''; position:absolute; top:-50%; left:-50%;
+  width:200%; height:200%;
+  background:conic-gradient(from 0deg,transparent,rgba(79,195,247,.03),transparent);
+  animation:spin 10s linear infinite; pointer-events:none;
+}
+.main-card > * { position:relative; z-index:1; }
+@keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+
+/* 头部 */
+.header { display:flex; align-items:center; gap:16px; margin-bottom:4px; flex-wrap:wrap; }
+.header h1 { font-size:28px; font-weight:700; background:linear-gradient(135deg,#4fc3f7,#7c4dff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.header .subtitle { font-size:13px; color:var(--muted); margin-top:2px; }
+
+/* 上传区域 */
+.upload-zone {
+  border:2px dashed var(--border); border-radius:12px; padding:14px 20px;
+  margin:8px 0 12px; text-align:center; cursor:pointer;
+  transition:all .25s; position:relative;
+  background:rgba(79,195,247,.02);
+}
+.upload-zone:hover { border-color:var(--accent); background:rgba(79,195,247,.06); }
+.upload-zone.dragover { border-color:var(--accent); background:rgba(79,195,247,.12); transform:scale(1.01); }
+.upload-zone .up-icon { font-size:22px; margin-bottom:2px; }
+.upload-zone .up-text { font-size:13px; color:var(--muted); }
+.upload-zone .up-text span { color:var(--accent); font-weight:600; cursor:pointer; }
+.upload-zone .up-hint { font-size:11px; color:var(--muted); margin-top:2px; opacity:.6; }
+.upload-zone input[type=file] { display:none; }
+.upload-progress { margin-top:6px; display:none; }
+.upload-progress.show { display:block; }
+.upload-progress .up-bar-bg { height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.upload-progress .up-bar { height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--success)); border-radius:2px; transition:width .3s; }
+.upload-progress .up-status { font-size:12px; color:var(--muted); margin-top:2px; }
+
+/* 工具栏 */
+.toolbar { display:flex; align-items:center; justify-content:space-between; margin:8px 0 8px; flex-wrap:wrap; gap:8px; }
+.toolbar .info { font-size:13px; color:var(--muted); }
+.toolbar .info span { color:var(--accent); font-weight:600; }
+.search-box {
+  background:#1a2240; border:1px solid var(--border); color:var(--text);
+  padding:6px 12px; border-radius:8px; font-size:13px; width:200px; outline:none; transition:.2s;
+}
+.search-box:focus { border-color:var(--accent); }
+.search-box::placeholder { color:var(--muted); }
+
+/* 文件列表容器 */
+.list-container { flex:1; overflow-y:auto; min-height:0; padding-right:4px; margin-top:4px; }
+.list-container::-webkit-scrollbar { width:4px; }
+.list-container::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+
+/* 文件项 */
+.file-item {
+  display:flex; align-items:center; gap:12px;
+  padding:12px 16px; border-radius:12px;
+  border:1px solid transparent;
+  transition:all .2s; cursor:default;
+  margin-bottom:6px;
+}
+.file-item:hover { background:#1a2240; border-color:var(--border); }
+.file-item .icon {
+  width:40px; height:40px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; flex-shrink:0;
+}
+.file-item .icon.folder { background:#1a2a40; color:var(--accent); }
+.file-item .icon.file { background:#1e2940; color:var(--muted); }
+.file-item .icon.zip { background:#1a2a30; color:var(--warning); }
+.file-item .icon.image { background:#1a2a20; color:var(--success); }
+.file-item .icon.doc { background:#2a1a30; color:#ce93d8; }
+.file-item .icon.pdf { background:#2a1a1a; color:var(--danger); }
+.file-item .info { flex:1; min-width:0; }
+.file-item .info .name { font-size:15px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.file-item .info .meta { font-size:12px; color:var(--muted); margin-top:2px; }
+.file-item .actions { display:flex; gap:6px; flex-shrink:0; }
+.btn-download {
+  background:linear-gradient(135deg,#4fc3f7,#7c4dff); border:none; color:#fff;
+  padding:5px 14px; border-radius:8px; cursor:pointer; font-size:12px;
+  transition:all .2s; text-decoration:none; display:inline-flex; align-items:center; gap:4px;
+}
+.btn-download:hover { transform:translateY(-1px); box-shadow:0 4px 20px rgba(79,195,247,.3); }
+.btn-delete {
+  background:transparent; border:1px solid rgba(239,83,80,.3); color:var(--danger);
+  padding:5px 12px; border-radius:8px; cursor:pointer; font-size:12px;
+  transition:all .2s; display:inline-flex; align-items:center; gap:4px;
+}
+.btn-delete:hover { background:rgba(239,83,80,.15); border-color:var(--danger); transform:translateY(-1px); }
+
+/* 空状态 */
+.empty-state { text-align:center; padding:60px 20px; color:var(--muted); }
+.empty-state .big-icon { font-size:48px; margin-bottom:16px; }
+.empty-state p { font-size:15px; line-height:1.8; }
+
+/* 提示横幅 */
+.toast {
+  position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(80px);
+  background:var(--card); border:1px solid var(--border); border-radius:12px;
+  padding:12px 24px; font-size:14px; color:var(--text);
+  opacity:0; transition:all .4s ease; pointer-events:none; z-index:999;
+  box-shadow:0 8px 30px rgba(0,0,0,.4);
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+.toast.success { border-color:var(--success); }
+.toast.error { border-color:var(--danger); }
+
+/* 加载动画 */
+.loading { text-align:center; padding:60px 20px; color:var(--muted); }
+.spinner { width:32px; height:32px; border:3px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .8s linear infinite; margin:0 auto 12px; }
+
+/* 复制成功 */
+.copied { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,.8); color:#fff; padding:16px 32px; border-radius:12px; font-size:16px; pointer-events:none; opacity:0; transition:opacity .3s; z-index:999; }
+.copied.show { opacity:1; }
+
+/* 导航路径 */
+.nav-bar {
+  display:flex; align-items:center; gap:6px; margin:4px 0 10px; padding:6px 10px;
+  background:rgba(79,195,247,.04); border:1px solid var(--border); border-radius:10px;
+  font-size:13px; flex-wrap:wrap; min-height:36px;
+}
+.nav-bar .nav-item {
+  color:var(--muted); cursor:pointer; padding:2px 6px; border-radius:4px;
+  transition:all .2s; white-space:nowrap;
+}
+.nav-bar .nav-item:hover { color:var(--accent); background:rgba(79,195,247,.1); }
+.nav-bar .nav-item.current { color:var(--text); cursor:default; font-weight:500; }
+.nav-bar .nav-item.current:hover { background:transparent; }
+.nav-bar .nav-sep { color:var(--border); font-size:10px; }
+.nav-bar .nav-back {
+  color:var(--accent); cursor:pointer; padding:2px 8px; border-radius:4px;
+  transition:all .2s; font-weight:500; display:none;
+}
+.nav-bar .nav-back:hover { background:rgba(79,195,247,.1); }
+.nav-bar .nav-back.show { display:inline-flex; align-items:center; gap:4px; }
+
+/* 文件夹项 */
+.file-item.dir { cursor:pointer; }
+.file-item.dir:hover { background:#1a2a40; border-color:var(--accent); }
+.file-item.dir .icon { background:#1a2a40; color:var(--accent); }
+
+@media (max-width:600px) {
+  .main-card { padding:20px 16px; }
+  .header h1 { font-size:22px; }
+  .search-box { width:100%; }
+  .file-item { flex-wrap:wrap; }
+  .file-item .actions { width:100%; justify-content:flex-end; }
+}
+</style>
+</head>
+<body>
+
+<div class="main-card">
+  <div class="header">
+    <div>
+      <h1>📁 下载中心</h1>
+      <div class="subtitle">将文件放入本目录，服务自动识别 · 刷新即可查看</div>
+    </div>
+  </div>
+
+  <!-- 上传区域 -->
+  <div class="upload-zone" id="uploadZone">
+    <div class="up-icon">📤</div>
+    <div class="up-text">拖拽文件/文件夹到此处，或 <span>点击选择文件</span></div>
+    <div class="up-hint">
+      支持任意文件类型 · 拖拽目录自动递归读取
+      <span style="margin:0 8px;opacity:.3">|</span>
+      <span id="btnFolderMode" style="color:var(--accent);cursor:pointer;font-weight:600;">📁 上传文件夹</span>
+    </div>
+    <input type="file" id="fileInput" multiple>
+    <input type="file" id="folderInput" webkitdirectory style="display:none">
+    <div class="upload-progress" id="uploadProgress">
+      <div class="up-bar-bg"><div class="up-bar" id="upBar"></div></div>
+      <div class="up-status" id="upStatus"></div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="info">共 <span id="fileCount">0</span> 个文件</div>
+    <input class="search-box" id="searchBox" type="text" placeholder="🔍 搜索文件名..." oninput="renderList()">
+  </div>
+
+  <!-- 导航面包屑 -->
+  <div class="nav-bar" id="navBar">
+    <span class="nav-back" id="navBack" onclick="goUp()">⬆ 返回上级</span>
+  </div>
+
+  <div class="list-container" id="fileList">
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <div>加载文件列表中...</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="copied" id="copied">✅ 下载链接已复制</div>
+
+<script>
+// 获取文件列表 - 调用后端 API 动态扫描目录
+async function fetchFileList() {
+  const apiUrl = '/downloads-api/list?_=' + Date.now();
+  const resp = await fetch(apiUrl);
+  if (resp.ok) {
+    const data = await resp.json();
+    if (data && Array.isArray(data.files)) return data.files;
+  }
+  return null;
+}
+
+// 格式化文件大小
+function formatSize(bytes) {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B','KB','MB','GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const val = (bytes / Math.pow(k, i)).toFixed(i > 0 ? 1 : 0);
+  return val + ' ' + sizes[i];
+}
+
+// 获取文件图标
+function getFileIcon(name) {
+  const ext = name.includes('.') ? name.split('.').pop().toLowerCase() : '';
+  if (['zip','rar','7z','tar','gz'].includes(ext)) return { cls:'zip', emoji:'📦' };
+  if (['png','jpg','jpeg','gif','webp','svg','ico','bmp'].includes(ext)) return { cls:'image', emoji:'🖼️' };
+  if (['pdf'].includes(ext)) return { cls:'pdf', emoji:'📄' };
+  if (['doc','docx','xls','xlsx','ppt','pptx'].includes(ext)) return { cls:'doc', emoji:'📝' };
+  if (['mp4','avi','mkv','mov','webm'].includes(ext)) return { cls:'file', emoji:'🎬' };
+  if (['mp3','wav','flac','aac','ogg'].includes(ext)) return { cls:'file', emoji:'🎵' };
+  if (['exe','msi','dmg','apk'].includes(ext)) return { cls:'file', emoji:'⚙️' };
+  return { cls:'file', emoji:'📄' };
+}
+
+// ── 目录浏览状态 ──
+let _currentDir = '';  // 当前目录，相对于 downloads，空串表示根目录
+
+// 获取当前目录下的直接子项（文件和子目录）
+function getDirContents(dir) {
+  const list = window._fileList || [];
+  const prefix = dir ? dir + '/' : '';
+  const seen = new Set();
+  const items = [];
+
+  for (const f of list) {
+    const p = f.path || f.name;
+    if (!p.startsWith(prefix)) continue;
+    const rest = p.substring(prefix.length);
+    if (!rest) continue;
+    const slashIdx = rest.indexOf('/');
+    if (slashIdx === -1) {
+      // 文件或目录自身
+      if (f.is_dir) {
+        // 目录标记
+        continue; // 跳过目录标记，我们会自己构建
+      } else {
+        items.push({ ...f, _display: f.name, _isDir: false });
+      }
+    } else {
+      // 有子路径，这是一个子目录
+      const dirName = rest.substring(0, slashIdx);
+      if (!seen.has(dirName)) {
+        seen.add(dirName);
+        items.push({
+          name: dirName,
+          path: prefix + dirName,
+          _display: dirName,
+          _isDir: true,
+          size: 0,
+          mtime: ''
+        });
+      }
+    }
+  }
+  // 排序：目录在前，文件在后，各自按名称排序
+  items.sort((a, b) => {
+    if (a._isDir !== b._isDir) return a._isDir ? -1 : 1;
+    return a._display.toLowerCase().localeCompare(b._display.toLowerCase());
+  });
+  return items;
+}
+
+// 渲染面包屑导航
+function renderNav() {
+  const navBar = document.getElementById('navBar');
+  const backBtn = document.getElementById('navBack');
+  if (!_currentDir) {
+    backBtn.classList.remove('show');
+    navBar.innerHTML = '<span class="nav-back" id="navBack" onclick="goUp()">⬆ 返回上级</span>';
+    return;
+  }
+  // 构建面包屑
+  const parts = _currentDir.split('/');
+  let html = '<span class="nav-back show" id="navBack" onclick="goUp()">⬆ 返回上级</span>';
+  let cum = '';
+  // 根目录
+  html += '<span class="nav-item" onclick="enterDir(\'\')">📁 根目录</span>';
+  html += '<span class="nav-sep">›</span>';
+  for (let i = 0; i < parts.length; i++) {
+    cum = i === 0 ? parts[i] : cum + '/' + parts[i];
+    const isLast = i === parts.length - 1;
+    if (isLast) {
+      html += '<span class="nav-item current">📂 ' + parts[i] + '</span>';
+    } else {
+      html += '<span class="nav-item" onclick="enterDir(\'' + cum.replace(/'/g,"\\'") + '\')">📂 ' + parts[i] + '</span>';
+      html += '<span class="nav-sep">›</span>';
+    }
+  }
+  navBar.innerHTML = html;
+}
+
+// 进入子目录
+function enterDir(dir) {
+  _currentDir = dir;
+  renderNav();
+  renderList();
+}
+
+// 返回上级
+function goUp() {
+  if (!_currentDir) return;
+  const idx = _currentDir.lastIndexOf('/');
+  _currentDir = idx === -1 ? '' : _currentDir.substring(0, idx);
+  renderNav();
+  renderList();
+}
+
+// 渲染文件列表（目录浏览模式）
+function renderList() {
+  const container = document.getElementById('fileList');
+  const search = document.getElementById('searchBox').value.trim().toLowerCase();
+  const items = getDirContents(_currentDir);
+
+  const filtered = search
+    ? items.filter(f => f._display.toLowerCase().includes(search))
+    : items;
+
+  document.getElementById('fileCount').textContent = filtered.length;
+
+  if (filtered.length === 0) {
+    if (items.length === 0 && !_currentDir) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="big-icon">📂</div>
+          <p>暂无文件<br><span style="font-size:13px;color:var(--muted)">拖拽或选择文件/文件夹上传</span></p>
+        </div>`;
+    } else {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="big-icon">🔍</div>
+          <p>没有匹配到"<strong>${search || ''}</strong>"的内容</p>
+        </div>`;
+    }
+    return;
+  }
+
+  container.innerHTML = filtered.map(f => {
+    if (f._isDir) {
+      const safeDir = f.path.replace(/'/g,"\\'");
+      return `
+        <div class="file-item dir" onclick="enterDir('${safeDir}')">
+          <div class="icon file">📁</div>
+          <div class="info">
+            <div class="name" title="${f._display}">${f._display}</div>
+            <div class="meta">文件夹</div>
+          </div>
+          <div class="actions">
+            <span style="color:var(--muted);font-size:11px;">点击进入 ›</span>
+          </div>
+        </div>`;
+    }
+    const icon = getFileIcon(f.name);
+    const sizeStr = f.size != null ? formatSize(f.size) : '';
+    const dateStr = f.mtime || '';
+    const safePath = (f.path || f.name).replace(/'/g,"\\'");
+    const displayName = f._display || f.name;
+    return `
+      <div class="file-item">
+        <div class="icon ${icon.cls}">${icon.emoji}</div>
+        <div class="info">
+          <div class="name" title="${f.path || f.name}">${displayName}</div>
+          <div class="meta">${[sizeStr, dateStr].filter(Boolean).join(' · ')}</div>
+        </div>
+        <div class="actions">
+          <a class="btn-download" href="/gradio_api/file=root/html/downloads/${encodeURIComponent(f.path || f.name)}" download="${displayName}" title="下载文件">⬇ 下载</a>
+          <button class="btn-delete" onclick="event.stopPropagation();deleteFile('${safePath}')" title="删除文件">🗑 删除</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// 显示提示
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type || '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// === 文件上传（支持子目录结构） ===
+async function uploadFiles(files) {
+  if (!files || files.length === 0) return;
+  const progress = document.getElementById('uploadProgress');
+  const bar = document.getElementById('upBar');
+  const status = document.getElementById('upStatus');
+  progress.classList.add('show');
+
+  const formData = new FormData();
+  for (let i = 0; i < files.length; i++) {
+    const f = files[i];
+    formData.append('file' + i, f);
+    // 只传目录部分，不包含文件名本身（后端会拼接文件名）
+    const rawPath = f.webkitRelativePath || f._relPath || '';
+    const dirPart = rawPath.substring(0, rawPath.lastIndexOf('/'));
+    formData.append('path' + i, dirPart);
+  }
+
+  bar.style.width = '30%';
+  status.textContent = '正在上传 ' + files.length + ' 个文件...';
+
+  try {
+    const resp = await fetch('/downloads-api/upload', { method: 'POST', body: formData });
+    bar.style.width = '90%';
+    const result = await resp.json();
+    bar.style.width = '100%';
+    if (result.success) {
+      const names = (result.files || []).join('、');
+      status.textContent = '✅ 上传成功：' + names;
+      if (result.errors && result.errors.length > 0) {
+        status.textContent += ' | 失败：' + result.errors.join('、');
+      }
+      setTimeout(() => { progress.classList.remove('show'); bar.style.width = '0%'; }, 2000);
+      await refreshList();
+    } else {
+      status.textContent = '❌ 上传失败：' + (result.error || '未知错误');
+      setTimeout(() => progress.classList.remove('show'), 3000);
+    }
+  } catch (e) {
+    bar.style.width = '0%';
+    status.textContent = '❌ 上传出错：' + e.message;
+    setTimeout(() => progress.classList.remove('show'), 3000);
+  }
+}
+
+// === 文件删除 ===
+async function deleteFile(filename) {
+  if (!confirm('确定要删除文件 "' + filename + '" 吗？')) return;
+  try {
+    const resp = await fetch('/downloads-api/delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ filename: filename })
+    });
+    const result = await resp.json();
+    if (result.success) {
+      showToast('✅ 已删除：' + filename, 'success');
+      await refreshList();
+    } else {
+      showToast('❌ 删除失败：' + (result.error || '未知错误'), 'error');
+    }
+  } catch (e) {
+    showToast('❌ 删除出错：' + e.message, 'error');
+  }
+}
+
+// === 刷新列表 ===
+async function refreshList() {
+  const list = await fetchFileList();
+  if (list) {
+    window._fileList = list;
+    // 如果当前目录已不存在（被删除），回到根目录
+    if (_currentDir) {
+      const prefix = _currentDir + '/';
+      const stillExists = list.some(f => (f.path || f.name).startsWith(prefix) || (f.path || f.name) === _currentDir);
+      if (!stillExists) _currentDir = '';
+    }
+    renderNav();
+    renderList();
+  }
+}
+
+// === 递归获取目录下所有文件（保留相对路径到 _relPath） ===
+async function walkDir(entry, basePath) {
+  const files = [];
+  async function walk(entry, relPath) {
+    if (entry.isFile) {
+      const file = await new Promise((resolve, reject) => entry.file(resolve, reject));
+      file._relPath = relPath;
+      files.push(file);
+    } else if (entry.isDirectory) {
+      const reader = entry.createReader();
+      const subEntries = await new Promise((resolve, reject) => reader.readEntries(resolve, reject));
+      for (const child of subEntries) {
+        const childPath = relPath ? relPath + '/' + child.name : child.name;
+        await walk(child, childPath);
+      }
+    }
+  }
+  await walk(entry, basePath || '');
+  return files;
+}
+
+// === 处理拖拽数据（支持文件 + 目录，保留目录结构） ===
+async function handleDropItems(items) {
+  const allFiles = [];
+  const promises = [];
+  for (const item of items) {
+    const entry = item.webkitGetAsEntry ? item.webkitGetAsEntry() : null;
+    if (entry) {
+      if (entry.isDirectory) {
+        // 以目录名作为基础路径，保持目录结构
+        promises.push(walkDir(entry, entry.name).then(files => allFiles.push(...files)));
+      } else if (entry.isFile) {
+        const file = item.getAsFile();
+        if (file) allFiles.push(file);
+      }
+    } else {
+      const file = item.getAsFile();
+      if (file) allFiles.push(file);
+    }
+  }
+  await Promise.all(promises);
+  return allFiles;
+}
+
+// === 上传区域事件绑定 ===
+(function initUploadZone() {
+  const zone = document.getElementById('uploadZone');
+  const fileInput = document.getElementById('fileInput');
+  const folderInput = document.getElementById('folderInput');
+
+  // 点击区域 → 选择文件
+  zone.addEventListener('click', (e) => {
+    if (e.target.id === 'btnFolderMode') return;
+    fileInput.click();
+  });
+  fileInput.addEventListener('change', () => { uploadFiles(fileInput.files); fileInput.value = ''; });
+
+  // 上传文件夹按钮
+  document.getElementById('btnFolderMode').addEventListener('click', (e) => {
+    e.stopPropagation();
+    folderInput.click();
+  });
+  folderInput.addEventListener('change', () => { uploadFiles(folderInput.files); folderInput.value = ''; });
+
+  // 拖拽
+  zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('drop', async (e) => {
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    const items = e.dataTransfer.items;
+    if (items && items.length > 0) {
+      // 使用 webkitGetAsEntry 支持目录拖拽
+      const files = await handleDropItems(items);
+      if (files.length > 0) uploadFiles(files);
+    } else if (e.dataTransfer.files.length > 0) {
+      uploadFiles(e.dataTransfer.files);
+    }
+  });
+})();
+
+// 初始化
+(async function init() {
+  const list = await fetchFileList();
+  if (list) {
+    window._fileList = list;
+    document.getElementById('loading').style.display = 'none';
+    renderNav();
+    renderList();
+    return;
+  }
+
+  // 如果 API 不可用，展示说明
+  document.getElementById('loading').innerHTML = `
+    <div class="empty-state">
+      <div class="big-icon">⚙️</div>
+      <p>无法连接文件服务</p>
+      <p style="font-size:13px;margin-top:8px;color:var(--muted)">
+        请确保项目服务已启动，<br>
+        或将文件放入 <code>downloads/</code> 目录后重试
+      </p>
+    </div>`;
+})();
+</script>
+</body>
+</html>

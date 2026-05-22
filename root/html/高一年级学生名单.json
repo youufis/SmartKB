@@ -1,0 +1,5714 @@
+[
+    {
+        "class": "高一1班",
+        "name": "陈嘉南",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "严敬杨",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "潘树茵",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "张荣桐",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "钟宇轩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "陈钰龙",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "蔡崧毓",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "车航",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "梁思颖",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "钟嘉怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "梁烨桦",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "赖裔轩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "肖惠艳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "赵秋晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "廖淑琦",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "张恒瑞",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "黎雯熙",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "林俊万",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "唐嘉婧",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "董颖霖",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "周乐聪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "陈炳灿",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "吴凯威",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "黄楚涵",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "陆燕琳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "王一帆",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "陆建彬",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "陈梓骏",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "梁芮",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "欧阳楚泳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "冯蔡菲扬",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "梁睿宸",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "何浩政",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "马建豪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "谢可欣",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "李柯",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "潘博",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "刘雅涵",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "叶梓涵",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "梁凯程",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "杨溢",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "钟楚城",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "李凯骐",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "林梦悦",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "李炜",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "何奕澄",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "林惠莹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "冯子航",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "王汝勤",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一1班",
+        "name": "梁芷颖",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "冯文燕",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "李王振华",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "黎国强",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "陈玮豪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "覃宇航",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "梁颖沂",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "区恺淘",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "周贝贝",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "何昊衡",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "苏嘉睿",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "肖乔心",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "曾维景",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "高维岳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "刘绮程",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "何培堃",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "刘文博",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "王帅然",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "梁宝龙",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "陈依阳",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "康铭泽",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "陈铠滢",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "徐慧",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "郑琬荧",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "麦传辉",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "何声潼",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "黎炜怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "何定钧",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "龙桦诺",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "胡泳琳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "方清雅",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "黎程荣",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "陈建行",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "郭家桦",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "谭咏晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "马泽浩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "谢慧",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "刘思淇",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "许洪庚",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "陈湟芷",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "练梓晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "王豪轩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "刘文婷",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "谭小茵",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "杨靖宇",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "唐曼希",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "曾乐锜",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一2班",
+        "name": "彭丽莹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "杨迪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "杨阳",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "周嘉墩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "刘思雨",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "陈嘉兴",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "邓均城",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "曹嵐雨",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "温晟睿",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "李晓澄",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "黄嘉轩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "李珏瑶",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "吴乙冰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "罗丽娟",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "刘天宇",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "朱灿松",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "高澄仪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "何绰妍",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "陈锶谊",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "彭桦欣",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "李涵瑶",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "骆子诺",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "潘鑫",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "刘珊珊",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "高鹏涛",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "邵嘉威",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "黄钊萍",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "刘炎治",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "李昊锋",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "黄泓博",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "林俊森",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "林君璇",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "卢逸旭",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "谢培坤",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "冯海晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "蔡啸延",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "梁斯棋",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "汪依琳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "兰毅铭",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "华振烨",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "张栩瑶",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "李俊杰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "陈俊宇",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "罗娜",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "曾旭林",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "吴诗颖",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "王茹涵",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "陈智宏",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "陈汉滔",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "赵晨旭",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "郑凯程",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "吴家熙",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "刘润宝",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "麦俊毅",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "陈佳怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "唐梓淇",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一3班",
+        "name": "袁嘉婷",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "刘炘鑫",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "蓝焌民",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "陶桃",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "涂小文",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "钟嘉瑜",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "谭灶华",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "周凯峰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "李建清",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "黄泽烨",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "尹瀚宽",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "李佳洋",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "万嘉欣",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "张旭尧",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "谭学良",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "胡臻朗",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "谭诗睿",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "梁庭轩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "高绰谦",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "祝泽熙",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "李鑫蕾",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "陈臻明",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "梁永聪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "李嘉兴",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "金达",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "陈悦天",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "潘家辉",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "黎洁琳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "陈凯华",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "何泳希",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "李雄",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "黄浩轩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "卢德思",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "任星杰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "董怀宇",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "胡筠皓",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "曾晟",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "杨倩怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "李梦怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "李谦",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "梁丽俏",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "梁佰鸿",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "李峻楷",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "李军志",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "梁巧滢",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "梁志恺",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一4班",
+        "name": "向子豪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "司徒文君",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "刘梓轩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "蔡婉婷",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "曾欣怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "李昭贤",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "苏洁梅",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "钟健伶",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "林志聪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "黄沛凝",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "李诗晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "申毅峰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "冼宝仪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "杨叙琳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "周倩湄",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "武文博",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "曾颖霖",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "肖桂城",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "黎晓雯",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "吴勇辉",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "李炫枝",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "辛凌霏",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "何嘉慧",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "杨睿丝",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "卢晓荧",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "陈均彦",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "邓晨宇",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "卢芷莹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "余永财",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "王悦文",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "吴瑞欣",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "郭深睿",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "王婉铮",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "孟昭希",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "林智宇",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "林栩丹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "黄俊熙",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "周栋伟",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "卢颖霏",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "沈品雯",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "马立诚",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "何彦霏",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "陈国耀",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "徐灵蕊",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "黄熙弼",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "张许桐",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "陈昕艺",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "张煜海",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "梁家睿",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "伍峻宇",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "梁壮灏",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "陈辰",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一5班",
+        "name": "陈艺进",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "林佩珊",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "杨涵",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "李淑恩",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "梁梓柔",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "陈正朗",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "陆家莹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "黄晓欣",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "翁梓城",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "黄天语",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "张婉婷",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "胡艺蓝",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "叶书颖",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "何炳琪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "周慧曦",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "陈骏杰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "徐子欣",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "陆薪宇",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "郭晓莹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "林宥希",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "陈军宪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "庞静彤",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "高晓诗",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "李芯悦",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "张叶嘉",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "梁家伟",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "孙欣怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "曾芯愉",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "陈立希",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "黄梓恒",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "张雨帆",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "周镇洋",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "刘心妍",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "霍子轩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "杨周印",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "范诺妍",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "吴子轩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "吴卓扬",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "胡善婷",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "廖宇涛",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "覃文宇",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "欧沛文",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "周瑞欣",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "刘文馨",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "赵奕鸣",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "温子瑶",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "周阳",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "卢功洋",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "卢梓玉",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "韦燕铭",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "蒙思怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一6班",
+        "name": "张裕朗",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "曹睦翊",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "何衍霆",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "何孟婷",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "张家辉",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "王语馨",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "翁超群",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "卢义雪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "赵嘉琪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "黄子权",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "朱紫菱",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "李健宁",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "申安琪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "张嘉昌",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "熊佳琪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "杨继豪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "林慧妍",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "郭灿辉",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "许青澜",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "梁浩贤",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "苏琬淇",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "陈晓怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "先吉馨",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "郑悦程",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "霍子扬",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "刘欣垌",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "黄俊威",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "刘彦廷",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "兰俊宇",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "邱海钰",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "龚子轩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "欧阳绮淳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "黄慧杰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "谈乐言",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "耿子龙",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "李佳殷",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "余钟冠恩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "皇甫域华",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "钟和培",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "陈曦B",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "陈敏心",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "郑梓豪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "梁瀚天",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "罗慧思",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "李振鑫",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "卢雨瑶",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "左浩森",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "罗健轩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "陶艺元",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一7班",
+        "name": "冯权生",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "吴泽熙",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "邓峻熙",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "王可",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "胡聍",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "谢译莹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "杨子钊",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "何绮霖",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "高正杨",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "李慧端",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "郭家璇",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "黄智豪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "梁文菁",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "陈星宇",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "蓝欣",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "翁鸿斌",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "韦芳棋",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "颜语",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "何盛宝",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "李子健",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "梁均宇",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "郭梓添",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "曹睿琪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "李旭东",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "易可馨",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "房春怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "陈浩生",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "王健铭",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "杨文慧",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "廖广兰",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "苏宇希",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "陆伟政",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "骆俊源",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "汤佳睦",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "黎紫瑶",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "区乘源",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "邓鸿炜",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "林俊宏",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "刘家林",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "官彦傧",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "李健明",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "陈永杰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "林宇轩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "黄莉乔",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "王研璐",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "刘嘉辉",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "梁培莹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "陆雁鸣",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "覃默",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "黄钰婷",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "刘美伶",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "黎明杰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "梁雏鹏",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "王瑜",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "郭梓竣",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "周颖婷",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "王晋鹏",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "李风桦",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一8班",
+        "name": "陈思蝶",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "刘慧琳A",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "卢嘉颖",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "付泽骜",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "魏伊雯",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "甄子睿",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "黄敏茹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "麦晓彤",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "陈幸荣",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "周沛琳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "黄梓轩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "罗辉宏",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "伍芷颖",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "张欣悦",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "卢雨辰",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "梁家杰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "耿俊杰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "吴世炜",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "赵子佳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "李施乐",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "邱广湛",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "黎芷均",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "陈伟琪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "简家丽",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "何曼榆",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "凌岚",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "何以诺",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "蔡瑞琳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "覃祖浩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "黎建峰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "黄泳峰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "吴宇枫",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "廖美彤",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "罗可靖",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "温钒熙",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "刘鑫涛",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "黄圣杰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "卢嘉齐",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "苏晓君",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "陈嘉俊",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "陈泽森",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "梁瀚森",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "庄恩泽",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "张思彤",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "詹宇康",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "薛铠莹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "陈森阳",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "周子晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "梁恩瑜",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "韩彤恩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "张潆之",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "兰俊",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "霍伟洛",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "梁惠琪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "何旋",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "李琳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "于昊",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "陈宇",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一9班",
+        "name": "刘亦歆",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "周泽雨",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "貌俊皓",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "何榆杏",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "李珏颖",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "张晓琪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "刘荦萌",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "郭晓晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "欧阳润祁",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "陈诗娴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "徐钰琼",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "张雯淇",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "潘梓晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "莫文君",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "苏雅慧",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "陈贝潆",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "黄柏潮",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "黄炜豪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "潘晓柔",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "罗昕岚",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "胥嘉一",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "吴展铭",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "邹宛彤",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "王梓茹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "苏子铧",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "曲瑶",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "钟圣焘",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "陆科桦",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "周梓皓",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "林欣潼",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "赵宣羽",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "陈可欣",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "谢镇熙",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "李泳彤",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "陈俊霖",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "何颖仪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "陈嘉嘉",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "邸子厚",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "陈悦",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "罗安佟",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "冯仲杰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "陈果冉",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "莫绮雯",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "杨媛",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "梁愉怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "廖芷欣",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一10班",
+        "name": "吴芯义",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "邵语菲",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "梁考彤",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "周雨洁",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "黎学谦",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "陈信武",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "陆君琪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "蒋旻",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "祁无双",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "刘伟基",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "石晓颖",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "麦智沛",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "杨元佳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "黎心怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "莫雯丹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "陈紫芸",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "邓力强",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "卢宝仪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "吴诗悦",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "郭美姿子",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "胡婉霞",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "肖菲",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "何悦翠",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "温佩颖",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "张莹莹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "余津莹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "刘思乐",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "黎晓柔",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "严渝童",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "伍咏榆",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "胡佳豪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "陈熙雯",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "华钎语",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "陶福凤",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "洪永宙",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "谈婧",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "袁紫珊",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "刘文杰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "文梓灏",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "黎杰",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "张紫萱",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "郭芷晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "姚昕瑜",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "冯诗晏",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "陈嘉怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "贺礼佳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "郭绮慧",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "梁诗琪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "吴灿佳",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "卢梓妍",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一11班",
+        "name": "麦瑞桐",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "郭浩臻",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "徐佳琪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "陈良玉",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "杨顺悦",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "利康晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "罗灏霖",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "麦欣桐",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "何颖诗",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "曾彦蕾",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "黄培怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "吴毅谦",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "麦梓渝",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "陈仲斌",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "陈秋荔",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "盘红丽",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "邓颖埼",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "梁洁宁",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "梁熙玄",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "韦文邦",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "张铭轩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "陈洣和",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "马照翔",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "叶蕊",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "杨晨",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "宁芯怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "钟嘉茗",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "刘慧琳B",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "何梓江",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "何文悦",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "潘彦柔",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "张静娴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "杨天瑜",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "纪莹莹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "叶睿浩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "冯蔚驰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "郭凯怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "卢国麒",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "霍晓蓥",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "麦添亮",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "梁嘉怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "高微鸿",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "朱芷晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "张阳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "冯利",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "黄珺莹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "冯伊晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "欧倩妤",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "杨心磊",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "姚婕",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "邓雪盈",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一12班",
+        "name": "陈曦A",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "沈雅诗",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "谭卓妍",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "翁梓晋",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "李天霖",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "周珈羽",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "黄俊燊",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "梁芷莹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "刘妍岑",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "陈蕾朵",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "袁梓涵",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "唐秋妍",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "李文畅",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "文语晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "孔紫蔓",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "吴嘉桓",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "杨顺欣",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "钟诚礼",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "田野",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "丘栩璇",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "黄柏洋",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "卢颖珺",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "贺舒婷",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "罗诗宏",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "牟悦涵",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "冯雪瑶",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "谢晓晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "左韵潆",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "卢晓儒",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "温雯惠",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "杨文淇",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "唐曼迪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "王语嫣",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "廖悦煊",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "陈睿晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "黄奕翀",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "池一心",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "郑智城",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "刘晓晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "胡婧莹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "赖心怡",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "陈星妤",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "黄海涛",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "梁蔼柔",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "李浚铭",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "许秋蕾",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "黄昭诚",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一13班",
+        "name": "蔡凯楚",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "刘世博",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "龙雨丹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "李昌胜",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "梁正轩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "彭月棋",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "肖璟浩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "黄韦晨",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "林子熙",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "李曦乐",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "曹宇帆",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "黄诗涵",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "周家乐",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "戎梓涵",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "李林杰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "郭勤思",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "黄正阳",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "李汶妮",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "卢子贤",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "郑轼",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "沈美妍",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "余鸿华",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "梁俊杰",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "黄梓明",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "张舜涛",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "高依娜",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "李安琪",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "郭泳均",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "方佑能",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "杨欣淇",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "周晨凯",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "黄梓晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "庞诗游",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "张紫玲",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "陈銮沅",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "李乐天",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "张先涛",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "练宇涵",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "王杰夫",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "翟雅茹",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "莫可恒",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "韦承晨",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "王紫茜",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "曾怡静",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "罗正聪",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "曾晟烈",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "杨慧琳",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "李子涵",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "李海鸣",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "梁小甜",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "曾泓量",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "章云浩",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "王炜哲",
+        "gender": "男",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    },
+    {
+        "class": "高一14班",
+        "name": "阮子晴",
+        "gender": "女",
+        "language": "",
+        "subjects": "",
+        "major": ""
+    }
+]

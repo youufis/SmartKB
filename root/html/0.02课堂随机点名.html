@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ 课堂随机点名系统</title>
+    <style>
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --accent-color: #ff4d4d;
+            --glow-color: #ffd700;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--light-color);
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 0 60px rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            animation: spin 8s linear infinite;
+            z-index: -1;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, var(--glow-color), #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 3px;
+            animation: titlePulse 2s ease-in-out infinite;
+            text-transform: uppercase;
+        }
+        
+        @keyframes titlePulse {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3)); }
+            50% { filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.6)); }
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            max-width: 200px;
+        }
+        
+        .toggle-group {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            max-width: none;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .toggle-switch.active {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            border-color: var(--glow-color);
+            box-shadow: 0 0 20px rgba(37, 117, 252, 0.4);
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toggle-switch.active::after {
+            transform: translateX(28px);
+        }
+        
+        label {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--light-color);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        select:hover, input:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--glow-color);
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        option {
+            background-color: var(--dark-color);
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 25px;
+        }
+        
+        button {
+            padding: 18px 50px;
+            background: linear-gradient(135deg, var(--accent-color), #ff8a5c, #ffd700);
+            background-size: 200% 200%;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px rgba(255, 77, 77, 0.4), 0 0 0 2px rgba(255, 255, 255, 0.1);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg) translateY(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(255, 77, 77, 0.6), 0 0 0 3px rgba(255, 255, 255, 0.2);
+            animation: buttonGlow 1.5s ease-in-out infinite;
+        }
+        
+        button:hover::before {
+            transform: rotate(45deg) translateY(100%);
+        }
+        
+        button:active {
+            transform: translateY(2px) scale(0.98);
+        }
+        
+        button.spinning {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        .rolling-display {
+            width: auto;
+            min-width: 200px;
+            max-width: 600px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(30, 30, 50, 0.9));
+            border-radius: 20px;
+            border: 3px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3), inset 0 0 60px rgba(0, 0, 0, 0.5);
+            padding: 0 30px;
+        }
+        
+        .rolling-name {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--glow-color);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 77, 77, 0.6);
+            letter-spacing: 5px;
+            white-space: nowrap;
+            animation: glitchText 0.3s ease-in-out;
+        }
+        
+        @keyframes glitchText {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+        
+        .rolling-active .rolling-name {
+            animation-duration: 0.05s;
+            filter: blur(1px);
+        }
+        
+        .roll-reveal {
+            animation: revealName 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes revealName {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.5); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .result-container {
+            width: 100%;
+            max-width: 900px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateY(100px);
+            animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--glow-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .student-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            animation: cardAppear 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            transition: all 0.4s ease;
+        }
+        
+        @keyframes cardAppear {
+            from { opacity: 0; transform: scale(0.8) rotateY(90deg); }
+            to { opacity: 1; transform: scale(1) rotateY(0); }
+        }
+        
+        .student-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.2), 0 0 0 2px rgba(255, 215, 0, 0.3);
+            border-color: rgba(255, 215, 0, 0.4);
+        }
+        
+        .student-info {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .info-item { display: flex; align-items: center; }
+        
+        .info-label {
+            font-weight: 700;
+            margin-right: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+        
+        .info-value { font-weight: 700; color: white; }
+        
+        .name-value {
+            color: var(--glow-color);
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-right: 15px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.5), transparent);
+            margin: 20px 0;
+            width: 100%;
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            z-index: 1000;
+            pointer-events: none;
+            animation: confetti-fall 4s ease-out forwards;
+        }
+        
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .controls {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            .control-group {
+                width: 100%;
+                max-width: 300px;
+            }
+            .name-value { font-size: 1.8rem; }
+            .rolling-display { 
+                width: 90%;
+                min-width: auto;
+                height: 100px;
+            }
+            .rolling-name {
+                font-size: 2rem;
+                letter-spacing: 3px;
+            }
+            .container, .result-container { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 随机点名系统</h1>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="grade">选择年级</label>
+                <select id="grade" onchange="loadClasses()">
+                    <option value="高一年级学生名单.json">高一年级</option>
+                    <option value="高二年级学生名单.json">高二年级</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label for="class">选择班级</label>
+                <select id="class" disabled>
+                    <option value="">-- 请选择班级 --</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label for="count">抽取人数</label>
+                <input type="number" id="count" value="1" min="1" max="50">
+            </div>
+            
+            <div class="control-group toggle-group">
+                <label>自动加分</label>
+                <div class="toggle-switch" id="autoScoreToggle" onclick="toggleAutoScore()"></div>
+            </div>
+        </div>
+        
+        <div class="button-container">
+            <button id="randomBtn" onclick="randomSelect()">🎯 开始点名</button>
+        </div>
+        
+        <div id="rolling-display-wrapper" style="display: none;">
+            <div class="rolling-display">
+                <span class="rolling-name" id="rollingName">准备就绪</span>
+            </div>
+        </div>
+        
+        <div class="loading" id="loading" style="display: none;">数据加载中...</div>
+    </div>
+    
+    <div id="resultArea"></div>
+    
+    <script>
+        // 调试模式关闭
+        const DEBUG = false;
+        
+        function log(message) {
+            if (!DEBUG) return;
+            console.log(message);
+        }
+        
+        function error(message) {
+            if (!DEBUG) return;
+            console.error(message);
+        }
+        
+        let currentStudents = [];
+        let selectedStudents = [];
+        let rollTimer = null;
+        let isRolling = false;
+        let autoScoreEnabled = true;
+        const SCORE_API_BASE = window.location.origin;
+        
+        window.onload = function() {
+            log('页面加载完成，开始初始化...');
+            createStars();
+            
+            // 默认开启自动加分功能
+            setTimeout(() => {
+                const toggle = document.getElementById('autoScoreToggle');
+                if (toggle && autoScoreEnabled) {
+                    toggle.classList.add('active');
+                }
+            }, 100);
+            
+            setTimeout(() => {
+                loadClasses();
+            }, 500);
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const gradeSelect = document.getElementById('grade');
+                if (gradeSelect) {
+                    gradeSelect.onchange = loadClasses;
+                    log('年级选择框事件监听器已绑定');
+                } else {
+                    error('未能找到年级选择框元素');
+                }
+            }, 100);
+        });
+        
+        function createStars() {
+            const starsContainer = document.createElement('div');
+            starsContainer.className = 'stars';
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                starsContainer.appendChild(star);
+            }
+            document.body.insertBefore(starsContainer, document.body.firstChild);
+        }
+        
+        function toggleAutoScore() {
+            autoScoreEnabled = !autoScoreEnabled;
+            const toggle = document.getElementById('autoScoreToggle');
+            if (autoScoreEnabled) {
+                toggle.classList.add('active');
+                showToast('✅ 已启用自动加分', '每次点名将自动+5分', 'success');
+            } else {
+                toggle.classList.remove('active');
+                showToast('ℹ️ 已关闭自动加分', '点名后不会自动加分', 'info');
+            }
+        }
+        
+        async function addScoreToStudent(studentName, studentClass, points = 5) {
+            try {
+                const grade = document.getElementById('grade').value.includes('高一') ? '高一' : '高二';
+                
+                const response = await fetch(`${SCORE_API_BASE}/score-api/score`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        grade: grade,
+                        class: studentClass,
+                        name: studentName,
+                        points: points
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    log(`成功为 ${studentName} 添加 ${points} 分，当前总分: ${result.total}`);
+                    return { success: true, total: result.total, message: `+${points}分 (总分: ${result.total})` };
+                } else {
+                    error(`加分失败: ${result.message}`);
+                    return { success: false, message: result.message || '加分失败' };
+                }
+            } catch (error) {
+                error(`调用积分API失败: ${error.message}`);
+                return { success: false, message: '网络连接失败' };
+            }
+        }
+        
+        function showToast(title, message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 10000;
+                padding: 16px 24px;
+                border-radius: 12px;
+                background: ${type === 'success' ? 'linear-gradient(135deg, #059669, #10b981)' : 
+                            type === 'error' ? 'linear-gradient(135deg, #dc2626, #ef4444)' : 
+                            'linear-gradient(135deg, #2563eb, #3b82f6)'};
+                color: white;
+                font-weight: 600;
+                font-size: 1rem;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+                animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                max-width: 400px;
+                backdrop-filter: blur(10px);
+            `;
+            
+            toast.innerHTML = `
+                <div style="font-size: 1.1rem; margin-bottom: 4px;">${title}</div>
+                <div style="font-size: 0.9rem; opacity: 0.9;">${message}</div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOutRight 0.3s ease-in forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+        
+        async function loadJsonData(filename) {
+            const loadingElement = document.getElementById('loading');
+            loadingElement.style.display = 'block';
+            log(`尝试加载文件：${filename}`);
+            
+            try {
+                const response = await fetch(filename);
+                log(`HTTP 响应状态：${response.status} ${response.statusText}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                log(`成功加载数据，共 ${data.length} 条记录`);
+                loadingElement.style.display = 'none';
+                return data;
+            } catch (error) {
+                error(`加载 JSON 数据失败：${error.message}`);
+                loadingElement.style.display = 'none';
+                alert(`加载学生数据失败！\n\n原因：${error.message}\n\n请确保：\n1. JSON 文件存在于 html 目录\n2. 通过 http://localhost:8000 访问而非 file://`);
+                return [];
+            }
+        }
+        
+        async function loadClasses() {
+            console.log('开始加载班级数据...');
+            const gradeSelect = document.getElementById('grade');
+            const classSelect = document.getElementById('class');
+            
+            console.log('当前选择的年级:', gradeSelect.value);
+            classSelect.innerHTML = '<option value="">-- 数据加载中 --</option>';
+            classSelect.disabled = true;
+            
+            try {
+                const students = await loadJsonData(gradeSelect.value);
+                console.log('加载到的学生数量:', students.length);
+                currentStudents = students;
+                
+                classSelect.innerHTML = '<option value="">-- 请选择班级 --</option>';
+            
+                if (students.length === 0) {
+                    classSelect.innerHTML = '<option value="">-- 无可用数据 --</option>';
+                    classSelect.disabled = false;
+                    return;
+                }
+                
+                const classes = [...new Set(students.map(student => student.class))];
+                console.log('获取到的班级列表:', classes);
+                
+                classes.forEach(className => {
+                    const option = document.createElement('option');
+                    option.value = className;
+                    option.textContent = className;
+                    classSelect.appendChild(option);
+                });
+                
+                const allOption = document.createElement('option');
+                allOption.value = "all";
+                allOption.textContent = "全部班级";
+                classSelect.appendChild(allOption);
+                
+                classSelect.disabled = false;
+                console.log('班级选择框已启用，选项数量:', classSelect.options.length - 1);
+            } catch (error) {
+                console.error('加载班级数据失败:', error);
+                classSelect.innerHTML = '<option value="">-- 加载失败 --</option>';
+                classSelect.disabled = false;
+            }
+        }
+        
+        function changeRollingName() {
+            if (isRolling && currentStudents.length > 0) {
+                const randomIndex = Math.floor(Math.random() * currentStudents.length);
+                document.getElementById('rollingName').textContent = currentStudents[randomIndex].name;
+            }
+        }
+        
+        function startRolling() {
+            document.getElementById('rolling-display-wrapper').style.display = 'block';
+            isRolling = true;
+            const rollingName = document.getElementById('rollingName');
+            rollingName.classList.remove('roll-reveal');
+            void rollingName.offsetWidth;
+            rollingName.classList.add('rolling-active');
+            rollTimer = setInterval(changeRollingName, 50);
+        }
+        
+        function stopRolling(finalNames) {
+            clearInterval(rollTimer);
+            isRolling = false;
+            const rollingName = document.getElementById('rollingName');
+            rollingName.classList.remove('rolling-active');
+            
+            if (finalNames.length === 1) {
+                rollingName.textContent = finalNames[0];
+                rollingName.style.fontSize = '3.5rem';
+                rollingName.style.letterSpacing = '5px';
+                rollingName.classList.add('roll-reveal');
+                triggerBurstEffect();
+                triggerExplosion(finalNames[0]);
+            } else {
+                const totalLength = finalNames.join('、').length;
+                let fontSize = '2.8rem';
+                let letterSpacing = '4px';
+                
+                if (totalLength > 15) {
+                    fontSize = '2rem';
+                    letterSpacing = '2px';
+                } else if (totalLength > 25) {
+                    fontSize = '1.6rem';
+                    letterSpacing = '1px';
+                } else if (totalLength > 35) {
+                    fontSize = '1.2rem';
+                    letterSpacing = '0px';
+                }
+                
+                rollingName.textContent = finalNames.join('、');
+                rollingName.style.fontSize = fontSize;
+                rollingName.style.letterSpacing = letterSpacing;
+                rollingName.classList.add('roll-reveal');
+                triggerMultiBurst();
+            }
+            
+            setTimeout(() => {
+                document.getElementById('rolling-display-wrapper').style.display = 'none';
+                rollingName.style.fontSize = '';
+                rollingName.style.letterSpacing = '';
+            }, 2000);
+        }
+        
+        function triggerBurstEffect() {
+            const rect = document.querySelector('.rolling-display').getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const burst = document.createElement('div');
+                    burst.className = 'burst-effect';
+                    burst.style.cssText = `position:fixed;width:20px;height:20px;border-radius:50%;border:3px solid var(--glow-color);pointer-events:none;z-index:1001;left:${centerX}px;top:${centerY}px;transform:translate(-50%,-50%);animation:burstExpand 0.8s ease-out forwards`;
+                    document.body.appendChild(burst);
+                    setTimeout(() => burst.remove(), 800);
+                }, i * 100);
+            }
+        }
+        
+        function triggerExplosion(name) {
+            const colors = ['#ffd700', '#ff4d4d', '#2ce69b', '#00ffff', '#ff6b6b'];
+            const particleCount = 100;
+            const rect = document.querySelector('.rolling-display').getBoundingClientRect();
+            const startX = rect.left + rect.width / 2;
+            const startY = rect.top + rect.height / 2;
+            
+            for (let i = 0; i < particleCount; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    
+                    const angle = (Math.PI * 2 * i) / particleCount;
+                    const distance = Math.random() * 300 + 200;
+                    
+                    particle.style.cssText = `position:fixed;width:${Math.random()*8+4}px;height:inherit;border-radius:50%;z-index:1000;left:${startX}px;top:${startY}px;background-color:${colors[Math.floor(Math.random()*colors.length)]};pointer-events:none;animation:particleFly 1.5s ease-out forwards`;
+                    particle.style.setProperty('--tx', `${Math.cos(angle)*distance}px`);
+                    particle.style.setProperty('--ty', `${Math.sin(angle)*distance}px`);
+                    
+                    document.body.appendChild(particle);
+                    setTimeout(() => particle.remove(), 1500);
+                }, i * 10);
+            }
+        }
+        
+        function triggerMultiBurst() {
+            setTimeout(triggerBurstEffect, 150);
+        }
+        
+        async function randomSelect() {
+            const classSelect = document.getElementById('class');
+            const countInput = document.getElementById('count');
+            
+            const selectedClass = classSelect.value;
+            let count = parseInt(countInput.value);
+            
+            if (!selectedClass) {
+                alert('请先选择班级！');
+                return;
+            }
+            
+            if (isNaN(count) || count < 1) {
+                count = 1;
+                countInput.value = 1;
+            }
+            
+            let eligibleStudents = selectedClass === "all" ? [...currentStudents] : currentStudents.filter(s => s.class === selectedClass);
+            eligibleStudents = eligibleStudents.filter(s => !selectedStudents.some(sel => sel.name === s.name && sel.class === s.class));
+            
+            if (eligibleStudents.length === 0) {
+                alert('所有学生都已被抽取过，将重置抽取列表！');
+                selectedStudents = [];
+                eligibleStudents = selectedClass === "all" ? [...currentStudents] : currentStudents.filter(s => s.class === selectedClass);
+            }
+            
+            count = Math.min(count, eligibleStudents.length);
+            
+            const btn = event.target;
+            btn.disabled = true;
+            btn.classList.add('spinning');
+            
+            startRolling();
+            
+            setTimeout(async () => {
+                const selected = [];
+                const tempStudents = [...eligibleStudents];
+                
+                for (let i = 0; i < count; i++) {
+                    const randomIndex = Math.floor(Math.random() * tempStudents.length);
+                    selected.push(tempStudents[randomIndex]);
+                    tempStudents.splice(randomIndex, 1);
+                }
+                
+                selectedStudents.push(...selected);
+                const names = selected.map(s => s.name);
+                stopRolling(names);
+                
+                const resultContainer = document.createElement('div');
+                resultContainer.className = 'result-container';
+                
+                const resultTitle = document.createElement('div');
+                resultTitle.className = 'result-title';
+                resultTitle.textContent = `🎉 抽取结果 (${selectedClass === "all" ? "全部班级" : selectedClass}) 🎉`;
+                resultContainer.appendChild(resultTitle);
+                
+                const studentResults = document.createElement('div');
+                studentResults.id = 'studentResults';
+                resultContainer.appendChild(studentResults);
+                
+                document.getElementById('resultArea').innerHTML = '';
+                document.getElementById('resultArea').appendChild(resultContainer);
+                
+                setTimeout(() => {
+                    selected.forEach((student, index) => {
+                        setTimeout(async () => {
+                            const card = document.createElement('div');
+                            card.className = 'student-card';
+                            
+                            let scoreInfo = '';
+                            if (autoScoreEnabled) {
+                                const scoreResult = await addScoreToStudent(student.name, student.class, 5);
+                                if (scoreResult.success) {
+                                    scoreInfo = `<div class="info-item"><span class="info-label">加分</span><span class="info-value" style="color: #ffd700;">⭐ ${scoreResult.message}</span></div>`;
+                                    showToast('加分成功', `${student.name}: ${scoreResult.message}`, 'success');
+                                } else {
+                                    scoreInfo = `<div class="info-item"><span class="info-label">加分</span><span class="info-value" style="color: #ef4444;">❌ ${scoreResult.message}</span></div>`;
+                                    showToast('加分失败', `${student.name}: ${scoreResult.message}`, 'error');
+                                }
+                            }
+                            
+                            card.innerHTML = `
+                                <div class="student-info">
+                                    <span class="name-value" data-name="${student.name}">${student.name}</span>
+                                    <div class="info-item"><span class="info-label">班级</span><span class="info-value">${student.class}</span></div>
+                                    <div class="info-item"><span class="info-label">性别</span><span class="info-value">${student.gender}</span></div>
+                                    <div class="info-item"><span class="info-label">外语</span><span class="info-value">${student.language}</span></div>
+                                    <div class="info-item"><span class="info-label">选科</span><span class="info-value">${student.subjects}</span></div>
+                                    <div class="info-item"><span class="info-label">类别</span><span class="info-value">${student.major}</span></div>
+                                    ${scoreInfo}
+                                </div>
+                                ${index < selected.length - 1 ? '<div class="divider"></div>' : ''}
+                            `;
+                            studentResults.appendChild(card);
+                            createSuperConfetti();
+                        }, index * 300);
+                    });
+                    
+                    btn.disabled = false;
+                    btn.classList.remove('spinning');
+                    resultContainer.scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+            }, 2000);
+        }
+        
+        function createSuperConfetti() {
+            const colors = ['#ffd700', '#ff4d4d', '#6a11cb', '#2575fc', '#2ce69b', '#00ffff', '#ffffff'];
+            const shapeTypes = ['square', 'circle', 'triangle'];
+            const particleCount = 80;
+            
+            for (let i = 0; i < particleCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    
+                    const leftPos = Math.random() * 100;
+                    const shape = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+                    
+                    confetti.style.cssText = `position:fixed;left:${leftPos}vw;z-index:1000;pointer-events:none;animation:confetti-fall ${(Math.random()*2+2)}s ease-out forwards`;
+                    confetti.style.animationDelay = `${Math.random()}s`;
+                    confetti.style.transform = `rotate(${Math.random()*360}deg)`;
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    if (shape === 'square') {
+                        const size = Math.random() * 12 + 6;
+                        confetti.style.width = size + 'px';
+                        confetti.style.height = size + 'px';
+                        confetti.style.borderRadius = '0';
+                    } else if (shape === 'circle') {
+                        const size = Math.random() * 10 + 5;
+                        confetti.style.width = size + 'px';
+                        confetti.style.height = size + 'px';
+                        confetti.style.borderRadius = '50%';
+                    } else {
+                        const size = Math.random() * 12 + 6;
+                        confetti.style.cssText += `width:0;height:0;border-left:${size/2}px solid transparent;border-right:${size/2}px solid transparent;border-bottom:${size}px solid ${confetti.style.backgroundColor};background-color:transparent;`;
+                    }
+                    
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 10);
+            }
+        }
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes burstExpand {
+                0% { transform: scale(0); opacity: 1; border-width: 5px; }
+                100% { transform: scale(20); opacity: 0; border-width: 0px; }
+            }
+            @keyframes particleFly {
+                0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+                100% { transform: translate(var(--tx), var(--ty)) rotate(var(--rotate, 360deg)); opacity: 0; }
+            }
+            @keyframes slideInRight {
+                0% { transform: translateX(400px); opacity: 0; }
+                100% { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                0% { transform: translateX(0); opacity: 1; }
+                100% { transform: translateX(400px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
